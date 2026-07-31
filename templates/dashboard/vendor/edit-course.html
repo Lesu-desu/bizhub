@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course | Vendor Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f7faf8; color: #111827; min-height: 100vh; }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px 60px; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+        .header h1 { font-size: 28px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .header h1 span { color: #0b8f47; }
+        .header .btn-back { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1.5px solid #e5e7eb; border-radius: 10px; background: white; color: #4b5563; font-weight: 600; font-size: 14px; text-decoration: none; transition: 0.2s ease; }
+        .header .btn-back:hover { border-color: #0b8f47; color: #0b8f47; background: #f0fdf4; }
+
+        .card { background: white; border-radius: 20px; padding: 36px; border: 1px solid #e5e7eb; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+        .card .subtitle { color: #6b7280; font-size: 14px; margin-bottom: 24px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; color: #111827; }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s ease;
+            background: white;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #0b8f47;
+            box-shadow: 0 0 0 4px rgba(11,143,71,0.1);
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .file-upload { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .file-upload input[type="file"] { padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; flex: 1; }
+        .file-upload .preview { width: 60px; height: 60px; border-radius: 8px; background: #f3f4f6; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .file-upload .preview img { width: 100%; height: 100%; object-fit: cover; }
+        .file-upload .preview .icon { width: 24px; height: 24px; color: #9ca3af; }
+
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+        .checkbox-group input[type="checkbox"] { width: 18px; height: 18px; accent-color: #0b8f47; cursor: pointer; }
+
+        .btn-primary { display: inline-block; width: 100%; padding: 16px; background: linear-gradient(135deg, #0b8f47, #16c96b); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.3s ease; text-align: center; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(11,143,71,0.25); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .btn-danger { background: #ef4444; color: white; padding: 8px 16px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s ease; }
+        .btn-danger:hover { background: #dc2626; }
+
+        .flash-messages { margin-bottom: 20px; }
+        .flash-message { padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; font-weight: 500; }
+        .flash-success { background: #dcfce7; color: #166534; border-left: 4px solid #22c55e; }
+        .flash-error { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+
+        @media (max-width: 640px) {
+            .form-row { grid-template-columns: 1fr; }
+            .card { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container page-transition">
+        <div class="header">
+            <h1>
+                <i data-lucide="book-open" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>Edit Course</span>
+            </h1>
+            <a href="{{ url_for('vendor_courses') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back to My Courses
+            </a>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 4px;">{{ course.title }}</h2>
+            <p class="subtitle">Update your course information below.</p>
+
+            <form action="{{ url_for('vendor_edit_course', course_id=course.id) }}" method="POST" enctype="multipart/form-data">
+                <!-- Title -->
+                <div class="form-group">
+                    <label for="title">Course Title <span style="color: #dc2626;">*</span></label>
+                    <input type="text" id="title" name="title" value="{{ course.title }}" required minlength="3" placeholder="e.g. Python for Beginners">
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description">Description <span style="color: #dc2626;">*</span></label>
+                    <textarea id="description" name="description" required minlength="10" rows="4">{{ course.description }}</textarea>
+                </div>
+
+                <!-- Category & Level -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category">
+                            <option value="Technology" {{ 'selected' if course.category == 'Technology' else '' }}>Technology</option>
+                            <option value="Business" {{ 'selected' if course.category == 'Business' else '' }}>Business</option>
+                            <option value="Design" {{ 'selected' if course.category == 'Design' else '' }}>Design</option>
+                            <option value="Marketing" {{ 'selected' if course.category == 'Marketing' else '' }}>Marketing</option>
+                            <option value="Finance" {{ 'selected' if course.category == 'Finance' else '' }}>Finance</option>
+                            <option value="Health" {{ 'selected' if course.category == 'Health' else '' }}>Health</option>
+                            <option value="Education" {{ 'selected' if course.category == 'Education' else '' }}>Education</option>
+                            <option value="Other" {{ 'selected' if course.category == 'Other' else '' }}>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="level">Level</label>
+                        <select id="level" name="level">
+                            <option value="Beginner" {{ 'selected' if course.level == 'Beginner' else '' }}>Beginner</option>
+                            <option value="Intermediate" {{ 'selected' if course.level == 'Intermediate' else '' }}>Intermediate</option>
+                            <option value="Advanced" {{ 'selected' if course.level == 'Advanced' else '' }}>Advanced</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Price -->
+                <div class="form-group">
+                    <label for="price">Price (₦) <span style="color: #dc2626;">*</span></label>
+                    <input type="number" id="price" name="price" value="{{ course.price }}" step="0.01" min="0" required>
+                </div>
+
+                <!-- Cover Image -->
+                <div class="form-group">
+                    <label>Cover Image</label>
+                    <div class="file-upload">
+                        <input type="file" id="cover_image" name="cover_image" accept="image/*">
+                        <div class="preview" id="coverPreview">
+                            {% if course.cover_image %}
+                                <img src="{{ course.cover_image }}" alt="Cover preview">
+                            {% else %}
+                                <i data-lucide="image" class="icon"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p style="font-size: 13px; color: #6b7280; margin-top: 4px;">Leave empty to keep current image.</p>
+                </div>
+
+                <!-- Promo Video -->
+                <div class="form-group">
+                    <label for="promo_video_url">Promo Video URL</label>
+                    <input type="url" id="promo_video_url" name="promo_video_url" value="{{ course.promo_video }}" placeholder="https://www.youtube.com/watch?v=... or https://...">
+                    <p style="font-size: 13px; color: #6b7280; margin-top: 4px;">You can paste a YouTube link or a direct video URL.</p>
+                </div>
+
+                <!-- What You'll Learn -->
+                <div class="form-group">
+                    <label for="what_you_will_learn">What You'll Learn (one per line)</label>
+                    <textarea id="what_you_will_learn" name="what_you_will_learn" rows="4">{{ course.what_you_will_learn }}</textarea>
+                    <p style="font-size: 13px; color: #6b7280; margin-top: 4px;">Enter each learning objective on a new line.</p>
+                </div>
+
+                <!-- Requirements -->
+                <div class="form-group">
+                    <label for="requirements">Requirements (one per line)</label>
+                    <textarea id="requirements" name="requirements" rows="3">{{ course.requirements }}</textarea>
+                    <p style="font-size: 13px; color: #6b7280; margin-top: 4px;">Enter each prerequisite on a new line.</p>
+                </div>
+
+                <!-- Active Toggle -->
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="is_active" name="is_active" {{ 'checked' if course.is_active else '' }}>
+                        <label for="is_active" style="font-weight: 500;">Course is active (visible to customers)</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">Update Course</button>
+            </form>
+
+            <!-- Delete Section -->
+            <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #e5e7eb;">
+                <h3 style="font-size: 16px; font-weight: 600; color: #dc2626; margin-bottom: 8px;">Danger Zone</h3>
+                <p style="color: #6b7280; font-size: 14px; margin-bottom: 12px;">
+                    Once you delete a course, it cannot be recovered. All lessons and enrollments will also be removed.
+                </p>
+                <form action="{{ url_for('vendor_delete_course', course_id=course.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this course? This action is irreversible.');">
+                    <button type="submit" class="btn-danger">Delete Course</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Preview cover image when a file is selected
+        document.getElementById('cover_image').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const preview = document.getElementById('coverPreview');
+                    preview.innerHTML = `<img src="${event.target.result}" alt="Cover preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

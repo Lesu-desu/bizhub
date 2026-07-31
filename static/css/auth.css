@@ -1,0 +1,2202 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f5fdf7;
+  color: #111;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* =========================
+   BACKGROUND GLOW EFFECTS
+========================= */
+
+.bg-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.bg-glow-1 {
+  width: 400px;
+  height: 400px;
+  background: #33cc66;
+  top: -120px;
+  left: -100px;
+}
+
+.bg-glow-2 {
+  width: 350px;
+  height: 350px;
+  background: #7dff9d;
+  bottom: -120px;
+  right: -100px;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
+  width: 100%;
+  padding: 24px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #19c15f, #0d8d42);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: 800;
+  box-shadow: 0 10px 25px rgba(25, 193, 95, 0.25);
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+}
+
+.logo-subtext {
+  font-size: 13px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* =========================
+   MAIN AUTH LAYOUT
+========================= */
+
+.auth-layout {
+  width: 100%;
+  min-height: calc(100vh - 100px);
+  padding: 40px 7% 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 70px;
+}
+
+/* =========================
+   INTRO SECTION
+========================= */
+
+.auth-intro {
+  max-width: 520px;
+}
+
+.intro-badge {
+  display: inline-block;
+  background: rgba(25, 193, 95, 0.12);
+  color: #0f9f49;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+
+.auth-intro h2 {
+  font-size: 62px;
+  line-height: 1.05;
+  margin-bottom: 24px;
+  font-weight: 800;
+}
+
+.auth-intro h2 span {
+  color: #13b355;
+}
+
+.auth-intro p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: #555;
+  max-width: 470px;
+}
+
+/* =========================
+   AUTH CARD
+========================= */
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  border-radius: 32px;
+  padding: 42px;
+  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow:
+    0 25px 50px rgba(0,0,0,0.08),
+    0 5px 20px rgba(0,0,0,0.03);
+}
+
+/* =========================
+   FORM HEADER
+========================= */
+
+.form-header {
+  margin-bottom: 34px;
+}
+
+.form-header h3 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  font-weight: 800;
+  color: #111;
+}
+
+.form-header p {
+  color: #666;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* =========================
+   FORM ELEMENTS
+========================= */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.input-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1.5px solid #e2e8e5;
+  background: white;
+  font-size: 15px;
+  font-family: inherit;
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.input-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #18b75b;
+  box-shadow: 0 0 0 5px rgba(24,183,91,0.12);
+  transform: translateY(-1px);
+}
+
+/* =========================
+   PASSWORD BOX
+========================= */
+
+.password-box {
+  position: relative;
+}
+
+.password-box input {
+  padding-right: 60px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.toggle-password:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn {
+  width: 100%;
+  border: none;
+  background: linear-gradient(135deg, #16bf5c, #0f9e48);
+  color: white;
+  padding: 18px;
+  border-radius: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    opacity 0.25s ease;
+  box-shadow:
+    0 15px 30px rgba(22,191,92,0.22);
+}
+
+.primary-btn:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 20px 40px rgba(22,191,92,0.28);
+}
+
+.primary-btn:active {
+  transform: scale(0.98);
+}
+
+/* =========================
+   ROLE SELECTION PAGE
+========================= */
+
+.role-layout {
+  width: 100%;
+  min-height: 100vh;
+  padding: 70px 7%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.role-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.role-header h1 {
+  font-size: 56px;
+  margin-bottom: 18px;
+  font-weight: 800;
+}
+
+.role-header p {
+  font-size: 18px;
+  color: #666;
+}
+
+.role-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.role-selection-card {
+  background: rgba(255,255,255,0.88);
+  border-radius: 30px;
+  padding: 50px 40px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(255,255,255,0.5);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+  box-shadow:
+    0 15px 35px rgba(0,0,0,0.06);
+}
+
+.role-selection-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(24,183,91,0.25);
+  box-shadow:
+    0 30px 60px rgba(0,0,0,0.1);
+}
+
+.role-icon {
+  font-size: 54px;
+  margin-bottom: 26px;
+}
+
+.role-selection-card h3 {
+  font-size: 30px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.role-selection-card p {
+  color: #666;
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+/* =========================
+   ONBOARDING PAGES
+========================= */
+
+.onboarding-layout {
+  width: 100%;
+  min-height: 100vh;
+  padding: 60px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding-card {
+  max-width: 620px;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 1100px) {
+
+  .auth-layout {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .auth-intro {
+    max-width: 100%;
+  }
+
+  .auth-intro p {
+    margin: 0 auto;
+  }
+
+  .role-selection-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .topbar {
+    padding: 24px 24px;
+  }
+
+  .auth-layout,
+  .role-layout,
+  .onboarding-layout {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .auth-intro h2 {
+    font-size: 46px;
+  }
+
+  .role-header h1 {
+    font-size: 40px;
+  }
+
+  .auth-card {
+    padding: 32px 24px;
+  }
+
+  .role-selection-card {
+    padding: 38px 28px;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .auth-intro h2 {
+    font-size: 38px;
+  }
+
+  .role-header h1 {
+    font-size: 32px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+  }
+
+  .logo-subtext {
+    font-size: 11px;
+  }
+
+  .form-header h3 {
+    font-size: 28px;
+  }
+
+  .primary-btn {
+    padding: 16px;
+  }
+}
+/* =========================================
+   FORGOT PASSWORD / SUCCESS STATES
+========================================= */
+
+.hidden {
+  display: none;
+}
+
+.success-state {
+  text-align: center;
+  animation: fadeUp 0.8s ease;
+}
+
+.success-icon {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.4rem;
+  font-weight: 800;
+  box-shadow: 0 15px 35px rgba(11,143,71,0.25);
+}
+
+.success-state h2 {
+  font-size: 2rem;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
+.success-state p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.success-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-width: 220px;
+}
+
+/* =========================================
+   BUTTON LOADING STATE
+========================================= */
+
+.primary-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   INPUT ANIMATION ENHANCEMENT
+========================================= */
+
+.form-group input {
+  transform: translateY(0);
+}
+
+.form-group input:hover {
+  border-color: rgba(11,143,71,0.4);
+}
+
+.form-group input:focus {
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   AUTH CARD ENHANCEMENT
+========================================= */
+
+.auth-card {
+  transition: 0.4s ease;
+}
+
+.auth-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+/* =========================================
+   MOBILE IMPROVEMENTS
+========================================= */
+
+@media (max-width: 500px) {
+
+  .success-icon {
+    width: 75px;
+    height: 75px;
+    font-size: 2rem;
+  }
+
+  .success-state h2 {
+    font-size: 1.7rem;
+  }
+
+  .success-btn {
+    width: 100%;
+  }
+}
+
+/* =========================================
+   FORGOT PASSWORD / SUCCESS STATES
+========================================= */
+
+.hidden {
+  display: none;
+}
+
+.success-state {
+  text-align: center;
+  animation: fadeUp 0.8s ease;
+}
+
+.success-icon {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0b8f47, #16c172);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.4rem;
+  font-weight: 800;
+  box-shadow: 0 15px 35px rgba(11,143,71,0.25);
+}
+
+.success-state h2 {
+  font-size: 2rem;
+  margin-bottom: 14px;
+  color: #111;
+}
+
+.success-state p {
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.success-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-width: 220px;
+}
+
+.primary-btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.auth-card {
+  transition: 0.4s ease;
+}
+
+.auth-card:hover {
+  transform: translateY(-3px);
+}
+
+@media (max-width: 500px) {
+
+  .success-icon {
+    width: 75px;
+    height: 75px;
+    font-size: 2rem;
+  }
+
+  .success-state h2 {
+    font-size: 1.7rem;
+  }
+
+  .success-btn {
+    width: 100%;
+  }
+
+}
+
+/* =========================================
+   RESET PASSWORD PAGE
+========================================= */
+
+.password-box {
+  position: relative;
+}
+
+.password-box input {
+  padding-right: 60px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.25s ease;
+  opacity: 0.7;
+}
+
+.toggle-password:hover {
+  opacity: 1;
+  transform: translateY(-50%) scale(1.08);
+}
+
+/* =========================================
+   SUCCESS STATES
+========================================= */
+
+.hidden {
+  display: none;
+}
+
+.success-state {
+  text-align: center;
+  animation: fadeUp 0.7s ease;
+}
+
+.success-icon {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #17c964, #0e9f49);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 800;
+  box-shadow: 0 15px 35px rgba(23,201,100,0.25);
+}
+
+.success-state h2 {
+  font-size: 2rem;
+  margin-bottom: 14px;
+  color: #111;
+}
+
+.success-state p {
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 32px;
+  font-size: 15px;
+}
+
+.success-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 240px;
+  text-decoration: none;
+}
+
+/* =========================================
+   RESEND BUTTON STATE
+========================================= */
+
+.primary-btn.loading {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* =========================================
+   MOBILE IMPROVEMENTS
+========================================= */
+
+@media (max-width: 500px) {
+
+  .success-icon {
+    width: 76px;
+    height: 76px;
+    font-size: 2rem;
+  }
+
+  .success-state h2 {
+    font-size: 1.7rem;
+  }
+
+  .success-btn {
+    width: 100%;
+  }
+
+}
+
+/* =========================================
+   RESEND RESET EMAIL
+========================================= */
+
+.resend-wrapper {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.resend-wrapper span {
+  color: #666;
+  font-size: 14px;
+}
+
+.resend-btn {
+  border: none;
+  background: transparent;
+  color: #12b457;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.25s ease;
+}
+
+.resend-btn:hover {
+  opacity: 0.7;
+}
+
+.resend-btn.loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ==========================================
+   VENDOR ONBOARDING WIZARD
+========================================== */
+
+.vendor-layout{
+    width:100%;
+    min-height:calc(100vh - 100px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:60px 24px;
+}
+
+.vendor-card{
+    width:100%;
+    max-width:760px;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(18px);
+    border-radius:32px;
+    padding:50px;
+    border:1px solid rgba(255,255,255,.6);
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.08),
+        0 8px 20px rgba(0,0,0,.04);
+}
+
+.wizard-top{
+    margin-bottom:40px;
+}
+
+.wizard-step{
+    display:inline-block;
+    padding:8px 18px;
+    border-radius:999px;
+    background:rgba(22,191,92,.12);
+    color:#16bf5c;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:20px;
+}
+
+.wizard-top h2{
+    font-size:38px;
+    font-weight:800;
+    color:#111;
+    margin-bottom:14px;
+}
+
+.wizard-top p{
+    color:#666;
+    line-height:1.7;
+    margin-bottom:28px;
+}
+
+/* Progress Bar */
+
+.progress{
+    width:100%;
+    height:8px;
+    background:#e8ece9;
+    border-radius:999px;
+    overflow:hidden;
+    margin-bottom:30px;
+}
+
+.progress-fill{
+    height:100%;
+    background:linear-gradient(135deg,#19c15f,#0d8d42);
+    border-radius:999px;
+}
+
+.progress-20{
+    width:20%;
+}
+
+.progress-40{
+    width:40%;
+}
+
+.progress-60{
+    width:60%;
+}
+
+.progress-80{
+    width:80%;
+}
+
+.progress-100{
+    width:100%;
+}
+
+/* Step Indicator */
+
+.step-indicator{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:40px;
+}
+
+.circle{
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:#d9dfdb;
+    transition:.3s;
+}
+
+.circle.active{
+    background:#19c15f;
+    box-shadow:0 0 15px rgba(25,193,95,.35);
+}
+
+.line{
+    flex:1;
+    max-width:70px;
+    height:4px;
+    background:#d9dfdb;
+}
+
+.line.active{
+    background:#19c15f;
+}
+
+/* Phone Number */
+
+.phone-input{
+    display:flex;
+    align-items:center;
+    border:1.5px solid #e3e8e5;
+    border-radius:16px;
+    overflow:hidden;
+    transition:.3s;
+    background:#fff;
+}
+
+.phone-input:focus-within{
+    border-color:#16bf5c;
+    box-shadow:0 0 0 5px rgba(22,191,92,.12);
+}
+
+.phone-input span{
+    padding:16px 18px;
+    background:#f6f7f7;
+    font-weight:700;
+    color:#444;
+    border-right:1px solid #e3e8e5;
+}
+
+.phone-input input{
+    border:none;
+    flex:1;
+    padding:16px 18px;
+    font-size:15px;
+    font-family:inherit;
+    background:transparent;
+}
+
+.phone-input input:focus{
+    outline:none;
+}
+
+/* Buttons */
+
+.wizard-buttons{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    margin-top:40px;
+}
+
+.secondary-btn{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+    padding:18px 28px;
+    border-radius:18px;
+    background:#f3f5f4;
+    color:#333;
+    font-weight:700;
+    transition:.3s;
+}
+
+.secondary-btn:hover{
+    background:#e7ece9;
+    transform:translateY(-2px);
+}
+
+.wizard-buttons .primary-btn{
+    width:auto;
+    padding:18px 40px;
+}
+
+/* Hover Animation */
+
+.vendor-card:hover{
+    transform:translateY(-4px);
+    transition:.35s;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.vendor-card{
+    padding:35px 24px;
+}
+
+.wizard-top h2{
+    font-size:30px;
+}
+
+.wizard-buttons{
+    flex-direction:column;
+}
+
+.secondary-btn,
+.wizard-buttons .primary-btn{
+    width:100%;
+}
+
+.line{
+    max-width:35px;
+}
+
+}
+
+@media(max-width:500px){
+
+.vendor-layout{
+    padding:30px 18px;
+}
+
+.vendor-card{
+    border-radius:24px;
+}
+
+.wizard-top h2{
+    font-size:26px;
+}
+
+.wizard-step{
+    font-size:12px;
+}
+
+.circle{
+    width:15px;
+    height:15px;
+}
+
+.line{
+    height:3px;
+}
+
+}
+
+/* ==========================================
+   VENDOR STEP 1
+========================================== */
+
+/* Form spacing */
+
+#vendorStep1Form{
+
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+
+}
+
+/* Better input appearance */
+
+#vendorStep1Form .input-group input{
+
+    width:100%;
+    padding:16px 18px;
+    border-radius:16px;
+    border:1.5px solid #e3e8e5;
+    background:#fff;
+    font-size:15px;
+    font-family:inherit;
+
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease,
+        transform .3s ease;
+
+}
+
+#vendorStep1Form .input-group input:focus{
+
+    outline:none;
+
+    border-color:#19c15f;
+
+    box-shadow:
+        0 0 0 5px rgba(25,193,95,.12);
+
+    transform:translateY(-2px);
+
+}
+
+/* Placeholder */
+
+#vendorStep1Form input::placeholder{
+
+    color:#9aa3a0;
+
+}
+
+/* Required field label */
+
+#vendorStep1Form label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    font-weight:600;
+
+    color:#333;
+
+}
+
+/* Continue button animation */
+
+#vendorStep1Form .primary-btn{
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease;
+
+}
+
+#vendorStep1Form .primary-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+/* Phone input refinement */
+
+.phone-input input{
+
+    border:none !important;
+
+    box-shadow:none !important;
+
+    transform:none !important;
+
+}
+
+.phone-input input:focus{
+
+    border:none !important;
+
+    box-shadow:none !important;
+
+}
+
+/* ==========================================
+   VENDOR STEP 2
+   Business Profile & Branding
+========================================== */
+
+/* Step 2 Form */
+
+#vendorStep2Form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Labels */
+
+#vendorStep2Form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Textarea */
+
+#vendorStep2Form textarea {
+    width: 100%;
+    min-height: 160px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1.5px solid #e3e8e5;
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease,
+        transform .3s ease;
+}
+
+#vendorStep2Form textarea:focus {
+    outline: none;
+    border-color: #19c15f;
+    box-shadow: 0 0 0 5px rgba(25,193,95,.12);
+    transform: translateY(-2px);
+}
+
+/* Select */
+
+#vendorStep2Form select {
+    width: 100%;
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1.5px solid #e3e8e5;
+    background: white;
+    font-size: 15px;
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease,
+        transform .3s ease;
+}
+
+#vendorStep2Form select:focus {
+    outline: none;
+    border-color: #19c15f;
+    box-shadow: 0 0 0 5px rgba(25,193,95,.12);
+    transform: translateY(-2px);
+}
+
+/* Optional Text Input */
+
+#vendorStep2Form input[type="text"] {
+    width: 100%;
+    padding: 16px 18px;
+    border-radius: 16px;
+    border: 1.5px solid #e3e8e5;
+    font-size: 15px;
+    font-family: inherit;
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease,
+        transform .3s ease;
+}
+
+#vendorStep2Form input[type="text"]:focus {
+    outline: none;
+    border-color: #19c15f;
+    box-shadow: 0 0 0 5px rgba(25,193,95,.12);
+    transform: translateY(-2px);
+}
+
+/* File Upload */
+
+#vendorStep2Form input[type="file"] {
+    width: 100%;
+    padding: 16px;
+    border: 2px dashed #19c15f;
+    border-radius: 18px;
+    background: #f8fff9;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+#vendorStep2Form input[type="file"]:hover {
+    background: #f1fff5;
+    border-color: #14a651;
+}
+
+/* Upload hint */
+
+#vendorStep2Form input[type="file"]::file-selector-button {
+    border: none;
+    background: #19c15f;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    margin-right: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .3s;
+}
+
+#vendorStep2Form input[type="file"]::file-selector-button:hover {
+    background: #109546;
+}
+
+/* Character Counter Placeholder */
+
+.character-counter {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #777;
+    text-align: right;
+}
+
+/* Navigation Buttons */
+
+#vendorStep2Form .wizard-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    margin-top: 20px;
+}
+
+#vendorStep2Form .secondary-btn {
+    min-width: 150px;
+}
+
+#vendorStep2Form .primary-btn {
+    min-width: 170px;
+}
+
+/* Smooth Animation */
+
+#vendorStep2Form .input-group {
+    animation: fadeUp .5s ease;
+}
+
+/* Responsive */
+
+@media (max-width:768px){
+
+    #vendorStep2Form .wizard-buttons{
+        flex-direction:column;
+    }
+
+    #vendorStep2Form .secondary-btn,
+    #vendorStep2Form .primary-btn{
+        width:100%;
+    }
+
+}
+
+/* ==========================================
+   VENDOR STEP 3
+========================================== */
+
+#vendorStep3Form{
+
+display:flex;
+
+flex-direction:column;
+
+gap:24px;
+
+}
+
+#vendorStep3Form input,
+#vendorStep3Form select,
+#vendorStep3Form textarea{
+
+width:100%;
+
+padding:16px 18px;
+
+border-radius:16px;
+
+border:1.5px solid #e3e8e5;
+
+font-size:15px;
+
+font-family:inherit;
+
+transition:.3s;
+
+background:#fff;
+
+}
+
+#vendorStep3Form textarea{
+
+min-height:130px;
+
+resize:vertical;
+
+}
+
+#vendorStep3Form input:focus,
+#vendorStep3Form select:focus,
+#vendorStep3Form textarea:focus{
+
+outline:none;
+
+border-color:#19c15f;
+
+box-shadow:0 0 0 5px rgba(25,193,95,.12);
+
+transform:translateY(-2px);
+
+}
+
+#vendorStep3Form label{
+
+font-weight:600;
+
+margin-bottom:10px;
+
+display:block;
+
+color:#333;
+
+}
+
+#vendorStep3Form input[type="checkbox"]{
+
+width:auto;
+
+margin-right:10px;
+
+transform:scale(1.2);
+
+accent-color:#19c15f;
+
+}
+
+#vendorStep3Form .wizard-buttons{
+
+display:flex;
+
+justify-content:space-between;
+
+margin-top:20px;
+
+gap:18px;
+
+}
+
+@media(max-width:768px){
+
+#vendorStep3Form .wizard-buttons{
+
+flex-direction:column;
+
+}
+
+#vendorStep3Form .secondary-btn,
+#vendorStep3Form .primary-btn{
+
+width:100%;
+
+}
+
+}
+
+```css
+/* ==========================================
+   VENDOR STEP 4
+========================================== */
+
+#vendorStep4Form{
+
+display:flex;
+
+flex-direction:column;
+
+gap:24px;
+
+}
+
+#vendorStep4Form input,
+#vendorStep4Form select{
+
+width:100%;
+
+padding:16px 18px;
+
+border-radius:16px;
+
+border:1.5px solid #e3e8e5;
+
+background:#fff;
+
+font-size:15px;
+
+font-family:inherit;
+
+transition:.3s;
+
+}
+
+#vendorStep4Form input:focus,
+#vendorStep4Form select:focus{
+
+outline:none;
+
+border-color:#19c15f;
+
+box-shadow:0 0 0 5px rgba(25,193,95,.12);
+
+transform:translateY(-2px);
+
+}
+
+#vendorStep4Form input[type=file]{
+
+padding:16px;
+
+border:2px dashed #19c15f;
+
+background:#f8fff9;
+
+cursor:pointer;
+
+}
+
+#vendorStep4Form input[type=file]:hover{
+
+background:#f0fff5;
+
+}
+
+#vendorStep4Form .wizard-buttons{
+
+display:flex;
+
+justify-content:space-between;
+
+gap:18px;
+
+margin-top:20px;
+
+}
+
+@media(max-width:768px){
+
+#vendorStep4Form .wizard-buttons{
+
+flex-direction:column;
+
+}
+
+#vendorStep4Form .secondary-btn,
+#vendorStep4Form .primary-btn{
+
+width:100%;
+
+}
+
+}
+```
+
+
+```css
+/* ==========================================
+   VENDOR STEP 5
+========================================== */
+
+#vendorStep5Form{
+display:flex;
+flex-direction:column;
+gap:24px;
+}
+
+#vendorStep5Form input,
+#vendorStep5Form select{
+
+width:100%;
+padding:16px 18px;
+border-radius:16px;
+border:1.5px solid #e3e8e5;
+font-size:15px;
+font-family:inherit;
+transition:.3s;
+background:#fff;
+
+}
+
+#vendorStep5Form input:focus,
+#vendorStep5Form select:focus{
+
+outline:none;
+border-color:#19c15f;
+box-shadow:0 0 0 5px rgba(25,193,95,.12);
+
+}
+
+.review-box{
+
+background:#f8fff9;
+border:1px solid #d8f3df;
+padding:24px;
+border-radius:18px;
+
+}
+
+.review-box h3{
+
+margin-bottom:12px;
+font-size:22px;
+
+}
+
+.review-box p{
+
+color:#666;
+margin-bottom:18px;
+
+}
+
+.review-box ul{
+
+padding-left:22px;
+
+}
+
+.review-box li{
+
+margin-bottom:10px;
+
+}
+
+.terms-box{
+
+padding:18px;
+background:#fafafa;
+border-radius:16px;
+
+}
+
+.terms-box label{
+
+display:flex;
+gap:12px;
+align-items:flex-start;
+font-weight:500;
+line-height:1.6;
+
+}
+
+.terms-box input{
+
+width:auto;
+margin-top:4px;
+accent-color:#19c15f;
+
+}
+
+#vendorStep5Form .wizard-buttons{
+
+display:flex;
+justify-content:space-between;
+gap:18px;
+
+}
+
+@media(max-width:768px){
+
+#vendorStep5Form .wizard-buttons{
+
+flex-direction:column;
+
+}
+
+#vendorStep5Form .secondary-btn,
+#vendorStep5Form .primary-btn{
+
+width:100%;
+
+}
+
+}
+```
+
+/* ==========================================
+   CUSTOMER STEP 1
+========================================== */
+
+#customerStep1Form{
+
+display:flex;
+flex-direction:column;
+gap:24px;
+
+}
+
+#customerStep1Form .input-group input,
+#customerStep1Form .input-group textarea{
+
+width:100%;
+
+padding:16px 18px;
+
+border-radius:16px;
+
+border:1.5px solid #e3e8e5;
+
+background:#fff;
+
+font-size:15px;
+
+font-family:inherit;
+
+transition:
+border-color .3s ease,
+box-shadow .3s ease,
+transform .3s ease;
+
+}
+
+#customerStep1Form .input-group input:focus,
+#customerStep1Form .input-group textarea:focus{
+
+outline:none;
+
+border-color:#19c15f;
+
+box-shadow:
+0 0 0 5px rgba(25,193,95,.12);
+
+transform:translateY(-2px);
+
+}
+
+#customerStep1Form label{
+
+display:block;
+
+margin-bottom:10px;
+
+font-weight:600;
+
+color:#333;
+
+}
+
+#customerStep1Form textarea{
+
+resize:vertical;
+
+min-height:120px;
+
+}
+
+#customerStep1Form textarea::placeholder,
+#customerStep1Form input::placeholder{
+
+color:#9aa3a0;
+
+}
+
+#customerStep1Form .primary-btn{
+
+transition:
+transform .3s ease,
+box-shadow .3s ease;
+
+}
+
+#customerStep1Form .primary-btn:hover{
+
+transform:translateY(-3px);
+
+}
+
+/* ==========================================
+   CUSTOMER STEP 2
+========================================== */
+
+#customerStep2Form{
+
+display:flex;
+flex-direction:column;
+gap:24px;
+
+}
+
+#customerStep2Form select{
+
+width:100%;
+
+padding:16px 18px;
+
+border-radius:16px;
+
+border:1.5px solid #e3e8e5;
+
+background:#fff;
+
+font-size:15px;
+
+font-family:inherit;
+
+}
+
+#customerStep2Form select:focus{
+
+outline:none;
+
+border-color:#19c15f;
+
+box-shadow:0 0 0 5px rgba(25,193,95,.12);
+
+}
+
+.interest-grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:15px;
+
+margin-top:10px;
+
+}
+
+.interest-card{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+padding:18px;
+
+border:1.5px solid #e3e8e5;
+
+border-radius:16px;
+
+cursor:pointer;
+
+transition:.3s ease;
+
+background:#fff;
+
+font-weight:600;
+
+}
+
+.interest-card:hover{
+
+border-color:#19c15f;
+
+background:#f5fff8;
+
+transform:translateY(-2px);
+
+}
+
+.interest-card input{
+
+width:auto;
+
+}
+
+@media(max-width:768px){
+
+.interest-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+/* ==========================================
+   CUSTOMER STEP 3
+========================================== */
+
+#customerStep3Form{
+
+display:flex;
+flex-direction:column;
+gap:24px;
+
+}
+
+#customerStep3Form input,
+#customerStep3Form select{
+
+width:100%;
+
+padding:16px 18px;
+
+border-radius:16px;
+
+border:1.5px solid #e3e8e5;
+
+background:#fff;
+
+font-size:15px;
+
+font-family:inherit;
+
+transition:
+border-color .3s ease,
+box-shadow .3s ease,
+transform .3s ease;
+
+}
+
+#customerStep3Form input:focus,
+#customerStep3Form select:focus{
+
+outline:none;
+
+border-color:#19c15f;
+
+box-shadow:0 0 0 5px rgba(25,193,95,.12);
+
+transform:translateY(-2px);
+
+}
+
+#customerStep3Form label{
+
+display:block;
+
+margin-bottom:10px;
+
+font-weight:600;
+
+color:#333;
+
+}
+
+#customerStep3Form input::placeholder{
+
+color:#9aa3a0;
+
+}
+
+#customerStep3Form .primary-btn{
+
+transition:
+transform .3s ease,
+box-shadow .3s ease;
+
+}
+
+#customerStep3Form .primary-btn:hover{
+
+transform:translateY(-3px);
+
+}
+
+/* ==========================================
+   CUSTOMER STEP 4
+========================================== */
+
+#customerStep4Form{
+
+display:flex;
+flex-direction:column;
+gap:24px;
+
+}
+
+#customerStep4Form select{
+
+width:100%;
+
+padding:16px 18px;
+
+border-radius:16px;
+
+border:1.5px solid #e3e8e5;
+
+background:#fff;
+
+font-size:15px;
+
+font-family:inherit;
+
+transition:
+border-color .3s ease,
+box-shadow .3s ease,
+transform .3s ease;
+
+}
+
+#customerStep4Form select:focus{
+
+outline:none;
+
+border-color:#19c15f;
+
+box-shadow:0 0 0 5px rgba(25,193,95,.12);
+
+transform:translateY(-2px);
+
+}
+
+#customerStep4Form label{
+
+display:block;
+
+font-weight:600;
+
+color:#333;
+
+}
+
+#customerStep4Form input[type="checkbox"]{
+
+margin-right:10px;
+
+transform:scale(1.15);
+
+accent-color:#19c15f;
+
+}
+
+#customerStep4Form .primary-btn{
+
+transition:
+transform .3s ease,
+box-shadow .3s ease;
+
+}
+
+#customerStep4Form .primary-btn:hover{
+
+transform:translateY(-3px);
+
+}
+
+/* ==========================================
+   CUSTOMER STEP 5
+========================================== */
+
+#customerStep5Form{
+
+display:flex;
+flex-direction:column;
+gap:24px;
+
+}
+
+.summary-box{
+
+padding:25px;
+
+background:#f8fbf9;
+
+border:1.5px solid #e3e8e5;
+
+border-radius:18px;
+
+}
+
+.summary-box h3{
+
+margin-bottom:18px;
+
+color:#222;
+
+font-size:20px;
+
+}
+
+.summary-box ul{
+
+list-style:none;
+
+padding:0;
+
+margin:0;
+
+display:flex;
+
+flex-direction:column;
+
+gap:14px;
+
+}
+
+.summary-box li{
+
+font-size:15px;
+
+color:#444;
+
+}
+
+.checkbox-label{
+
+display:flex;
+
+align-items:flex-start;
+
+gap:12px;
+
+font-weight:500;
+
+line-height:1.6;
+
+cursor:pointer;
+
+}
+
+.checkbox-label input{
+
+margin-top:4px;
+
+accent-color:#19c15f;
+
+transform:scale(1.15);
+
+}
+
+#customerStep5Form .primary-btn{
+
+transition:
+transform .3s ease,
+box-shadow .3s ease;
+
+}
+
+#customerStep5Form .primary-btn:hover{
+
+transform:translateY(-3px);
+
+}
+
+/* ==========================================
+   EMAIL VERIFIED PAGE
+========================================== */
+
+.verification-card{
+
+    max-width:600px;
+    margin:auto;
+    text-align:center;
+
+}
+
+.verification-icon{
+
+    width:90px;
+    height:90px;
+
+    margin:0 auto 28px;
+
+    border-radius:50%;
+
+    background:#19c15f;
+
+    color:white;
+
+    font-size:42px;
+    font-weight:700;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:
+    0 20px 45px rgba(25,193,95,.25);
+
+}
+
+.verification-card h2{
+
+    font-size:34px;
+    margin-bottom:18px;
+
+}
+
+.verification-card p{
+
+    color:#666;
+    line-height:1.8;
+    font-size:16px;
+
+}
+
+.verification-message{
+
+    margin:30px 0;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    background:#f7f9f8;
+
+    color:#555;
+
+    line-height:1.8;
+
+}
+
+#continueDashboardBtn{
+
+    width:100%;
+    margin-top:10px;
+
+}
+
+#emailVerifiedBtn{
+
+    margin-top:16px;
+    width:100%;
+
+}

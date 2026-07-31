@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ course.title }} | My Learning</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}" />
+
+    <style>
+        /* All styles as previously defined */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header h1 span { color: #0b8f47; }
+        .header .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+        .header .btn-back:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .course-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+        .course-cover {
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+        .course-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .course-cover .icon {
+            width: 80px;
+            height: 80px;
+            color: #9ca3af;
+        }
+
+        .course-info h2 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+        .course-info .vendor {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .course-info .rating {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+        .course-info .description {
+            color: #4b5563;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        .course-info .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        .course-info .meta-grid .meta-item {
+            text-align: center;
+        }
+        .course-info .meta-grid .meta-item .meta-label {
+            font-size: 11px;
+            color: #6b7280;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        .course-info .meta-grid .meta-item .meta-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin-top: 2px;
+        }
+
+        .progress-section {
+            margin-bottom: 24px;
+        }
+        .progress-section .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 4px;
+        }
+        .progress-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0b8f47, #16c96b);
+            border-radius: 999px;
+            transition: width 0.6s ease;
+        }
+
+        .lessons-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .lessons-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .lessons-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            transition: 0.2s;
+        }
+        .lesson-item:last-child { border-bottom: none; }
+        .lesson-item:hover { background: #f9fafb; }
+
+        .lesson-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #0b8f47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .lesson-info {
+            flex: 1;
+        }
+        .lesson-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+        .lesson-info p {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        .lesson-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        .lesson-meta .free-badge {
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #dcfce7;
+            color: #166534;
+        }
+        .lesson-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .lesson-actions .btn-icon {
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .lesson-actions .btn-icon:hover {
+            background: #f3f4f6;
+            color: #0b8f47;
+        }
+        .lesson-actions .btn-icon.download:hover {
+            background: #dcfce7;
+            color: #0b8f47;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .chat-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 8px;
+        }
+        .chat-messages .msg {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+        }
+        .chat-messages .msg.received {
+            background: #f3f4f6;
+            align-self: flex-start;
+            border: 1px solid #e5e7eb;
+        }
+        .chat-messages .msg.sent {
+            background: #0b8f47;
+            color: white;
+            align-self: flex-end;
+        }
+        .chat-messages .msg .time {
+            display: block;
+            font-size: 11px;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+        .chat-messages .msg.sent .time { color: rgba(255,255,255,0.7); }
+        .chat-messages .msg img, .chat-messages .msg video {
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+        .chat-messages .msg a {
+            color: #0b8f47;
+            text-decoration: underline;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .chat-input input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+        .chat-input input[type="text"]:focus {
+            border-color: #0b8f47;
+            box-shadow: 0 0 0 4px rgba(11,143,71,0.1);
+        }
+        .chat-input .btn-icon {
+            padding: 10px;
+            border-radius: 10px;
+            border: 1.5px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-input .btn-icon:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+        .chat-input .send-btn {
+            padding: 12px 24px;
+            background: #0b8f47;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .chat-input .send-btn:hover {
+            background: #0a7a3d;
+        }
+        .chat-input .file-preview {
+            font-size: 13px;
+            color: #6b7280;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .course-header { grid-template-columns: 1fr; }
+            .course-cover { min-height: 200px; }
+            .course-info .meta-grid { grid-template-columns: 1fr 1fr; }
+            .lesson-item { flex-wrap: wrap; }
+            .chat-input { flex-direction: column; align-items: stretch; }
+            .chat-input .send-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container page-transition">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <i data-lucide="book-open" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>My Learning</span>
+            </h1>
+            <a href="{{ url_for('learning') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back to My Learning
+            </a>
+        </div>
+
+        <!-- Course Info -->
+        <div class="course-header">
+            <div class="course-cover">
+                {% if course.cover_image %}
+                    <img src="{{ course.cover_image }}" alt="{{ course.title }}">
+                {% else %}
+                    <i data-lucide="book-open" class="icon"></i>
+                {% endif %}
+            </div>
+            <div class="course-info">
+                <h2>{{ course.title }}</h2>
+                <div class="vendor">
+                    by {{ course.vendor_name }}
+                    <span class="rating">⭐ {{ course.rating|round(1) if course.rating else 'N/A' }}</span>
+                </div>
+                <div class="description">{{ course.description }}</div>
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <div class="meta-label">Level</div>
+                        <div class="meta-value">{{ course.level }}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Lessons</div>
+                        <div class="meta-value">{{ course.total_lessons }}</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Duration</div>
+                        <div class="meta-value">{{ course.total_duration }} min</div>
+                    </div>
+                    <div class="meta-item">
+                        <div class="meta-label">Students</div>
+                        <div class="meta-value">{{ course.enrolled_students }}</div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-info">
+                        <span>Your Progress</span>
+                        <strong>{{ progress }}%</strong>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ progress }}%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lessons -->
+        <div class="lessons-section">
+            <div class="lessons-header">
+                <h3>
+                    <i data-lucide="list" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                    Course Lessons
+                </h3>
+                <div>
+                    <span style="font-size:14px; color:#6b7280; margin-right:16px;">{{ lessons|length }} lesson(s)</span>
+                    <a href="{{ url_for('download_all_lessons', course_id=course.id) }}" class="resume-btn" style="padding:8px 16px; font-size:13px; display:inline-flex; align-items:center; gap:6px;">
+                        <i data-lucide="download" class="icon"></i> Download All
+                    </a>
+                </div>
+            </div>
+            <div class="lesson-list">
+                {% for lesson in lessons %}
+                <div class="lesson-item">
+                    <div class="lesson-number">{{ loop.index }}</div>
+                    <div class="lesson-info">
+                        <h4>{{ lesson.title }}</h4>
+                        <p>{{ lesson.description }}</p>
+                        <div class="lesson-meta">
+                            <span><i data-lucide="clock" class="icon" style="width: 14px; height: 14px;"></i> {{ lesson.duration }} min</span>
+                            {% if lesson.is_free %}
+                            <span class="free-badge">Free</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="lesson-actions">
+                        <!-- Play -->
+                        <a href="{{ url_for('view_lesson', course_id=course.id, lesson_id=lesson.id) }}" class="btn-icon" title="Watch lesson">
+                            <i data-lucide="play-circle" class="icon"></i>
+                        </a>
+                        <!-- Download (if video file exists) -->
+                        {% if lesson.video_file %}
+                        <a href="{{ url_for('download_lesson_video', course_id=course.id, lesson_id=lesson.id) }}" class="btn-icon download" title="Download video">
+                            <i data-lucide="download" class="icon"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Chat with Instructor -->
+        <div class="chat-section">
+            <h3>
+                <i data-lucide="message-circle" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                Chat with {{ course.vendor_name }}
+            </h3>
+            <div class="chat-messages" id="chatMessages">
+                {% if messages %}
+                    {% for msg in messages %}
+                    <div class="msg {{ 'sent' if msg.sender_id == user_id else 'received' }}">
+                        {% if msg.text %}{{ msg.text }}{% endif %}
+                        {% if msg.attachment %}
+                            {% set ext = msg.attachment.split('.')[-1].lower() %}
+                            {% if ext in ['jpg','jpeg','png','gif','webp'] %}
+                                <br><img src="{{ msg.attachment }}" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px;">
+                            {% elif ext in ['mp4','mov','avi','webm'] %}
+                                <br><video src="{{ msg.attachment }}" controls style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px;"></video>
+                            {% else %}
+                                <br><a href="{{ msg.attachment }}" target="_blank">📎 Download attachment</a>
+                            {% endif %}
+                        {% endif %}
+                        <span class="time">{{ msg.created_at.strftime('%d %b %Y, %I:%M %p') if msg.created_at else 'Just now' }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; color: #6b7280; padding: 20px;">
+                        <i data-lucide="message-circle" class="icon" style="width: 48px; height: 48px; color: #d1d5db;"></i>
+                        <h4 style="margin-top: 8px;">No messages yet</h4>
+                        <p>Start a conversation with the instructor.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Chat Input with File Upload -->
+            <div class="chat-input">
+                <input type="text" id="chatInput" placeholder="Type a message...">
+                <input type="file" id="chatFile" accept="image/*,video/*,application/pdf" style="display:none;">
+                <button class="btn-icon" id="fileUploadBtn" onclick="document.getElementById('chatFile').click()" title="Attach file">
+                    <i data-lucide="paperclip" class="icon"></i>
+                </button>
+                <span id="filePreview" class="file-preview"></span>
+                <button class="send-btn" onclick="sendMessage()">
+                    <i data-lucide="send" class="icon"></i>
+                    Send
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let selectedFile = null;
+
+        // Handle file selection
+        document.getElementById('chatFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedFile = file;
+                const preview = document.getElementById('filePreview');
+                preview.textContent = file.name;
+                preview.style.display = 'inline';
+            }
+        });
+
+        // Send message (with optional attachment)
+        function sendMessage() {
+            const text = document.getElementById('chatInput').value.trim();
+            const file = selectedFile;
+
+            if (!text && !file) return;
+
+            if (file) {
+                // Upload file first
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/api/chat/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        sendChatMessage(text, data.file_url);
+                    } else {
+                        alert(data.message || 'Failed to upload file.');
+                    }
+                })
+                .catch(error => {
+                    alert('Network error during upload.');
+                });
+            } else {
+                // Text-only
+                sendChatMessage(text, null);
+            }
+        }
+
+        function sendChatMessage(text, attachmentUrl) {
+            const vendorId = {{ vendor_id }};
+
+            fetch('/api/customer/chat/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    vendor_id: vendorId,
+                    message: text,
+                    attachment: attachmentUrl
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Display the new message
+                    const chatMessages = document.getElementById('chatMessages');
+                    const sentDiv = document.createElement('div');
+                    sentDiv.className = 'msg sent';
+                    let content = text;
+                    if (attachmentUrl) {
+                        const ext = attachmentUrl.split('.').pop().toLowerCase();
+                        if (['jpg','jpeg','png','gif','webp'].includes(ext)) {
+                            content += `<br><img src="${attachmentUrl}" style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px;">`;
+                        } else if (['mp4','mov','avi','webm'].includes(ext)) {
+                            content += `<br><video src="${attachmentUrl}" controls style="max-width:100%; max-height:200px; border-radius:8px; margin-top:8px;"></video>`;
+                        } else {
+                            content += `<br><a href="${attachmentUrl}" target="_blank">📎 Attached file</a>`;
+                        }
+                    }
+                    sentDiv.innerHTML = `${content}<span class="time">Just now</span>`;
+                    chatMessages.appendChild(sentDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                    // Clear inputs
+                    document.getElementById('chatInput').value = '';
+                    document.getElementById('chatFile').value = '';
+                    document.getElementById('filePreview').style.display = 'none';
+                    selectedFile = null;
+                } else {
+                    alert(data.message || 'Failed to send message.');
+                }
+            })
+            .catch(error => {
+                alert('Network error. Please try again.');
+            });
+        }
+
+        // Enter key to send
+        document.getElementById('chatInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Scroll to bottom on load
+        const chatMessagesEl = document.getElementById('chatMessages');
+        if (chatMessagesEl) {
+            chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+        }
+    </script>
+</body>
+</html>

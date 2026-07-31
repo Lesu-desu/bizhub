@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Products | BizHub</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+          href="../../../assets/css/style.css">
+
+    <link rel="stylesheet"
+          href="../../../assets/css/transitions.css">
+
+    <link rel="stylesheet"
+          href="../../../assets/css/products.css">
+
+</head>
+
+<body>
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- ==========================================
+HEADER
+========================================== -->
+
+<header class="products-header fade-down">
+
+    <a href="../../../index.html"
+       class="logo-wrapper">
+
+        <div class="logo-icon">
+
+            B
+
+        </div>
+
+        <div>
+
+            <h1 class="logo-text">
+
+                BizHub
+
+            </h1>
+
+            <p class="logo-subtext">
+
+                Learn • Connect • Grow
+
+            </p>
+
+        </div>
+
+    </a>
+
+    <nav class="products-nav">
+
+        <a href="../marketplace.html">
+
+            Marketplace
+
+        </a>
+
+        <a href="#"
+           class="active">
+
+            Products
+
+        </a>
+
+        <a href="../courses/courses.html">
+
+            Courses
+
+        </a>
+
+        <a href="../vendors/vendors.html">
+
+            Vendors
+
+        </a>
+
+    </nav>
+
+    <div class="header-actions">
+
+        <button class="icon-btn">
+
+            🔍
+
+        </button>
+
+        <button class="icon-btn">
+
+            ❤️
+
+        </button>
+
+        <button class="icon-btn">
+
+            🛒
+
+        </button>
+
+    </div>
+
+</header>
+
+<!-- ==========================================
+HERO
+========================================== -->
+
+<section class="products-hero fade-up">
+
+    <span class="section-tag">
+
+        🛍 Marketplace Products
+
+    </span>
+
+    <h1>
+
+        Discover Premium Digital Products
+
+    </h1>
+
+    <p>
+
+        Browse business templates, software, ebooks,
+        digital assets, productivity tools,
+        and professional resources from trusted vendors.
+
+    </p>
+
+    <form class="products-search">
+
+        <input
+            type="text"
+            placeholder="Search products...">
+
+        <button
+            class="primary-btn"
+            type="submit">
+
+            Search
+
+        </button>
+
+    </form>
+
+</section>
+
+<!-- ==========================================
+PRODUCTS SECTION
+========================================== -->
+
+<section class="products-section">
+
+    <!-- Sidebar -->
+
+    <aside class="filters-panel fade-left">
+
+    <div class="filters-header">
+
+        <h2>
+
+            Filter Products
+
+        </h2>
+
+        <button class="reset-link">
+
+            Reset
+
+        </button>
+
+    </div>
+
+    <div class="filter-section">
+
+        <label class="filter-title">
+
+            Search Vendor
+
+        </label>
+
+        <input
+            type="text"
+            class="filter-search"
+            placeholder="Search vendors...">
+
+    </div>
+
+    <div class="filter-section">
+
+        <h3>
+
+            Categories
+
+        </h3>
+
+        <label class="filter-option">
+
+            <input
+                type="radio"
+                name="category">
+
+            <span>
+
+                Business
+
+            </span>
+
+        </label>
+
+        <label class="filter-option">
+
+            <input
+                type="radio"
+                name="category">
+
+            <span>
+
+                Technology
+
+            </span>
+
+        </label>
+
+        <label class="filter-option">
+
+            <input
+                type="radio"
+                name="category">
+
+            <span>
+
+                Design
+
+            </span>
+
+        </label>
+
+        <label class="filter-option">
+
+            <input
+                type="radio"
+                name="category">
+
+            <span>
+
+                Marketing
+
+            </span>
+
+        </label>
+
+        <label class="filter-option">
+
+            <input
+                type="radio"
+                name="category">
+
+            <span>
+
+                Finance
+
+            </span>
+
+        </label>
+
+    </div>
+
+    <div class="filter-section">
+
+        <h3>
+
+            Price Range
+
+        </h3>
+
+        <input
+            type="range"
+            min="0"
+            max="100000"
+            value="50000"
+            id="priceRange">
+
+        <div class="price-display">
+
+            <span>
+
+                ₦0
+
+            </span>
+
+            <span id="priceValue">
+
+                ₦50,000
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="filter-section">
+
+        <h3>
+
+            Minimum Rating
+
+        </h3>
+
+        <label class="filter-option">
+
+            <input
+                type="radio"
+                name="rating">
+
+            <span>
+
+                ⭐⭐⭐⭐⭐
+
+            </span>
+
+        </label>
+
+        <label class="filter-option">
+
+            <input
+                type="radio"
+                name="rating">
+
+            <span>
+
+                ⭐⭐⭐⭐☆
+
+            </span>
+
+        </label>
+
+        <label class="filter-option">
+
+            <input
+                type="radio"
+                name="rating">
+
+            <span>
+
+                ⭐⭐⭐☆☆
+
+            </span>
+
+        </label>
+
+    </div>
+
+    <div class="filter-section">
+
+        <h3>
+
+            Availability
+
+        </h3>
+
+        <label class="filter-option">
+
+            <input
+                type="checkbox">
+
+            <span>
+
+                In Stock
+
+            </span>
+
+        </label>
+
+        <label class="filter-option">
+
+            <input
+                type="checkbox">
+
+            <span>
+
+                On Sale
+
+            </span>
+
+        </label>
+
+        <label class="filter-option">
+
+            <input
+                type="checkbox">
+
+            <span>
+
+                New Arrivals
+
+            </span>
+
+        </label>
+
+    </div>
+
+    <button class="apply-filter-btn">
+
+        Apply Filters
+
+    </button>
+
+</aside>
+
+<!-- Products Content -->
+
+<div class="products-content">
+
+    <!-- Products Toolbar -->
+
+    <div class="products-toolbar">
+
+        <h2>
+
+            Featured Products
+
+        </h2>
+
+        <select>
+
+            <option>Newest</option>
+            <option>Most Popular</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Highest Rated</option>
+
+        </select>
+
+    </div>
+
+    <!-- Product Grid -->
+
+    <div class="products-grid">
+
+    <!-- Product Card 1 -->
+    <div class="product-card fade-up">
+
+        <div class="product-image">
+
+            📦
+
+            <span class="product-badge">
+                Best Seller
+            </span>
+
+        </div>
+
+        <div class="product-info">
+
+            <h3>Business Starter Kit</h3>
+
+            <p>by Cadmus Tech</p>
+
+            <div class="product-rating">
+                ⭐⭐⭐⭐⭐
+                <span>(128)</span>
+            </div>
+
+            <div class="product-bottom">
+
+                <h4>₦15,000</h4>
+
+                <div class="product-actions">
+
+                    <button class="wishlist-btn">❤</button>
+
+                    <button class="cart-btn">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Product Card 2 -->
+    <div class="product-card fade-up">
+
+        <div class="product-image">
+
+            📱
+
+            <span class="product-badge">
+                New
+            </span>
+
+        </div>
+
+        <div class="product-info">
+
+            <h3>Social Media Pack</h3>
+
+            <p>by Green Studio</p>
+
+            <div class="product-rating">
+                ⭐⭐⭐⭐☆
+                <span>(94)</span>
+            </div>
+
+            <div class="product-bottom">
+
+                <h4>₦8,500</h4>
+
+                <div class="product-actions">
+
+                    <button class="wishlist-btn">❤</button>
+
+                    <button class="cart-btn">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Product Card 3 -->
+    <div class="product-card fade-up">
+
+        <div class="product-image">
+
+            💻
+
+            <span class="product-badge">
+                Popular
+            </span>
+
+        </div>
+
+        <div class="product-info">
+
+            <h3>Website UI Kit</h3>
+
+            <p>by Smart Business</p>
+
+            <div class="product-rating">
+                ⭐⭐⭐⭐⭐
+                <span>(201)</span>
+            </div>
+
+            <div class="product-bottom">
+
+                <h4>₦22,000</h4>
+
+                <div class="product-actions">
+
+                    <button class="wishlist-btn">❤</button>
+
+                    <button class="cart-btn">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Product Card 4 -->
+    <div class="product-card fade-up">
+
+        <div class="product-image">
+
+            📚
+
+            <span class="product-badge">
+                Featured
+            </span>
+
+        </div>
+
+        <div class="product-info">
+
+            <h3>Business eBook Bundle</h3>
+
+            <p>by BizHub Store</p>
+
+            <div class="product-rating">
+                ⭐⭐⭐⭐☆
+                <span>(76)</span>
+            </div>
+
+            <div class="product-bottom">
+
+                <h4>₦12,000</h4>
+
+                <div class="product-actions">
+
+                    <button class="wishlist-btn">❤</button>
+
+                    <button class="cart-btn">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Product Card 5 -->
+    <div class="product-card fade-up">
+
+        <div class="product-image">
+
+            📊
+
+            <span class="product-badge">
+                Trending
+            </span>
+
+        </div>
+
+        <div class="product-info">
+
+            <h3>Finance Tracker</h3>
+
+            <p>by Cadmus Tech</p>
+
+            <div class="product-rating">
+                ⭐⭐⭐⭐⭐
+                <span>(153)</span>
+            </div>
+
+            <div class="product-bottom">
+
+                <h4>₦18,000</h4>
+
+                <div class="product-actions">
+
+                    <button class="wishlist-btn">❤</button>
+
+                    <button class="cart-btn">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Product Card 6 -->
+    <div class="product-card fade-up">
+
+        <div class="product-image">
+
+            🎨
+
+            <span class="product-badge">
+                Editor's Pick
+            </span>
+
+        </div>
+
+        <div class="product-info">
+
+            <h3>Brand Identity Kit</h3>
+
+            <p>by DesignPro</p>
+
+            <div class="product-rating">
+                ⭐⭐⭐⭐⭐
+                <span>(241)</span>
+            </div>
+
+            <div class="product-bottom">
+
+                <h4>₦25,000</h4>
+
+                <div class="product-actions">
+
+                    <button class="wishlist-btn">❤</button>
+
+                    <button class="cart-btn">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==========================================
+PAGINATION
+========================================== -->
+
+<div class="pagination fade-up">
+
+    <button class="page-btn">
+
+        ← Previous
+
+    </button>
+
+    <button class="page-number active">
+
+        1
+
+    </button>
+
+    <button class="page-number">
+
+        2
+
+    </button>
+
+    <button class="page-number">
+
+        3
+
+    </button>
+
+    <button class="page-number">
+
+        4
+
+    </button>
+
+    <button class="page-btn">
+
+        Next →
+
+    </button>
+
+    <!-- ==========================================
+PAGINATION
+========================================== -->
+
+<div class="pagination fade-up">
+
+    <button class="page-btn">
+
+        ← Previous
+
+    </button>
+
+    <button class="page-number active">
+
+        1
+
+    </button>
+
+    <button class="page-number">
+
+        2
+
+    </button>
+
+    <button class="page-number">
+
+        3
+
+    </button>
+
+    <button class="page-number">
+
+        4
+
+    </button>
+
+    <button class="page-btn">
+
+        Next →
+
+    </button>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ==========================================
+RECENTLY VIEWED
+========================================== -->
+
+<section class="recently-viewed fade-up">
+
+    <div class="section-heading">
+
+        <h2>
+
+            Recently Viewed
+
+        </h2>
+
+        <a href="#">
+
+            View All →
+
+        </a>
+
+    </div>
+
+    <div class="recent-grid">
+
+        <div class="recent-card">
+
+            <div class="recent-image">
+
+                💻
+
+            </div>
+
+            <h3>
+
+                UI Design Kit
+
+            </h3>
+
+            <p>
+
+                ₦18,000
+
+            </p>
+
+        </div>
+
+        <div class="recent-card">
+
+            <div class="recent-image">
+
+                📚
+
+            </div>
+
+            <h3>
+
+                Business Blueprint
+
+            </h3>
+
+            <p>
+
+                ₦12,500
+
+            </p>
+
+        </div>
+
+        <div class="recent-card">
+
+            <div class="recent-image">
+
+                🎨
+
+            </div>
+
+            <h3>
+
+                Logo Bundle
+
+            </h3>
+
+            <p>
+
+                ₦9,000
+
+            </p>
+
+        </div>
+
+        <div class="recent-card">
+
+            <div class="recent-image">
+
+                📈
+
+            </div>
+
+            <h3>
+
+                Finance Tracker
+
+            </h3>
+
+            <p>
+
+                ₦15,500
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+FEATURED VENDORS
+========================================== -->
+
+<section class="featured-vendors fade-up">
+
+    <div class="section-heading">
+
+        <h2>
+
+            Featured Vendors
+
+        </h2>
+
+        <a href="../vendors/vendors.html">
+
+            View All →
+
+        </a>
+
+    </div>
+
+    <div class="vendors-grid">
+
+        <!-- Vendor 1 -->
+
+        <div class="vendor-card">
+
+            <div class="vendor-avatar">
+
+                CT
+
+            </div>
+
+            <h3>
+
+                Cadmus Tech
+
+            </h3>
+
+            <p>
+
+                Business Solutions
+
+            </p>
+
+            <div class="vendor-rating">
+
+                ⭐⭐⭐⭐⭐
+
+                <span>
+
+                    (520 Reviews)
+
+                </span>
+
+            </div>
+
+            <div class="vendor-stats">
+
+                <span>
+
+                    120 Products
+
+                </span>
+
+                <span>
+
+                    8 Courses
+
+                </span>
+
+            </div>
+
+            <div class="vendor-actions">
+
+                <button class="secondary-btn">
+
+                    View Store
+
+                </button>
+
+                <button class="follow-btn">
+
+                    Follow
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Vendor 2 -->
+
+        <div class="vendor-card">
+
+            <div class="vendor-avatar">
+
+                GS
+
+            </div>
+
+            <h3>
+
+                Green Studio
+
+            </h3>
+
+            <p>
+
+                Creative Design
+
+            </p>
+
+            <div class="vendor-rating">
+
+                ⭐⭐⭐⭐☆
+
+                <span>
+
+                    (318 Reviews)
+
+                </span>
+
+            </div>
+
+            <div class="vendor-stats">
+
+                <span>
+
+                    74 Products
+
+                </span>
+
+                <span>
+
+                    3 Courses
+
+                </span>
+
+            </div>
+
+            <div class="vendor-actions">
+
+                <button class="secondary-btn">
+
+                    View Store
+
+                </button>
+
+                <button class="follow-btn">
+
+                    Follow
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Vendor 3 -->
+
+        <div class="vendor-card">
+
+            <div class="vendor-avatar">
+
+                SB
+
+            </div>
+
+            <h3>
+
+                Smart Business
+
+            </h3>
+
+            <p>
+
+                Entrepreneurship
+
+            </p>
+
+            <div class="vendor-rating">
+
+                ⭐⭐⭐⭐⭐
+
+                <span>
+
+                    (741 Reviews)
+
+                </span>
+
+            </div>
+
+            <div class="vendor-stats">
+
+                <span>
+
+                    214 Products
+
+                </span>
+
+                <span>
+
+                    16 Courses
+
+                </span>
+
+            </div>
+
+            <div class="vendor-actions">
+
+                <button class="secondary-btn">
+
+                    View Store
+
+                </button>
+
+                <button class="follow-btn">
+
+                    Follow
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+TRENDING CATEGORIES
+========================================== -->
+
+<section class="trending-categories fade-up">
+
+    <div class="section-heading">
+
+        <h2>
+
+            Browse by Category
+
+        </h2>
+
+        <a href="#">
+
+            Explore All →
+
+        </a>
+
+    </div>
+
+    <div class="categories-grid">
+
+        <div class="category-card">
+
+            <div class="category-icon">
+
+                💼
+
+            </div>
+
+            <h3>
+
+                Business
+
+            </h3>
+
+            <p>
+
+                124 Products
+
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <div class="category-icon">
+
+                💻
+
+            </div>
+
+            <h3>
+
+                Technology
+
+            </h3>
+
+            <p>
+
+                86 Products
+
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <div class="category-icon">
+
+                🎨
+
+            </div>
+
+            <h3>
+
+                Design
+
+            </h3>
+
+            <p>
+
+                73 Products
+
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <div class="category-icon">
+
+                📈
+
+            </div>
+
+            <h3>
+
+                Marketing
+
+            </h3>
+
+            <p>
+
+                91 Products
+
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <div class="category-icon">
+
+                💰
+
+            </div>
+
+            <h3>
+
+                Finance
+
+            </h3>
+
+            <p>
+
+                48 Products
+
+            </p>
+
+        </div>
+
+        <div class="category-card">
+
+            <div class="category-icon">
+
+                🚀
+
+            </div>
+
+            <h3>
+
+                Startups
+
+            </h3>
+
+            <p>
+
+                57 Products
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+NEWSLETTER
+========================================== -->
+
+<section class="newsletter-section fade-up">
+
+    <div class="newsletter-content">
+
+        <span class="section-tag">
+
+            📩 Stay Updated
+
+        </span>
+
+        <h2>
+
+            Never Miss New Products
+
+        </h2>
+
+        <p>
+
+            Subscribe to receive updates on newly released products,
+            exclusive discounts, free resources, and courses from your
+            favorite BizHub vendors.
+
+        </p>
+
+        <form class="newsletter-form">
+
+            <input
+                type="email"
+                placeholder="Enter your email address">
+
+            <button
+                type="submit"
+                class="primary-btn">
+
+                Subscribe
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+FOOTER
+========================================== -->
+
+<footer class="site-footer">
+
+    <div class="footer-grid">
+
+        <!-- Brand -->
+
+        <div class="footer-column">
+
+            <div class="logo-wrapper">
+
+                <div class="logo-icon">
+
+                    B
+
+                </div>
+
+                <div>
+
+                    <h2 class="logo-text">
+
+                        BizHub
+
+                    </h2>
+
+                    <p class="logo-subtext">
+
+                        Learn • Connect • Grow
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p class="footer-description">
+
+                BizHub is Africa's marketplace for entrepreneurs,
+                creators, freelancers and business owners to
+                buy, sell and learn.
+
+            </p>
+
+        </div>
+
+        <!-- Marketplace -->
+
+        <div class="footer-column">
+
+            <h3>
+
+                Marketplace
+
+            </h3>
+
+            <a href="../marketplace.html">
+
+                Home
+
+            </a>
+
+            <a href="#">
+
+                Products
+
+            </a>
+
+            <a href="../vendors/vendors.html">
+
+                Vendors
+
+            </a>
+
+            <a href="../courses/courses.html">
+
+                Courses
+
+            </a>
+
+        </div>
+
+        <!-- Company -->
+
+        <div class="footer-column">
+
+            <h3>
+
+                Company
+
+            </h3>
+
+            <a href="#">
+
+                About Us
+
+            </a>
+
+            <a href="#">
+
+                Careers
+
+            </a>
+
+            <a href="#">
+
+                Contact
+
+            </a>
+
+            <a href="#">
+
+                Blog
+
+            </a>
+
+        </div>
+
+        <!-- Support -->
+
+        <div class="footer-column">
+
+            <h3>
+
+                Support
+
+            </h3>
+
+            <a href="#">
+
+                Help Center
+
+            </a>
+
+            <a href="#">
+
+                Privacy Policy
+
+            </a>
+
+            <a href="#">
+
+                Terms of Service
+
+            </a>
+
+            <a href="#">
+
+                Report a Problem
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        <p>
+
+            © 2026 BizHub. All Rights Reserved.
+
+        </p>
+
+        <div class="footer-socials">
+
+            <a href="#">
+
+                🌐
+
+            </a>
+
+            <a href="#">
+
+                📘
+
+            </a>
+
+            <a href="#">
+
+                📷
+
+            </a>
+
+            <a href="#">
+
+                💼
+
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+<script src="../../../assets/js/transitions.js"></script>
+<script src="../../../assets/js/products.js"></script>
+
+</body>
+
+</html>

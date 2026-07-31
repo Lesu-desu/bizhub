@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | BizHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f7faf8; color: #111827; min-height: 100vh; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px 60px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+        .header h1 { font-size: 28px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .header h1 span { color: #0b8f47; }
+        .header .btn-back { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1.5px solid #e5e7eb; border-radius: 10px; background: white; color: #4b5563; font-weight: 600; font-size: 14px; text-decoration: none; transition: 0.2s ease; }
+        .header .btn-back:hover { border-color: #0b8f47; color: #0b8f47; background: #f0fdf4; }
+        .cart-layout { display: grid; grid-template-columns: 1fr 340px; gap: 32px; align-items: start; }
+        .cart-items { background: white; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.03); overflow: hidden; }
+        .cart-item { display: flex; align-items: center; padding: 20px 24px; border-bottom: 1px solid #f3f4f6; gap: 16px; }
+        .cart-item:last-child { border-bottom: none; }
+        .cart-item .item-thumb { width: 64px; height: 64px; border-radius: 12px; background: #dcfce7; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .cart-item .item-thumb .icon { width: 32px; height: 32px; color: #0b8f47; }
+        .cart-item .item-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
+        .cart-item .item-info { flex: 1; min-width: 0; }
+        .cart-item .item-info h4 { font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 2px; }
+        .cart-item .item-info .vendor { font-size: 13px; color: #6b7280; }
+        .cart-item .item-info .delivery-badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; margin-top: 4px; }
+        .cart-item .item-info .delivery-badge.digital { background: #dcfce7; color: #166534; }
+        .cart-item .item-info .delivery-badge.physical { background: #dbeafe; color: #1e40af; }
+        .cart-item .item-info .delivery-badge.course { background: #fef3c7; color: #92400e; }
+        .cart-item .item-quantity { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+        .cart-item .item-quantity .qty-selector { display: inline-flex; align-items: center; border: 1.5px solid #e5e7eb; border-radius: 8px; overflow: hidden; background: white; }
+        .cart-item .item-quantity .qty-selector button { padding: 4px 10px; border: none; background: transparent; font-size: 16px; cursor: pointer; font-weight: 700; color: #4b5563; transition: 0.2s ease; }
+        .cart-item .item-quantity .qty-selector button:hover { background: #f3f4f6; }
+        .cart-item .item-quantity .qty-selector button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .cart-item .item-quantity .qty-selector span { padding: 0 12px; font-weight: 600; min-width: 24px; text-align: center; }
+        .cart-item .item-subtotal { font-size: 18px; font-weight: 700; color: #0b8f47; min-width: 80px; text-align: right; }
+        .cart-item .remove-btn { padding: 8px; background: transparent; color: #9ca3af; border: none; cursor: pointer; transition: 0.2s ease; border-radius: 8px; }
+        .cart-item .remove-btn:hover { background: #fee2e2; color: #ef4444; }
+        .cart-item .remove-btn .icon { width: 18px; height: 18px; }
+        .order-summary { background: white; border-radius: 16px; border: 1px solid #e5e7eb; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); position: sticky; top: 20px; }
+        .order-summary h3 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+        .summary-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px; color: #4b5563; }
+        .summary-row .value { font-weight: 600; }
+        .summary-divider { border: none; border-top: 1px solid #e5e7eb; margin: 12px 0; }
+        .summary-total { font-size: 20px; font-weight: 800; color: #0b8f47; }
+        .promo-box { display: flex; gap: 8px; margin: 16px 0; }
+        .promo-box input { flex: 1; padding: 8px 12px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; }
+        .promo-box input:focus { border-color: #0b8f47; }
+        .promo-box button { padding: 8px 16px; background: #0b8f47; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .promo-box button:hover { background: #0a7a3d; }
+        .checkout-btn { display: block; width: 100%; padding: 16px; background: linear-gradient(135deg, #0b8f47, #16c96b); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; text-align: center; text-decoration: none; transition: 0.3s ease; margin-top: 8px; }
+        .checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(11,143,71,0.25); }
+        .checkout-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .empty-state { text-align: center; padding: 60px 40px; }
+        .empty-state .icon { width: 64px; height: 64px; color: #d1d5db; margin-bottom: 16px; }
+        .empty-state h3 { font-size: 20px; font-weight: 700; color: #111827; }
+        .empty-state p { color: #6b7280; margin-bottom: 24px; }
+        @media (max-width: 900px) {
+            .cart-layout { grid-template-columns: 1fr; }
+            .order-summary { position: static; }
+        }
+        @media (max-width: 640px) {
+            .cart-item { flex-wrap: wrap; }
+            .cart-item .item-subtotal { text-align: left; width: 100%; }
+            .cart-item .remove-btn { align-self: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container page-transition">
+        <div class="header">
+            <h1>
+                <i data-lucide="shopping-cart" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>Your Cart</span>
+            </h1>
+            <a href="{{ url_for('marketplace') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Continue Shopping
+            </a>
+        </div>
+
+        <div class="cart-layout">
+            <div class="cart-items" id="cartItems">
+                {% if cart_items and cart_items|length > 0 %}
+                    {% for item in cart_items %}
+                    <div class="cart-item"
+                         data-cart-id="{{ item.cart_id }}"
+                         data-item-type="{{ item.item_type }}"
+                         data-item-id="{{ item.item_id }}"
+                         data-price="{{ item.price }}"
+                         data-quantity="{{ item.quantity }}">
+                        <div class="item-thumb">
+                            {% if item.cover_image %}
+                                <img src="{{ item.cover_image }}" alt="{{ item.title }}">
+                            {% else %}
+                                <i data-lucide="{% if item.item_type == 'course' %}book-open{% else %}package{% endif %}" class="icon"></i>
+                            {% endif %}
+                        </div>
+                        <div class="item-info">
+                            <h4>{{ item.title }}</h4>
+                            <div class="vendor">by {{ item.vendor_name }}</div>
+                            <div class="delivery-badge {% if item.item_type == 'course' %}course{% elif item.is_digital %}digital{% else %}physical{% endif %}">
+                                {% if item.item_type == 'course' %}Course{% elif item.is_digital %}Digital{% else %}Physical{% endif %}
+                            </div>
+                            <div class="item-quantity">
+                                <div class="qty-selector">
+                                    <button class="qty-btn" onclick="changeQuantity(this, -1)" {% if item.item_type == 'course' %}disabled{% endif %}>−</button>
+                                    <span class="qty-display">{{ item.quantity }}</span>
+                                    <button class="qty-btn" onclick="changeQuantity(this, 1)" {% if item.item_type == 'course' %}disabled{% endif %}>+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item-subtotal" id="subtotal_{{ item.item_id }}">₦{{ (item.price * item.quantity)|round(2) }}</div>
+                        <button onclick="removeFromCart('{{ item.item_type }}', {{ item.item_id }})" class="remove-btn">
+                            <i data-lucide="x" class="icon"></i>
+                        </button>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i data-lucide="shopping-cart" class="icon"></i>
+                        <h3>Your cart is empty</h3>
+                        <p>Discover great products and courses from our trusted vendors.</p>
+                        <a href="{{ url_for('marketplace') }}" class="checkout-btn" style="display:inline-flex; width:auto; padding:12px 32px;">
+                            <i data-lucide="shopping-bag" class="icon"></i>
+                            Browse Marketplace
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="order-summary" id="orderSummary">
+                <h3>Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span class="value" id="subtotalDisplay">₦{{ total_price }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span class="value" id="shippingDisplay">₦{{ shipping_cost or 0 }}</span>
+                </div>
+                <hr class="summary-divider">
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <span id="grandTotal">₦{{ (total_price + (shipping_cost or 0))|round(2) }}</span>
+                </div>
+                <div class="promo-box">
+                    <input type="text" id="promoCode" placeholder="Promo code">
+                    <button onclick="applyPromo()">Apply</button>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn" onclick="proceedToCheckout()">
+                    <i data-lucide="lock" class="icon"></i>
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // ----- Change Quantity -----
+        function changeQuantity(btn, delta) {
+            const itemEl = btn.closest('.cart-item');
+            if (!itemEl) return;
+            const qtyDisplay = itemEl.querySelector('.qty-display');
+            let currentQty = parseInt(qtyDisplay.textContent);
+            let newQty = currentQty + delta;
+            if (newQty < 1) {
+                if (confirm('Remove this item from your cart?')) {
+                    const itemType = itemEl.dataset.itemType;
+                    const itemId = parseInt(itemEl.dataset.itemId);
+                    removeFromCart(itemType, itemId);
+                }
+                return;
+            }
+            qtyDisplay.textContent = newQty;
+
+            const itemType = itemEl.dataset.itemType;
+            const itemId = parseInt(itemEl.dataset.itemId);
+
+            fetch('/api/cart/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_type: itemType, item_id: itemId, quantity: newQty })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const price = parseFloat(itemEl.dataset.price);
+                    const subtotalEl = document.getElementById(`subtotal_${itemId}`);
+                    subtotalEl.textContent = '₦' + (price * newQty).toFixed(2);
+                    recalculateTotals();
+                } else {
+                    qtyDisplay.textContent = currentQty;
+                    alert(data.message || 'Failed to update quantity.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                qtyDisplay.textContent = currentQty;
+                alert('Network error. Please try again.');
+            });
+        }
+
+        // ----- Remove Item -----
+        function removeFromCart(itemType, itemId) {
+            fetch('/api/cart/remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_type: itemType, item_id: itemId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message || 'Failed to remove item.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Network error. Please try again.');
+            });
+        }
+
+        // ----- Recalculate Totals -----
+        function recalculateTotals() {
+            let subtotal = 0;
+            let hasPhysical = false;
+            document.querySelectorAll('.cart-item').forEach(el => {
+                const price = parseFloat(el.dataset.price);
+                const qty = parseInt(el.querySelector('.qty-display').textContent);
+                subtotal += price * qty;
+                if (el.querySelector('.delivery-badge.physical')) {
+                    hasPhysical = true;
+                }
+            });
+
+            let shipping = 0;
+            if (hasPhysical) {
+                shipping = 2000;
+            }
+
+            document.getElementById('subtotalDisplay').textContent = '₦' + subtotal.toFixed(2);
+            document.getElementById('shippingDisplay').textContent = '₦' + shipping.toFixed(2);
+            document.getElementById('grandTotal').textContent = '₦' + (subtotal + shipping).toFixed(2);
+        }
+
+        // ----- Promo Code (demo) -----
+        function applyPromo() {
+            const code = document.getElementById('promoCode').value.trim();
+            if (!code) {
+                alert('Please enter a promo code.');
+                return;
+            }
+            alert('Promo code "' + code + '" applied! (Demo)');
+        }
+
+        // ----- Proceed to Checkout -----
+        function proceedToCheckout() {
+            const btn = document.getElementById('checkoutBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="icon" style="animation: spin 1s linear infinite;"></i> Redirecting...`;
+            lucide.createIcons();
+            window.location.href = "{{ url_for('checkout_cart') }}";
+        }
+
+        // Initial recalc
+        document.addEventListener('DOMContentLoaded', recalculateTotals);
+    </script>
+</body>
+</html>

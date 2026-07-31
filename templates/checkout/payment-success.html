@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful | BizHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f7faf8; color: #111827; min-height: 100vh; }
+        .container { max-width: 700px; margin: 0 auto; padding: 40px 20px 60px; }
+        .card { background: white; border-radius: 20px; padding: 48px 36px; border: 1px solid #e5e7eb; box-shadow: 0 4px 16px rgba(0,0,0,0.04); text-align: center; }
+        .success-icon { width: 80px; height: 80px; border-radius: 50%; background: #dcfce7; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .success-icon .icon { width: 40px; height: 40px; color: #0b8f47; }
+        h1 { font-size: 28px; font-weight: 800; color: #111827; margin-bottom: 8px; }
+        .subtitle { color: #6b7280; font-size: 16px; margin-bottom: 24px; }
+        .order-info { background: #f8fafc; border-radius: 12px; padding: 20px; margin-bottom: 24px; text-align: left; border: 1px solid #e5e7eb; }
+        .order-info .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; }
+        .order-info .row .label { color: #6b7280; }
+        .order-info .row .value { font-weight: 600; }
+        .order-info hr { border: none; border-top: 1px solid #e5e7eb; margin: 12px 0; }
+        .item-list { margin: 16px 0; }
+        .item-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f3f4f6; align-items: center; }
+        .item-row:last-child { border-bottom: none; }
+        .item-row .title { font-weight: 500; }
+        .item-row .price { font-weight: 600; color: #0b8f47; }
+        .btn-download { display: inline-block; padding: 4px 12px; background: #0b8f47; color: white; border-radius: 6px; font-size: 12px; text-decoration: none; margin-left: 8px; }
+        .btn-download:hover { background: #0a7a3d; }
+        .btn-primary, .btn-outline { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 10px; font-weight: 700; font-size: 16px; text-decoration: none; transition: 0.3s ease; margin: 8px; }
+        .btn-primary { background: linear-gradient(135deg, #0b8f47, #16c96b); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(11,143,71,0.25); }
+        .btn-outline { border: 1.5px solid #e5e7eb; background: white; color: #4b5563; }
+        .btn-outline:hover { border-color: #0b8f47; color: #0b8f47; }
+        .actions { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+        .actions a { width: 100%; max-width: 300px; justify-content: center; }
+        @media (max-width: 480px) {
+            .card { padding: 32px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container page-transition">
+        <div class="card">
+            <div class="success-icon">
+                <i data-lucide="check-circle" class="icon"></i>
+            </div>
+            <h1>✅ Payment Successful!</h1>
+            <p class="subtitle">Thank you, {{ user_name }}! Your purchase is complete.</p>
+
+            <div class="order-info">
+                <div class="row">
+                    <span class="label">Order Number</span>
+                    <span class="value">#{{ purchase.order_number if purchase else 'BZH-' + range(10000,99999)|random }}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Payment Method</span>
+                    <span class="value">Paystack</span>
+                </div>
+                <div class="row">
+                    <span class="label">Date</span>
+                    <span class="value">{{ purchase.created_at.strftime('%d %b %Y') if purchase and purchase.created_at else 'Today' }}</span>
+                </div>
+                <hr>
+                <div class="row">
+                    <span class="label">Total Paid</span>
+                    <span class="value" style="color:#0b8f47; font-size:18px;">₦{{ purchase.amount if purchase else item.price }}</span>
+                </div>
+            </div>
+
+            {% if item_type == 'cart' %}
+                <!-- Cart purchase: list all items with download buttons -->
+                <div style="text-align:left; margin-bottom:20px;">
+                    <h3 style="font-size:16px; font-weight:600; margin-bottom:8px;">Purchased Items</h3>
+                    <div class="item-list">
+                        {% for cart_item in cart_items %}
+                        <div class="item-row">
+                            <span class="title">{{ cart_item.title }}</span>
+                            <span class="price">₦{{ cart_item.price }}</span>
+                            {% if cart_item.item_type == 'product' and cart_item.is_digital %}
+                            <a href="{{ url_for('download_product', product_id=cart_item.item_id) }}" class="btn-download">
+                                <i data-lucide="download" style="width:14px; height:14px;"></i> Download
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a href="{{ url_for('my_purchases') }}" class="btn-primary">
+                        <i data-lucide="list" class="icon" style="width:18px; height:18px;"></i>
+                        View My Purchases
+                    </a>
+                    <a href="{{ url_for('download_receipt', purchase_id=purchase.id) }}" class="btn-outline">
+                        <i data-lucide="file-text" class="icon" style="width:18px; height:18px;"></i>
+                        Download Receipt
+                    </a>
+                    <a href="{{ url_for('marketplace') }}" class="btn-outline">
+                        <i data-lucide="shopping-bag" class="icon" style="width:18px; height:18px;"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+
+            {% else %}
+                <!-- Single item purchase -->
+                <div style="text-align:left; margin-bottom:20px;">
+                    <h3 style="font-size:16px; font-weight:600; margin-bottom:4px;">{{ item.title }}</h3>
+                    <p style="color:#6b7280; font-size:14px;">by {{ item.vendor_name }}</p>
+                </div>
+
+                <div class="actions">
+                    {% if item_type == 'course' %}
+                        <a href="{{ url_for('learning') }}" class="btn-primary">
+                            <i data-lucide="book-open" class="icon" style="width:18px; height:18px;"></i>
+                            Start Learning
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('download_product', product_id=item.id) }}" class="btn-primary">
+                            <i data-lucide="download" class="icon" style="width:18px; height:18px;"></i>
+                            Download Product
+                        </a>
+                    {% endif %}
+                    <a href="{{ url_for('download_receipt', purchase_id=purchase.id) }}" class="btn-outline">
+                        <i data-lucide="file-text" class="icon" style="width:18px; height:18px;"></i>
+                        Download Receipt
+                    </a>
+                    <a href="{{ url_for('marketplace') }}" class="btn-outline">
+                        <i data-lucide="shopping-bag" class="icon" style="width:18px; height:18px;"></i>
+                        Continue Shopping
+                    </a>
+                </div>
+            {% endif %}
+
+            <p style="margin-top:24px; color:#6b7280; font-size:13px;">
+                A confirmation email has been sent to you.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

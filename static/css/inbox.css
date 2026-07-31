@@ -1,0 +1,583 @@
+/*==========================================
+INBOX HERO
+==========================================*/
+
+.inbox-hero{
+
+    max-width:1400px;
+
+    margin:60px auto;
+
+    padding:0 5%;
+
+}
+
+.inbox-hero h1{
+
+    font-size:56px;
+
+    color:#1a1a2e;
+
+    margin:20px 0;
+
+}
+
+.inbox-hero p{
+
+    max-width:700px;
+
+    color:#666;
+
+    line-height:1.8;
+
+    font-size:18px;
+
+}
+
+/*==========================================
+INBOX LAYOUT
+==========================================*/
+
+.inbox-section{
+
+    max-width:1400px;
+
+    margin:80px auto;
+
+    padding:0 5%;
+
+}
+
+.inbox-layout{
+
+    display:grid;
+
+    grid-template-columns:340px 1fr;
+
+    gap:35px;
+
+    align-items:start;
+
+}
+
+/*==========================================
+CONVERSATION SIDEBAR
+==========================================*/
+
+.conversation-sidebar{
+
+    background:#fff;
+
+    border-radius:24px;
+
+    padding:30px;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.06);
+
+    position:sticky;
+
+    top:120px;
+
+}
+
+.conversation-search{
+
+    margin-bottom:30px;
+
+}
+
+.conversation-search input{
+
+    width:100%;
+
+    padding:16px 20px;
+
+    border:1px solid #e8e8e8;
+
+    border-radius:16px;
+
+    outline:none;
+
+    font-size:15px;
+
+    transition:.3s;
+
+}
+
+.conversation-search input:focus{
+
+    border-color:#16bf5c;
+
+    box-shadow:0 0 0 4px rgba(22,191,92,.12);
+
+}
+
+/*==========================================
+CONVERSATIONS
+==========================================*/
+
+.conversation-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.conversation-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.conversation-card:hover{
+
+    background:#f7faf8;
+
+}
+
+.conversation-card.active{
+
+    background:#e8fff2;
+
+}
+
+.conversation-avatar{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:50%;
+
+    background:linear-gradient(135deg,#16bf5c,#0f9e48);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#fff;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    flex-shrink:0;
+
+}
+
+.conversation-info{
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+.conversation-info h3{
+
+    color:#1a1a2e;
+
+    font-size:17px;
+
+    margin-bottom:6px;
+
+}
+
+.conversation-info p{
+
+    color:#666;
+
+    font-size:14px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.conversation-time{
+
+    color:#888;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    white-space:nowrap;
+
+}
+
+/*==========================================
+CHAT WINDOW
+==========================================*/
+
+.chat-window{
+
+    background:#fff;
+
+    border-radius:24px;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.06);
+
+    display:flex;
+
+    flex-direction:column;
+
+    min-height:700px;
+
+    overflow:hidden;
+
+}
+
+.chat-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:28px 35px;
+
+    border-bottom:1px solid #ececec;
+
+}
+
+.chat-user{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.chat-user h3{
+
+    color:#1a1a2e;
+
+    margin-bottom:6px;
+
+}
+
+.chat-user p{
+
+    color:#16bf5c;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+/*==========================================
+CHAT MESSAGES
+==========================================*/
+
+.chat-messages{
+
+    flex:1;
+
+    padding:35px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:25px;
+
+    background:#fafcfc;
+
+}
+
+.message{
+
+    max-width:70%;
+
+    padding:18px 22px;
+
+    border-radius:22px;
+
+    line-height:1.8;
+
+    position:relative;
+
+}
+
+.message p{
+
+    margin-bottom:10px;
+
+}
+
+.message span{
+
+    display:block;
+
+    font-size:12px;
+
+    color:#777;
+
+}
+
+.message.received{
+
+    background:#ffffff;
+
+    align-self:flex-start;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.05);
+
+}
+
+.message.sent{
+
+    background:#16bf5c;
+
+    color:#fff;
+
+    align-self:flex-end;
+
+}
+
+.message.sent span{
+
+    color:rgba(255,255,255,.8);
+
+}/*==========================================
+MESSAGE COMPOSER
+==========================================*/
+
+.message-composer-section{
+
+    max-width:1400px;
+
+    margin:0 auto 100px;
+
+    padding:0 5%;
+
+}
+
+.message-composer{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    background:#fff;
+
+    padding:20px 25px;
+
+    border-radius:24px;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.06);
+
+}
+
+.composer-icon{
+
+    width:52px;
+
+    height:52px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#f5f7f8;
+
+    cursor:pointer;
+
+    font-size:22px;
+
+    transition:.3s;
+
+}
+
+.composer-icon:hover{
+
+    background:#16bf5c;
+
+    color:#fff;
+
+}
+
+.message-composer input{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    font-size:16px;
+
+    color:#1a1a2e;
+
+    background:transparent;
+
+}
+
+.send-btn{
+
+    border:none;
+
+    padding:16px 32px;
+
+    border-radius:16px;
+
+    background:#16bf5c;
+
+    color:#fff;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.send-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 30px rgba(22,191,92,.30);
+
+}
+
+/*==========================================
+RESPONSIVE
+==========================================*/
+
+@media(max-width:1200px){
+
+    .inbox-layout{
+
+        grid-template-columns:300px 1fr;
+
+    }
+
+}
+
+@media(max-width:992px){
+
+    .inbox-layout{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .conversation-sidebar{
+
+        position:static;
+
+    }
+
+    .chat-window{
+
+        min-height:600px;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .inbox-hero h1{
+
+        font-size:42px;
+
+    }
+
+    .message{
+
+        max-width:90%;
+
+    }
+
+    .message-composer{
+
+        flex-wrap:wrap;
+
+    }
+
+    .message-composer input{
+
+        width:100%;
+
+        order:3;
+
+        margin-top:10px;
+
+    }
+
+    .send-btn{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+}
+
+@media(max-width:576px){
+
+    .conversation-card{
+
+        padding:15px;
+
+    }
+
+    .chat-header{
+
+        padding:20px;
+
+    }
+
+    .chat-messages{
+
+        padding:20px;
+
+    }
+
+    .message-composer{
+
+        padding:18px;
+
+    }
+
+    .composer-icon{
+
+        width:46px;
+
+        height:46px;
+
+        font-size:18px;
+
+    }
+
+}

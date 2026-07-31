@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<div class="container">
+    <h1>Customer Support Settings</h1>
+    <form method="POST">
+        <div class="form-group">
+            <label>Phone Number (with country code, no '+' sign)</label>
+            <input type="text" name="support_phone" value="{{ support_settings.support_phone }}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Button Text</label>
+            <input type="text" name="support_button_text" value="{{ support_settings.support_button_text }}" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BizHub | Create Account</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS Connections -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}" />
+</head>
+<body class="page-transition">
+
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <header class="topbar fade-down">
+    <a href="/" class="logo-wrapper">
+      <div class="logo-icon">B</div>
+      <div>
+        <h1 class="logo-text">BizHub</h1>
+        <p class="logo-subtext">Marketplace & Learning Platform</p>
+      </div>
+    </a>
+  </header>
+
+  <main class="auth-layout">
+
+    <section class="auth-intro fade-left delay-1">
+      <span class="intro-badge">CREATE YOUR ACCOUNT</span>
+      <h2>Start Your <span>BizHub Journey</span></h2>
+      <p>Join a modern ecosystem for digital business, online learning, and growth.</p>
+    </section>
+
+    <section class="auth-card fade-up delay-2">
+      <div class="form-header">
+        <h3>Create Account</h3>
+        <p>Enter your basic account details.</p>
+      </div>
+
+      <!-- Error message display -->
+      <div id="signupError" style="display:none; background: #fee2e2; color: #991b1b; padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #ef4444;">
+        <span id="signupErrorText"></span>
+      </div>
+
+      <form id="signupForm" novalidate>
+        <div class="input-group">
+          <label>Full Name</label>
+          <input type="text" id="fullName" name="full_name" placeholder="John Doe" required>
+        </div>
+
+        <div class="input-group">
+          <label>Email Address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <div class="password-box">
+            <input type="password" id="password" name="password" placeholder="Create password" required>
+            <button type="button" class="toggle-password" data-target="password">👁</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Confirm Password</label>
+          <div class="password-box">
+            <input type="password" id="confirmPassword" name="confirm_password" placeholder="Confirm password" required>
+            <button type="button" class="toggle-password" data-target="confirmPassword">👁</button>
+          </div>
+        </div>
+
+        <button type="submit" class="primary-btn" id="signupBtn">Continue</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- JavaScript Connections -->
+  <script src="{{ url_for('static', filename='js/transitions.js') }}"></script>
+
+  <!-- SIGNUP JAVASCRIPT - Place this here -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+      console.log("Signup script loaded!"); // Debug: Check if script runs
+
+      const form = document.getElementById("signupForm");
+      const button = document.getElementById("signupBtn");
+      const errorDiv = document.getElementById("signupError");
+      const errorText = document.getElementById("signupErrorText");
+
+      // Debug: Check if form exists
+      if (!form) {
+          console.error("Signup form not found!");
+          return;
+      }
+
+      // Password Toggle
+      document.querySelectorAll(".toggle-password").forEach(btn => {
+          btn.addEventListener("click", function() {
+              const targetId = this.getAttribute("data-target");
+              const input = document.getElementById(targetId);
+
+              if (!input) return;
+
+              if (input.type === "password") {
+                  input.type = "text";
+                  this.textContent = "🙈";
+              } else {
+                  input.type = "password";
+                  this.textContent = "👁";
+              }
+          });
+      });
+
+      // Show error function
+      function showError(message) {
+          errorText.textContent = message;
+          errorDiv.style.display = "block";
+      }
+
+      function hideError() {
+          errorDiv.style.display = "none";
+      }
+
+      // Form submission
+      form.addEventListener("submit", async function(e) {
+          e.preventDefault(); // IMPORTANT: Prevents page reload
+          console.log("Form submitted!"); // Debug: Check if submit fires
+
+          hideError();
+
+          const fullName = document.getElementById("fullName").value.trim();
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value;
+          const confirmPassword = document.getElementById("confirmPassword").value;
+
+          // Client-side validation
+          if (!fullName || !email || !password || !confirmPassword) {
+              showError("Please fill in all fields.");
+              return;
+          }
+
+          if (password.length < 6) {
+              showError("Password must be at least 6 characters.");
+              return;
+          }
+
+          if (password !== confirmPassword) {
+              showError("Passwords do not match.");
+              return;
+          }
+
+          // Disable button and show loading
+          button.disabled = true;
+          button.textContent = "Creating Account...";
+
+          try {
+              const response = await fetch("/signup", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                      full_name: fullName,
+                      email: email,
+                      password: password,
+                      confirm_password: confirmPassword
+                  })
+              });
+
+              const result = await response.json();
+              console.log("Response:", result); // Debug: Check response
+
+              if (result.success) {
+                  button.textContent = "✓ Success!";
+                  button.style.background = "linear-gradient(135deg, #0b8f47, #0d6b35)";
+
+                  setTimeout(() => {
+                      window.location.href = result.redirect || "/choose-role";
+                  }, 1000);
+
+              } else {
+                  showError(result.message || "Something went wrong.");
+                  button.disabled = false;
+                  button.textContent = "Continue";
+                  button.style.background = ""; // Reset background
+              }
+
+          } catch (err) {
+              console.error("Error:", err);
+              showError("Network error. Please check your connection.");
+              button.disabled = false;
+              button.textContent = "Continue";
+              button.style.background = "";
+          }
+      });
+  });
+  </script>
+</body>
+</html>

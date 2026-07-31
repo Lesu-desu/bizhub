@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #111827;
+        }
+
+        .header-left h1 span {
+            color: #0b8f47;
+        }
+
+        .header-left p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: 1.5px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .btn-outline .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* ===== BALANCE CARD ===== */
+        .balance-card {
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            border-radius: 20px;
+            padding: 40px 48px;
+            margin-bottom: 32px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card .balance-label {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        .balance-card .balance-amount {
+            font-size: 48px;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .balance-card .balance-sub {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .balance-card .balance-sub div {
+            opacity: 0.9;
+        }
+
+        .balance-card .balance-sub strong {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .balance-card .withdraw-btn {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            padding: 12px 28px;
+            background: white;
+            color: #0b8f47;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .balance-card .withdraw-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ===== STATS ROW ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 24px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-card .stat-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .stat-card .stat-value.green {
+            color: #0b8f47;
+        }
+
+        /* ===== TRANSACTIONS TABLE ===== */
+        .transactions-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+        }
+
+        .transactions-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .transactions-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .transactions-header .tx-count {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-box input {
+            padding: 10px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: 0.2s ease;
+            width: 200px;
+        }
+
+        .search-box input:focus {
+            border-color: #0b8f47;
+            box-shadow: 0 0 0 4px rgba(11, 143, 71, 0.1);
+        }
+
+        /* ===== TABLE ===== */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background: #f9fafb;
+        }
+
+        table th {
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+            color: #111827;
+            vertical-align: middle;
+        }
+
+        table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tx-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+
+        .tx-type .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .tx-type.credit {
+            color: #0b8f47;
+        }
+
+        .tx-type.debit {
+            color: #ef4444;
+        }
+
+        .tx-type.withdrawal {
+            color: #f59e0b;
+        }
+
+        .tx-amount {
+            font-weight: 700;
+        }
+
+        .tx-amount.credit {
+            color: #0b8f47;
+        }
+
+        .tx-amount.debit {
+            color: #ef4444;
+        }
+
+        .tx-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tx-status.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .tx-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .tx-status.failed {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+        }
+
+        .empty-state .empty-icon {
+            width: 80px;
+            height: 80px;
+            color: #d1d5db;
+            margin: 0 auto 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            font-size: 15px;
+            line-height: 1.6;
+            max-width: 400px;
+            margin: 0 auto 24px;
+        }
+
+        /* ===== FLASH MESSAGES ===== */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            animation: fadeIn 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flash-success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+        }
+
+        .flash-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .flash-message .icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== WITHDRAWAL MODAL ===== */
+        .withdraw-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .withdraw-modal-overlay.active {
+            display: flex;
+        }
+
+        .withdraw-modal {
+            background: white;
+            max-width: 480px;
+            width: 90%;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .withdraw-modal .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            transition: 0.2s ease;
+        }
+
+        .withdraw-modal .close-btn:hover {
+            color: #111827;
+        }
+
+        .withdraw-modal h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .withdraw-modal .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .withdraw-modal .form-group {
+            margin-bottom: 20px;
+        }
+
+        .withdraw-modal .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .withdraw-modal .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .withdraw-modal .form-group input:focus {
+            border-color: #0b8f47;
+            box-shadow: 0 0 0 4px rgba(11, 143, 71, 0.1);
+        }
+
+        .withdraw-modal .form-group .helper-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .withdraw-modal .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .withdraw-modal .btn-group .btn-secondary {
+            flex: 1;
+            padding: 12px;
+            border: 1.5px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .withdraw-modal .btn-group .btn-secondary:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .withdraw-modal .btn-group .btn-primary {
+            flex: 2;
+            padding: 12px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .withdraw-modal .btn-group .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11, 143, 71, 0.25);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-right {
+                width: 100%;
+            }
+
+            .header-right .btn-outline {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .balance-card {
+                padding: 30px 24px;
+            }
+
+            .balance-card .balance-amount {
+                font-size: 32px;
+            }
+
+            .balance-card .withdraw-btn {
+                position: static;
+                margin-top: 16px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .balance-card .balance-sub {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .transactions-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            table th,
+            table td {
+                padding: 12px 14px;
+                font-size: 13px;
+            }
+
+            .withdraw-modal {
+                padding: 30px 24px;
+            }
+
+            .withdraw-modal .btn-group {
+                flex-direction: column;
+            }
+
+            .withdraw-modal .btn-group .btn-secondary,
+            .withdraw-modal .btn-group .btn-primary {
+                width: 100%;
+                flex: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header-left h1 {
+                font-size: 22px;
+            }
+
+            .stat-card .stat-value {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container page-transition">
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <div class="header-left">
+                <h1>
+                    <i data-lucide="wallet" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                    <span>Wallet</span>
+                </h1>
+                <p>Manage your earnings and withdrawals</p>
+            </div>
+            <div class="header-right">
+                <a href="{{ url_for('vendor_dashboard') }}" class="btn-outline">
+                    <i data-lucide="arrow-left" class="icon"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            <i data-lucide="{% if category == 'success' %}check-circle{% else %}alert-circle{% endif %}" class="icon"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- ===== BALANCE CARD ===== -->
+        <div class="balance-card">
+            <div class="balance-label">Available Balance</div>
+            <div class="balance-amount">₦{{ wallet.balance|round(2) }}</div>
+            <div class="balance-sub">
+                <div>
+                    <strong>₦{{ wallet.total_earned|round(2) }}</strong><br>
+                    Total Earned
+                </div>
+                <div>
+                    <strong>₦{{ wallet.total_withdrawn|round(2) }}</strong><br>
+                    Total Withdrawn
+                </div>
+                <div>
+                    <strong>{{ wallet.pending_withdrawals }}</strong><br>
+                    Pending Withdrawals
+                </div>
+            </div>
+            <button class="withdraw-btn" onclick="openWithdrawModal()">
+                <i data-lucide="arrow-up-right" class="icon" style="width: 16px; height: 16px;"></i>
+                Request Withdrawal
+            </button>
+        </div>
+
+        <!-- ===== STATS ROW ===== -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-label">This Month</div>
+                <div class="stat-value green">₦{{ wallet.monthly_earnings|round(2) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Last Month</div>
+                <div class="stat-value">₦{{ wallet.last_month_earnings|round(2) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Lifetime</div>
+                <div class="stat-value green">₦{{ wallet.total_earned|round(2) }}</div>
+            </div>
+        </div>
+
+        <!-- ===== TRANSACTIONS SECTION ===== -->
+        <div class="transactions-section">
+            <div class="transactions-header">
+                <div>
+                    <h2>Transaction History</h2>
+                    <span class="tx-count">{{ transactions|length }} transaction(s) total</span>
+                </div>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search transactions...">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                {% if transactions %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsTableBody">
+                        {% for tx in transactions %}
+                        <tr>
+                            <td><td>{{ tx.created_at.strftime('%Y-%m-%d %H:%M') if tx.created_at else 'N/A' }}</td></td>
+                            <td>{{ tx.description }}</td>
+                            <td>
+                                <span class="tx-type {{ tx.type|lower }}">
+                                    {% if tx.type == 'credit' %}
+                                    <i data-lucide="arrow-down" class="icon"></i>
+                                    {% elif tx.type == 'debit' %}
+                                    <i data-lucide="arrow-up" class="icon"></i>
+                                    {% elif tx.type == 'withdrawal' %}
+                                    <i data-lucide="arrow-right" class="icon"></i>
+                                    {% endif %}
+                                    {{ tx.type|capitalize }}
+                                </span>
+                            </td>
+                            <td class="tx-amount {{ tx.type|lower }}">
+                                {% if tx.type == 'credit' %}+{% else %}-{% endif %}
+                                ₦{{ tx.amount|round(2) }}
+                            </td>
+                            <td>
+                                <span class="tx-status {{ tx.status|lower }}">
+                                    {{ tx.status }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <i data-lucide="wallet" class="empty-icon"></i>
+                    <h3>No transactions yet</h3>
+                    <p>Your earnings will appear here once you start making sales.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== WITHDRAWAL MODAL ===== -->
+    <div class="withdraw-modal-overlay" id="withdrawModal">
+        <div class="withdraw-modal">
+            <button onclick="closeWithdrawModal()" class="close-btn">✕</button>
+
+            <h2>
+                <i data-lucide="arrow-up-right" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                Request Withdrawal
+            </h2>
+            <p class="subtitle">Enter the amount you'd like to withdraw. Minimum withdrawal is ₦5,000.</p>
+
+            <form id="withdrawForm" onsubmit="submitWithdrawal(event)">
+                <div class="form-group">
+                    <label>Amount (₦) <span class="required">*</span></label>
+                    <input type="number" id="withdrawAmount" placeholder="5000" min="5000" step="100" required>
+                    <div class="helper-text">Minimum: ₦5,000 • Maximum: ₦{{ wallet.balance|round(2) }}</div>
+                </div>
+
+                <div class="form-group">
+                    <div style="background: #fef3c7; padding: 12px 16px; border-radius: 10px; border-left: 4px solid #f59e0b;">
+                        <p style="font-size: 14px; color: #92400e; line-height: 1.6;">
+                            ⚠️ Withdrawals are processed within <strong>7 business days</strong> and sent to your registered bank account.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" onclick="closeWithdrawModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary" id="submitWithdrawBtn">
+                        <i data-lucide="check" class="icon"></i>
+                        Submit Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // ===== SEARCH TRANSACTIONS =====
+        const searchInput = document.getElementById('searchInput');
+        const txRows = document.querySelectorAll('#transactionsTableBody tr');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+
+            txRows.forEach(row => {
+                const description = row.cells[1].textContent.toLowerCase();
+                const type = row.cells[2].textContent.toLowerCase();
+                const status = row.cells[4].textContent.toLowerCase();
+
+                const matches = description.includes(searchTerm) ||
+                               type.includes(searchTerm) ||
+                               status.includes(searchTerm);
+                row.style.display = matches ? '' : 'none';
+            });
+        });
+
+        // ===== WITHDRAWAL MODAL =====
+        const withdrawModal = document.getElementById('withdrawModal');
+        const withdrawForm = document.getElementById('withdrawForm');
+        const withdrawAmount = document.getElementById('withdrawAmount');
+        const submitBtn = document.getElementById('submitWithdrawBtn');
+
+        function openWithdrawModal() {
+            withdrawModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            withdrawAmount.focus();
+            lucide.createIcons();
+        }
+
+        function closeWithdrawModal() {
+            withdrawModal.classList.remove('active');
+            document.body.style.overflow = '';
+            withdrawForm.reset();
+            // Reset button state
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `
+                <i data-lucide="check" class="icon"></i>
+                Submit Request
+            `;
+            lucide.createIcons();
+        }
+
+        // Close modal on outside click
+        withdrawModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeWithdrawModal();
+            }
+        });
+
+        // ===== SUBMIT WITHDRAWAL =====
+        function submitWithdrawal(e) {
+            e.preventDefault();
+
+            const amount = parseFloat(withdrawAmount.value.trim());
+
+            // Client-side validation
+            if (!amount || amount < 5000) {
+                alert('Minimum withdrawal is ₦5,000.');
+                return;
+            }
+
+            const maxBalance = {{ wallet.balance }};
+            if (amount > maxBalance) {
+                alert(`Insufficient balance. You have ₦${maxBalance.toFixed(2)} available.`);
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <i data-lucide="loader-2" class="icon" style="animation: spin 1s linear infinite;"></i>
+                Processing...
+            `;
+            lucide.createIcons();
+
+            fetch('/vendor/wallet/withdraw', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ amount: amount })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // Handle 400, 500 errors gracefully
+                    return response.json().then(err => {
+                        throw new Error(err.message || 'Server error occurred.');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Withdrawal request submitted successfully!');
+                    closeWithdrawModal();
+                    location.reload();
+                } else {
+                    alert(data.message || 'Failed to request withdrawal.');
+                    resetSubmitButton();
+                }
+            })
+            .catch(error => {
+                // Show the actual error message from the server
+                alert(error.message || 'Network error. Please try again.');
+                resetSubmitButton();
+            });
+        }
+
+        // ===== RESET BUTTON =====
+        function resetSubmitButton() {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `
+                <i data-lucide="check" class="icon"></i>
+                Submit Request
+            `;
+            lucide.createIcons();
+        }
+
+        // ===== SPINNER ANIMATION =====
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

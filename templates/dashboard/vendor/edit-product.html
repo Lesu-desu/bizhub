@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header h1 span {
+            color: #0b8f47;
+        }
+
+        .header a {
+            color: #4b5563;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+        .header a:hover {
+            color: #0b8f47;
+        }
+
+        .header a .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ===== EDIT CARD ===== */
+        .edit-card {
+            background: white;
+            border-radius: 20px;
+            padding: 36px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .edit-card h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .edit-card .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .edit-card .product-id {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #f3f4f6;
+            border-radius: 999px;
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .form-group label .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0b8f47;
+            box-shadow: 0 0 0 4px rgba(11, 143, 71, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group .helper-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* ===== PRICE CALCULATOR ===== */
+        .price-calculator {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 8px;
+            border: 1px solid #e5e7eb;
+            display: none;
+        }
+
+        .price-calculator.visible {
+            display: block;
+            animation: fadeDown 0.3s ease;
+        }
+
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .price-calculator .calc-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 14px;
+        }
+
+        .price-calculator .calc-row .label {
+            color: #6b7280;
+        }
+
+        .price-calculator .calc-row .value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .price-calculator .calc-row .value.your-profit {
+            color: #0b8f47;
+            font-size: 16px;
+        }
+
+        .price-calculator .calc-row .value.bizhub-fee {
+            color: #ef4444;
+        }
+
+        .price-calculator .calc-divider {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 8px 0;
+        }
+
+        .price-calculator .calc-total {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 8px;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .price-calculator .calc-total .your-profit {
+            color: #0b8f47;
+            font-size: 18px;
+        }
+
+        /* ===== CURRENT FILES ===== */
+        .current-files {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px 20px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+
+        .current-files .file-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .current-files .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .current-files .file-item .icon {
+            width: 20px;
+            height: 20px;
+            color: #0b8f47;
+        }
+
+        .current-files .file-item .file-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: #111827;
+        }
+
+        .current-files .file-item .file-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .current-files .file-item .remove-link {
+            margin-left: auto;
+            color: #ef4444;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .current-files .file-item .remove-link:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== FILE UPLOAD ===== */
+        .file-upload-area {
+            border: 2px dashed #e5e7eb;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s ease;
+            position: relative;
+        }
+
+        .file-upload-area:hover {
+            border-color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .file-upload-area.dragover {
+            border-color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .file-upload-area .icon {
+            width: 48px;
+            height: 48px;
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+
+        .file-upload-area h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .file-upload-area p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .file-upload-area input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-name {
+            display: none;
+            margin-top: 12px;
+            padding: 10px 16px;
+            background: #dcfce7;
+            border-radius: 8px;
+            color: #0b8f47;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-name.show {
+            display: flex;
+        }
+
+        /* ===== STATUS TOGGLE ===== */
+        .status-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #d1d5db;
+            transition: 0.3s ease;
+            border-radius: 26px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background: #0b8f47;
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(18px);
+        }
+
+        .status-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #111827;
+        }
+
+        .status-label .active-text {
+            color: #0b8f47;
+        }
+
+        .status-label .inactive-text {
+            color: #6b7280;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11, 143, 71, 0.25);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-submit .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-danger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            text-decoration: none;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .btn-group .btn-secondary {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            border: 1.5px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+
+        .btn-group .btn-secondary:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .btn-group .btn-secondary .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-group .btn-primary {
+            flex: 2;
+        }
+
+        /* ===== FLASH MESSAGES ===== */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            animation: fadeIn 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flash-success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+        }
+
+        .flash-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .flash-message .icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .edit-card {
+                padding: 24px 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn-group .btn-secondary,
+            .btn-group .btn-primary {
+                width: 100%;
+                flex: none;
+            }
+
+            .status-group {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container page-transition">
+        <div class="header">
+            <h1>
+                <i data-lucide="pen-tool" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                Edit <span>Product</span>
+            </h1>
+            <a href="{{ url_for('vendor_products') }}">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back to Products
+            </a>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            <i data-lucide="{% if category == 'success' %}check-circle{% else %}alert-circle{% endif %}" class="icon"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="edit-card">
+            <h2>
+                <i data-lucide="edit-3" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                Product Details
+            </h2>
+            <p class="subtitle">Update your product information below.</p>
+            <span class="product-id">Product #{{ product.id }}</span>
+
+            <form id="editForm" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Product Title <span class="required">*</span></label>
+                    <input type="text" name="title" value="{{ product.title }}" placeholder="e.g. Complete Python Handbook" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category <span class="required">*</span></label>
+                        <select name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="E-books" {% if product.category == 'E-books' %}selected{% endif %}>E-books</option>
+                            <option value="Templates" {% if product.category == 'Templates' %}selected{% endif %}>Templates</option>
+                            <option value="Software" {% if product.category == 'Software' %}selected{% endif %}>Software</option>
+                            <option value="Courses" {% if product.category == 'Courses' %}selected{% endif %}>Courses</option>
+                            <option value="Design Assets" {% if product.category == 'Design Assets' %}selected{% endif %}>Design Assets</option>
+                            <option value="Music & Audio" {% if product.category == 'Music & Audio' %}selected{% endif %}>Music & Audio</option>
+                            <option value="Licenses" {% if product.category == 'Licenses' %}selected{% endif %}>Licenses</option>
+                            <option value="Other" {% if product.category == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Product Type <span class="required">*</span></label>
+                        <select name="product_type" required>
+                            <option value="">Select Type</option>
+                            <option value="ebook" {% if product.product_type == 'ebook' %}selected{% endif %}>E-book</option>
+                            <option value="template" {% if product.product_type == 'template' %}selected{% endif %}>Template</option>
+                            <option value="software" {% if product.product_type == 'software' %}selected{% endif %}>Software</option>
+                            <option value="course" {% if product.product_type == 'course' %}selected{% endif %}>Course</option>
+                            <option value="design" {% if product.product_type == 'design' %}selected{% endif %}>Design Asset</option>
+                            <option value="audio" {% if product.product_type == 'audio' %}selected{% endif %}>Music/Audio</option>
+                            <option value="license" {% if product.product_type == 'license' %}selected{% endif %}>License/Key</option>
+                            <option value="other" {% if product.product_type == 'other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Price (₦) <span class="required">*</span></label>
+                    <input type="number" name="price" id="priceInput" value="{{ product.price }}" placeholder="0.00" step="0.01" min="0.01" required>
+                    <div class="helper-text">You will receive 70% of each sale. BizHub retains 30%.</div>
+                    
+                    <!-- Price Calculator -->
+                    <div class="price-calculator" id="priceCalculator">
+                        <div class="calc-row">
+                            <span class="label">Your Price</span>
+                            <span class="value">₦<span id="displayPrice">{{ product.price }}</span></span>
+                        </div>
+                        <div class="calc-row">
+                            <span class="label">BizHub Fee (30%)</span>
+                            <span class="value bizhub-fee">-₦<span id="bizhubFee">{{ (product.price * 0.30)|round(2) }}</span></span>
+                        </div>
+                        <hr class="calc-divider">
+                        <div class="calc-total">
+                            <span>Your Profit (70%)</span>
+                            <span class="your-profit">₦<span id="yourProfit">{{ (product.price * 0.70)|round(2) }}</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description <span class="required">*</span></label>
+                    <textarea name="description" placeholder="Describe your product in detail..." required>{{ product.description }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Tags (comma separated)</label>
+                    <input type="text" name="tags" value="{{ product.tags }}" placeholder="e.g. python, programming, ebook, beginner">
+                </div>
+
+                <!-- Current Files -->
+                {% if product.file_url or product.cover_image %}
+                <div class="current-files">
+                    <p style="font-weight: 600; font-size: 14px; margin-bottom: 8px; color: #111827;">Current Files</p>
+                    
+                    {% if product.file_url %}
+                    <div class="file-item">
+                        <i data-lucide="file" class="icon"></i>
+                        <div>
+                            <div class="file-name">{{ product.file_url.split('/')[-1] }}</div>
+                            <div class="file-label">Product File</div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    {% if product.cover_image %}
+                    <div class="file-item">
+                        <i data-lucide="image" class="icon"></i>
+                        <div>
+                            <div class="file-name">{{ product.cover_image.split('/')[-1] }}</div>
+                            <div class="file-label">Cover Image</div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- New Product File -->
+                <div class="form-group">
+                    <label>Replace Product File (Optional)</label>
+                    <div class="file-upload-area" id="fileDropZone">
+                        <i data-lucide="upload-cloud" class="icon"></i>
+                        <h4>Upload New Product File</h4>
+                        <p>Drag & drop or click to upload</p>
+                        <p style="font-size: 12px; color: #9ca3af; margin-top: 4px;">Max 50MB • PDF, EPUB, DOC, ZIP, MP3, MP4, etc.</p>
+                        <input type="file" name="file" id="fileInput">
+                    </div>
+                    <div class="file-name" id="fileName">
+                        <i data-lucide="file" class="icon" style="width: 18px; height: 18px;"></i>
+                        <span id="fileNameText"></span>
+                    </div>
+                </div>
+
+                <!-- New Cover Image -->
+                <div class="form-group">
+                    <label>Replace Cover Image (Optional)</label>
+                    <div class="file-upload-area" id="coverDropZone">
+                        <i data-lucide="image" class="icon"></i>
+                        <h4>Upload New Cover Image</h4>
+                        <p>Drag & drop or click to upload</p>
+                        <p style="font-size: 12px; color: #9ca3af; margin-top: 4px;">PNG, JPG, JPEG, WEBP • Max 5MB</p>
+                        <input type="file" name="cover_image" id="coverInput" accept="image/*">
+                    </div>
+                    <div class="file-name" id="coverName">
+                        <i data-lucide="image" class="icon" style="width: 18px; height: 18px;"></i>
+                        <span id="coverNameText"></span>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="form-group">
+                    <label>Product Status</label>
+                    <div class="status-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox" name="is_active" {% if product.is_active %}checked{% endif %}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="status-label">
+                            <span class="{% if product.is_active %}active-text{% else %}inactive-text{% endif %}" id="statusText">
+                                {% if product.is_active %}Active{% else %}Inactive{% endif %}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="helper-text">Toggle to make this product visible or hidden on the marketplace.</div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="btn-group">
+                    <a href="{{ url_for('vendor_products') }}" class="btn-secondary">
+                        <i data-lucide="x" class="icon"></i>
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <i data-lucide="check" class="icon"></i>
+                        Save Changes
+                    </button>
+                </div>
+
+                <!-- Delete Button -->
+                <form action="{{ url_for('vendor_delete_product', product_id=product.id) }}" 
+                      method="POST" 
+                      onsubmit="return confirm('Are you sure you want to delete this product? This action cannot be undone.');">
+                    <button type="submit" class="btn-danger">
+                        <i data-lucide="trash-2" class="icon"></i>
+                        Delete Product
+                    </button>
+                </form>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // ===== PRICE CALCULATOR =====
+        const priceInput = document.getElementById('priceInput');
+        const priceCalculator = document.getElementById('priceCalculator');
+        const displayPrice = document.getElementById('displayPrice');
+        const bizhubFee = document.getElementById('bizhubFee');
+        const yourProfit = document.getElementById('yourProfit');
+
+        function calculateProfit() {
+            const price = parseFloat(priceInput.value) || 0;
+            
+            if (price > 0) {
+                priceCalculator.classList.add('visible');
+                
+                const fee = price * 0.30;
+                const profit = price * 0.70;
+                
+                displayPrice.textContent = price.toFixed(2);
+                bizhubFee.textContent = fee.toFixed(2);
+                yourProfit.textContent = profit.toFixed(2);
+            } else {
+                priceCalculator.classList.remove('visible');
+            }
+        }
+
+        // Show calculator on load if price exists
+        if (priceInput.value && parseFloat(priceInput.value) > 0) {
+            calculateProfit();
+        }
+
+        priceInput.addEventListener('input', calculateProfit);
+
+        // ===== STATUS TOGGLE TEXT =====
+        const toggleCheckbox = document.querySelector('.toggle-switch input');
+        const statusText = document.getElementById('statusText');
+
+        toggleCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                statusText.textContent = 'Active';
+                statusText.className = 'active-text';
+            } else {
+                statusText.textContent = 'Inactive';
+                statusText.className = 'inactive-text';
+            }
+        });
+
+        // ===== FILE UPLOAD HANDLING =====
+        function handleFileInput(inputId, nameId, displayId, iconName) {
+            const input = document.getElementById(inputId);
+            const name = document.getElementById(nameId);
+            const display = document.getElementById(displayId);
+
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+                    display.textContent = `${file.name} (${sizeMB} MB)`;
+                    name.classList.add('show');
+                    const icon = name.querySelector('.icon');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', iconName);
+                        lucide.createIcons();
+                    }
+                }
+            });
+        }
+
+        handleFileInput('fileInput', 'fileName', 'fileNameText', 'file');
+        handleFileInput('coverInput', 'coverName', 'coverNameText', 'image');
+
+        // ===== DRAG AND DROP =====
+        function setupDropZone(dropZoneId, inputId) {
+            const dropZone = document.getElementById(dropZoneId);
+            const input = document.getElementById(inputId);
+
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length) {
+                    input.files = files;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        }
+
+        setupDropZone('fileDropZone', 'fileInput');
+        setupDropZone('coverDropZone', 'coverInput');
+
+        // ===== FORM SUBMISSION =====
+        document.getElementById('editForm').addEventListener('submit', function() {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <i data-lucide="loader-2" class="icon" style="animation: spin 1s linear infinite;"></i>
+                Saving...
+            `;
+            lucide.createIcons();
+        });
+
+        // Spinner animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

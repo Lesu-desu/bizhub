@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BizHub | Sign In</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS Connections -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}" />
+
+  <style>
+    /* Error Message Styling */
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #ef4444;
+      display: none;
+      animation: shake 0.5s ease;
+      font-weight: 500;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    .primary-btn.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .primary-btn.success {
+      background: linear-gradient(135deg, #0b8f47, #0d6b35) !important;
+    }
+
+    .primary-btn.error {
+      background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+      animation: shake 0.5s ease;
+    }
+
+    /* Flash Message Styling */
+    .flash-message {
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-weight: 500;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .flash-success {
+      background: #dcfce7;
+      color: #166534;
+      border-left: 4px solid #22c55e;
+    }
+
+    .flash-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+
+    .flash-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 4px solid #f59e0b;
+    }
+
+    .flash-info {
+      background: #dbeafe;
+      color: #1e40af;
+      border-left: 4px solid #3b82f6;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Verification Message Styling */
+    .verification-message {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #f59e0b;
+      display: none;
+    }
+
+    .verification-message .resend-btn {
+      margin-top: 10px;
+      padding: 8px 20px;
+      background: #13b355;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .verification-message .resend-btn:hover {
+      background: #0d8d42;
+    }
+
+    .verification-message .resend-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .verification-message .resend-status {
+      margin-left: 12px;
+      font-size: 14px;
+      color: #13b355;
+    }
+
+    .verify-link {
+      color: #13b355;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .verify-link:hover {
+      text-decoration: underline;
+    }
+
+    /* OAuth Message Styling */
+    .oauth-message {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 16px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #f59e0b;
+      display: none;
+    }
+
+    .oauth-message .oauth-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .oauth-message .oauth-login-btn {
+      background: #13b355;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: 600;
+      transition: 0.3s ease;
+    }
+
+    .oauth-message .oauth-login-btn:hover {
+      background: #0d8d42;
+    }
+
+    .oauth-message .set-password-btn {
+      background: transparent;
+      border: 2px solid #13b355;
+      color: #13b355;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .oauth-message .set-password-btn:hover {
+      background: #13b355;
+      color: white;
+    }
+
+    .oauth-message .set-password-form {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8e5;
+    }
+
+    .oauth-message .set-password-form.show {
+      display: block;
+    }
+
+    .oauth-message .set-password-form .input-group {
+      margin-bottom: 10px;
+    }
+
+    .oauth-message .set-password-form input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1.5px solid #e2e8e5;
+      font-size: 14px;
+    }
+
+    .oauth-message .set-password-form input:focus {
+      outline: none;
+      border-color: #13b355;
+      box-shadow: 0 0 0 4px rgba(19, 179, 85, 0.12);
+    }
+
+    .oauth-message .set-password-form .save-password-btn {
+      background: #13b355;
+      color: white;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .oauth-message .set-password-form .save-password-btn:hover {
+      background: #0d8d42;
+    }
+
+    /* Social Buttons Styling */
+    .social-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: 1.5px solid #e2e8e5;
+      background: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+      text-decoration: none;
+      color: #333;
+      width: 100%;
+      gap: 10px;
+      font-size: 15px;
+    }
+
+    .social-btn:hover {
+      background: #f0fdf4;
+      border-color: #13b355;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(19, 179, 85, 0.1);
+    }
+
+    .social-btn img, .social-btn svg {
+      flex-shrink: 0;
+    }
+
+    .social-btn.google-btn:hover {
+      border-color: #4285F4;
+      background: #f8faff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+
+  <header class="auth-header fade-in">
+    <a href="/" class="logo-wrapper">
+      <div class="logo-box">B</div>
+      <div>
+        <h2>BizHub</h2>
+        <p>LEARN • CONNECT • GROW</p>
+      </div>
+    </a>
+    <a href="/" class="back-home">← Back to Home</a>
+  </header>
+
+  <main class="auth-page page-transition">
+    <div class="auth-card fade-up">
+      <div class="auth-top">
+        <span class="auth-badge">Welcome Back</span>
+        <h1>Sign in to your account</h1>
+        <p>Continue learning, selling, connecting and growing with BizHub.</p>
+      </div>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash-message flash-{{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <!-- Error Message Display -->
+      <div id="errorMessage" class="error-message">
+        <span id="errorText"></span>
+      </div>
+
+      <!-- Verification Message Display -->
+      <div id="verificationMessage" class="verification-message">
+        <div id="verificationText"></div>
+        <button class="resend-btn" id="resendVerificationBtn">Resend Verification Email</button>
+        <span class="resend-status" id="resendStatus"></span>
+        <div style="margin-top: 8px; font-size: 14px;">
+          Or enter your <a href="/verify-email-page" class="verify-link">verification code here →</a>
+        </div>
+      </div>
+
+      <!-- OAuth Account Message -->
+      <div id="oauthMessage" class="oauth-message">
+        <div id="oauthText"></div>
+        <div class="oauth-actions">
+          <a href="#" id="oauthLoginBtn" class="oauth-login-btn">
+            Continue with <span id="oauthProviderName">Google</span>
+          </a>
+          <button id="setPasswordBtn" class="set-password-btn">Set Password</button>
+        </div>
+        <div id="setPasswordForm" class="set-password-form">
+          <div class="input-group">
+            <label for="newPasswordOAuth" style="font-size: 14px; font-weight: 600; color: #333;">New Password</label>
+            <input type="password" id="newPasswordOAuth" placeholder="Enter new password" required minlength="6">
+          </div>
+          <div class="input-group">
+            <label for="confirmPasswordOAuth" style="font-size: 14px; font-weight: 600; color: #333;">Confirm Password</label>
+            <input type="password" id="confirmPasswordOAuth" placeholder="Confirm new password" required>
+          </div>
+          <button id="savePasswordBtn" class="save-password-btn">Set Password & Login</button>
+          <span id="passwordStatus" style="margin-left: 12px; font-size: 14px;"></span>
+        </div>
+      </div>
+
+      <form class="auth-form" id="loginForm">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+            <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">👁</button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="remember">
+            <span>Remember me</span>
+          </label>
+          <a href="/forgot-password" class="forgot-link">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="primary-btn auth-btn" id="loginBtn">Sign In</button>
+      </form>
+
+      <div class="auth-divider"><span>OR</span></div>
+
+      <div class="social-buttons">
+        <a href="{{ url_for('oauth_login', provider='google') }}" class="social-btn google-btn">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width: 20px; height: 20px;" alt="Google">
+          Continue with Google
+        </a>
+      </div>
+
+      <div class="auth-bottom">
+        <p>Don't have an account? <a href="/signup">Sign Up</a></p>
+      </div>
+    </div>
+  </main>
+
+  <!-- JavaScript Connections -->
+  <script src="{{ url_for('static', filename='js/transitions.js') }}"></script>
+  <script>
+  // ===== LOGIN FORM HANDLER =====
+  document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.getElementById('loginForm');
+      const loginBtn = document.getElementById('loginBtn');
+      const errorMessage = document.getElementById('errorMessage');
+      const errorText = document.getElementById('errorText');
+      const verificationMessage = document.getElementById('verificationMessage');
+      const verificationText = document.getElementById('verificationText');
+      const resendBtn = document.getElementById('resendVerificationBtn');
+      const resendStatus = document.getElementById('resendStatus');
+
+      // OAuth Elements
+      const oauthMessage = document.getElementById('oauthMessage');
+      const oauthText = document.getElementById('oauthText');
+      const oauthLoginBtn = document.getElementById('oauthLoginBtn');
+      const oauthProviderName = document.getElementById('oauthProviderName');
+      const setPasswordBtn = document.getElementById('setPasswordBtn');
+      const setPasswordForm = document.getElementById('setPasswordForm');
+      const newPasswordOAuth = document.getElementById('newPasswordOAuth');
+      const confirmPasswordOAuth = document.getElementById('confirmPasswordOAuth');
+      const savePasswordBtn = document.getElementById('savePasswordBtn');
+      const passwordStatus = document.getElementById('passwordStatus');
+
+      let currentOAuthEmail = '';
+      let currentOAuthProvider = '';
+
+      // ===== ERROR FUNCTIONS =====
+      function showError(message) {
+          errorText.textContent = message;
+          errorMessage.style.display = 'block';
+          loginBtn.classList.remove('loading', 'success');
+          loginBtn.classList.add('error');
+
+          setTimeout(() => {
+              loginBtn.classList.remove('error');
+          }, 3000);
+      }
+
+      function hideError() {
+          errorMessage.style.display = 'none';
+          loginBtn.classList.remove('error');
+      }
+
+      // ===== VERIFICATION FUNCTIONS =====
+      function showVerification(message, email) {
+          verificationText.textContent = message;
+          verificationMessage.style.display = 'block';
+          resendBtn.dataset.email = email;
+          resendStatus.textContent = '';
+      }
+
+      function hideVerification() {
+          verificationMessage.style.display = 'none';
+      }
+
+      // ===== OAuth FUNCTIONS =====
+      function showOAuthMessage(message, provider, email) {
+          oauthText.textContent = message;
+          oauthMessage.style.display = 'block';
+          oauthProviderName.textContent = provider.charAt(0).toUpperCase() + provider.slice(1);
+          oauthLoginBtn.href = '/oauth-login/' + provider.toLowerCase();
+          currentOAuthEmail = email;
+          currentOAuthProvider = provider;
+          setPasswordForm.classList.remove('show');
+      }
+
+      function hideOAuthMessage() {
+          oauthMessage.style.display = 'none';
+      }
+
+      // Toggle Set Password Form
+      if (setPasswordBtn) {
+          setPasswordBtn.addEventListener('click', function() {
+              setPasswordForm.classList.toggle('show');
+              if (setPasswordForm.classList.contains('show')) {
+                  newPasswordOAuth.focus();
+              }
+          });
+      }
+
+      // Save Password for OAuth User
+      if (savePasswordBtn) {
+          savePasswordBtn.addEventListener('click', async function() {
+              const password = newPasswordOAuth.value.trim();
+              const confirmPassword = confirmPasswordOAuth.value.trim();
+
+              if (!password || password.length < 6) {
+                  passwordStatus.textContent = '❌ Password must be at least 6 characters.';
+                  passwordStatus.style.color = '#dc2626';
+                  return;
+              }
+
+              if (password !== confirmPassword) {
+                  passwordStatus.textContent = '❌ Passwords do not match.';
+                  passwordStatus.style.color = '#dc2626';
+                  return;
+              }
+
+              this.disabled = true;
+              this.textContent = 'Saving...';
+              passwordStatus.textContent = '⏳ Saving...';
+              passwordStatus.style.color = '#f59e0b';
+
+              try {
+                  const response = await fetch('/set-password', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                          email: currentOAuthEmail,
+                          password: password
+                      })
+                  });
+
+                  const result = await response.json();
+
+                  if (result.success) {
+                      passwordStatus.textContent = '✅ Password set! Redirecting...';
+                      passwordStatus.style.color = '#13b355';
+                      setTimeout(() => {
+                          window.location.href = result.redirect || '/dashboard';
+                      }, 1500);
+                  } else {
+                      passwordStatus.textContent = '❌ ' + (result.message || 'Failed to set password.');
+                      passwordStatus.style.color = '#dc2626';
+                  }
+              } catch (error) {
+                  passwordStatus.textContent = '❌ Network error. Please try again.';
+                  passwordStatus.style.color = '#dc2626';
+              } finally {
+                  this.disabled = false;
+                  this.textContent = 'Set Password & Login';
+              }
+          });
+      }
+
+      // ===== RESEND VERIFICATION =====
+      if (resendBtn) {
+          resendBtn.addEventListener('click', async function() {
+              const email = this.dataset.email;
+              if (!email) {
+                  alert('No email found. Please try logging in again.');
+                  return;
+              }
+
+              this.disabled = true;
+              this.textContent = 'Sending...';
+              resendStatus.textContent = '';
+
+              try {
+                  const response = await fetch('/resend-verification', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ email: email })
+                  });
+
+                  const result = await response.json();
+
+                  if (result.success) {
+                      resendStatus.textContent = '✅ Verification email sent!';
+                      resendStatus.style.color = '#13b355';
+                      setTimeout(() => {
+                          resendStatus.textContent = '';
+                      }, 5000);
+                  } else {
+                      alert(result.message || 'Failed to resend verification email.');
+                  }
+              } catch (error) {
+                  alert('Network error. Please try again.');
+              } finally {
+                  this.disabled = false;
+                  this.textContent = 'Resend Verification Email';
+              }
+          });
+      }
+
+      // ===== PASSWORD TOGGLE =====
+      const togglePassword = document.getElementById('togglePassword');
+      if (togglePassword) {
+          togglePassword.addEventListener('click', function() {
+              const passwordInput = document.getElementById('password');
+              const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+              passwordInput.setAttribute('type', type);
+              this.textContent = type === 'password' ? '👁' : '🙈';
+          });
+      }
+
+      // ===== LOGIN FORM SUBMISSION =====
+      if (loginForm) {
+          loginForm.addEventListener('submit', async function(e) {
+              e.preventDefault();
+              hideVerification();
+              hideError();
+              hideOAuthMessage();
+
+              const email = document.getElementById('email').value.trim();
+              const password = document.getElementById('password').value;
+              const remember = document.getElementById('remember')?.checked || false;
+
+              if (!email || !password) {
+                  showError('Please fill in all fields.');
+                  return;
+              }
+
+              loginBtn.textContent = 'Signing In...';
+              loginBtn.disabled = true;
+              loginBtn.classList.add('loading');
+              loginBtn.classList.remove('success', 'error');
+
+              try {
+                  const response = await fetch('/login', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ email, password, remember })
+                  });
+
+                  const result = await response.json();
+
+                  if (result.success) {
+                      loginBtn.textContent = '✓ Welcome Back!';
+                      loginBtn.classList.remove('loading', 'error');
+                      loginBtn.classList.add('success');
+                      loginBtn.style.background = 'linear-gradient(135deg, #0b8f47, #0d6b35)';
+
+                      setTimeout(() => {
+                          window.location.href = result.redirect || '/dashboard';
+                      }, 1500);
+                  } else {
+                      // Check if it's an OAuth account
+                      if (result.needs_oauth && result.provider) {
+                          showOAuthMessage(result.message, result.provider, email);
+                          loginBtn.textContent = 'Sign In';
+                          loginBtn.disabled = false;
+                          loginBtn.classList.remove('loading', 'success');
+                      } else if (result.needs_verification && result.email) {
+                          showVerification(result.message, result.email);
+                          loginBtn.textContent = 'Sign In';
+                          loginBtn.disabled = false;
+                          loginBtn.classList.remove('loading', 'success');
+                      } else {
+                          showError(result.message || 'Login failed. Please try again.');
+                          loginBtn.textContent = 'Sign In';
+                          loginBtn.disabled = false;
+                          loginBtn.classList.remove('loading', 'success');
+                      }
+                  }
+
+              } catch (error) {
+                  showError('Network error. Please check your connection.');
+                  loginBtn.textContent = 'Sign In';
+                  loginBtn.disabled = false;
+                  loginBtn.classList.remove('loading', 'success');
+                  console.error('Login error:', error);
+              }
+          });
+      }
+
+      // ===== CLEAR ERRORS ON INPUT =====
+      document.getElementById('email')?.addEventListener('input', function() {
+          hideError();
+          hideVerification();
+          hideOAuthMessage();
+      });
+      document.getElementById('password')?.addEventListener('input', function() {
+          hideError();
+          hideVerification();
+          hideOAuthMessage();
+      });
+  });
+  </script>
+
+</body>
+</html>

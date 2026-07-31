@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #111827;
+        }
+
+        .header h1 span {
+            color: #0b8f47;
+        }
+
+        .header .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .header .btn-back:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        /* ===== LAYOUT ===== */
+        .community-layout {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 32px;
+            align-items: start;
+        }
+
+        /* ===== LEFT COLUMN: POSTS ===== */
+        .posts-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+        }
+
+        .posts-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .posts-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .posts-header .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .posts-header input {
+            padding: 8px 14px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .posts-header input:focus {
+            border-color: #0b8f47;
+            box-shadow: 0 0 0 4px rgba(11, 143, 71, 0.1);
+        }
+
+        .posts-header select {
+            padding: 8px 14px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            background: white;
+            cursor: pointer;
+        }
+
+        .posts-header select:focus {
+            border-color: #0b8f47;
+        }
+
+        .btn-primary-sm {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary-sm:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(11, 143, 71, 0.2);
+        }
+
+        /* ===== POST CARD ===== */
+        .post-item {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f3f4f6;
+            transition: 0.2s ease;
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-item:hover {
+            background: #f9fafb;
+        }
+
+        .post-item .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .post-item .post-header .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .post-item .post-header .avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-item .post-header .author-info {
+            flex: 1;
+        }
+
+        .post-item .post-header .author-info .name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #111827;
+        }
+
+        .post-item .post-header .author-info .time {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .post-item .post-header .category-tag {
+            padding: 2px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .post-item .post-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .post-item .post-title:hover {
+            color: #0b8f47;
+        }
+
+        .post-item .post-excerpt {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .post-item .post-footer {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .post-item .post-footer .stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .post-item .post-footer .stat .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .post-item .post-footer .like-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6b7280;
+            font-size: 13px;
+            transition: 0.2s ease;
+        }
+
+        .post-item .post-footer .like-btn:hover {
+            color: #0b8f47;
+        }
+
+        .post-item .post-footer .like-btn.liked {
+            color: #ef4444;
+        }
+
+        .post-item .post-footer .like-btn .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ===== RIGHT COLUMN: SIDEBAR ===== */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .sidebar-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 20px 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .sidebar-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-card h3 .icon {
+            width: 20px;
+            height: 20px;
+            color: #0b8f47;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 14px;
+            color: #4b5563;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .category-item:hover {
+            color: #0b8f47;
+        }
+
+        .category-item .count {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .contributor-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .contributor-item:last-child {
+            border-bottom: none;
+        }
+
+        .contributor-item .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #dcfce7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            color: #0b8f47;
+            flex-shrink: 0;
+        }
+
+        .contributor-item .info {
+            flex: 1;
+        }
+
+        .contributor-item .info .name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #111827;
+        }
+
+        .contributor-item .info .contributions {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .contributor-item .rank {
+            font-weight: 700;
+            color: #f59e0b;
+            font-size: 14px;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+        }
+
+        .empty-state .icon {
+            width: 64px;
+            height: 64px;
+            color: #d1d5db;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            font-size: 15px;
+            max-width: 400px;
+            margin: 0 auto 24px;
+            line-height: 1.6;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .community-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                order: -1;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header .btn-back {
+                width: 100%;
+                justify-content: center;
+            }
+            .posts-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .posts-header .controls {
+                width: 100%;
+            }
+            .posts-header input {
+                flex: 1;
+            }
+            .sidebar {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container page-transition">
+        <div class="header">
+            <h1>
+                <i data-lucide="users" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>Community</span>
+            </h1>
+            <a href="{{ url_for('customer_dashboard') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back to Dashboard
+            </a>
+        </div>
+
+        <div class="community-layout">
+            <!-- ===== LEFT COLUMN: POSTS ===== -->
+            <div>
+                <div class="posts-section">
+                    <div class="posts-header">
+                        <h2>Discussions</h2>
+                        <div class="controls">
+                            <input type="text" id="searchInput" placeholder="Search posts...">
+                            <select id="categoryFilter">
+                                <option value="">All Categories</option>
+                                {% for cat in categories %}
+                                <option value="{{ cat.category }}">{{ cat.category }}</option>
+                                {% endfor %}
+                            </select>
+                            <button onclick="openCreatePostModal()" class="btn-primary-sm">
+                                <i data-lucide="plus" class="icon" style="width: 16px; height: 16px;"></i>
+                                New Post
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="postsList">
+                        {% if posts and posts|length > 0 %}
+                            {% for post in posts %}
+                            <div class="post-item" data-category="{{ post.category }}" data-search="{{ post.title|lower }} {{ post.content|lower }} {{ post.author_name|lower }}">
+                                <div class="post-header">
+                                    <div class="avatar">
+                                        {% if post.author_avatar %}
+                                            <img src="{{ post.author_avatar }}" alt="{{ post.author_name }}">
+                                        {% else %}
+                                            {{ post.author_name[0] }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="author-info">
+                                        <div class="name">{{ post.author_name }}</div>
+                                        <div class="time">{{ post.created_at[:16] if post.created_at else 'Just now' }}</div>
+                                    </div>
+                                    <span class="category-tag">{{ post.category }}</span>
+                                </div>
+                                <div class="post-title" onclick="openPostDetail({{ post.id }})">
+                                    {{ post.title }}
+                                </div>
+                                <div class="post-excerpt">
+                                    {{ post.content[:150] }}{% if post.content|length > 150 %}...{% endif %}
+                                </div>
+                                <div class="post-footer">
+                                    <span class="stat">
+                                        <i data-lucide="message-circle" class="icon"></i>
+                                        {{ post.comments_count }}
+                                    </span>
+                                    <button onclick="toggleLike({{ post.id }})" class="like-btn {% if post.user_liked %}liked{% endif %}" id="likeBtn_{{ post.id }}">
+                                        <i data-lucide="heart" class="icon"></i>
+                                        <span id="likeCount_{{ post.id }}">{{ post.likes_count }}</span>
+                                    </button>
+                                    <span class="stat">
+                                        <i data-lucide="eye" class="icon"></i>
+                                        {{ post.views }}
+                                    </span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-state">
+                                <i data-lucide="message-circle" class="icon"></i>
+                                <h3>No posts yet</h3>
+                                <p>Be the first to start a discussion! Share your thoughts, ask questions, or help others.</p>
+                                <button onclick="openCreatePostModal()" class="btn-primary-sm">
+                                    <i data-lucide="plus" class="icon"></i>
+                                    Create First Post
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== RIGHT COLUMN: SIDEBAR ===== -->
+            <div class="sidebar">
+                <!-- Categories -->
+                <div class="sidebar-card">
+                    <h3>
+                        <i data-lucide="folder" class="icon"></i>
+                        Categories
+                    </h3>
+                    <div class="category-item" data-category="">
+                        <span>All</span>
+                        <span class="count">{{ posts|length }}</span>
+                    </div>
+                    {% for cat in categories %}
+                    <div class="category-item" data-category="{{ cat.category }}">
+                        <span>{{ cat.category }}</span>
+                        <span class="count">{{ cat.post_count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Top Contributors -->
+                <div class="sidebar-card">
+                    <h3>
+                        <i data-lucide="award" class="icon"></i>
+                        Top Contributors
+                    </h3>
+                    {% if contributors and contributors|length > 0 %}
+                        {% for contributor in contributors %}
+                        <div class="contributor-item">
+                            <div class="avatar">
+                                {% if contributor.profile_picture %}
+                                    <img src="{{ contributor.profile_picture }}" alt="{{ contributor.full_name }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                                {% else %}
+                                    {{ contributor.full_name[0] }}
+                                {% endif %}
+                            </div>
+                            <div class="info">
+                                <div class="name">{{ contributor.full_name }}</div>
+                                <div class="contributions">{{ contributor.total_contributions }} contributions</div>
+                            </div>
+                            {% if loop.index == 1 %}
+                            <span class="rank">🥇</span>
+                            {% elif loop.index == 2 %}
+                            <span class="rank">🥈</span>
+                            {% elif loop.index == 3 %}
+                            <span class="rank">🥉</span>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="color: #6b7280; font-size: 14px;">No contributors yet. Start posting!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CREATE POST MODAL ===== -->
+    <div id="createPostModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div style="background: white; max-width: 600px; width: 90%; border-radius: 24px; padding: 40px; position: relative; max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeCreatePostModal()" style="position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">✕</button>
+
+            <h2 style="font-size: 24px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">
+                <i data-lucide="edit-3" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                Create a Post
+            </h2>
+            <p style="color: #6b7280; font-size: 14px; margin-bottom: 24px;">Share your thoughts, ask questions, or start a discussion.</p>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px;">Title <span style="color: #ef4444;">*</span></label>
+                <input type="text" id="postTitle" placeholder="What's on your mind?" style="width: 100%; padding: 12px 16px; border: 1.5px solid #e5e7eb; border-radius: 12px; font-size: 14px; font-family: 'Inter', sans-serif; outline: none; transition: 0.2s ease;">
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px;">Category <span style="color: #ef4444;">*</span></label>
+                <select id="postCategory" style="width: 100%; padding: 12px 16px; border: 1.5px solid #e5e7eb; border-radius: 12px; font-size: 14px; font-family: 'Inter', sans-serif; outline: none; background: white; cursor: pointer;">
+                    <option value="General">General</option>
+                    <option value="Business">Business</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Design">Design</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Health">Health</option>
+                    <option value="Education">Education</option>
+                </select>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <label style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px;">Content <span style="color: #ef4444;">*</span></label>
+                <textarea id="postContent" placeholder="Write your post here..." style="width: 100%; padding: 12px 16px; border: 1.5px solid #e5e7eb; border-radius: 12px; font-size: 14px; font-family: 'Inter', sans-serif; outline: none; transition: 0.2s ease; min-height: 120px; resize: vertical;"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 12px;">
+                <button onclick="closeCreatePostModal()" style="flex: 1; padding: 12px; border: 1.5px solid #e5e7eb; background: white; color: #4b5563; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s ease;">Cancel</button>
+                <button onclick="submitPost()" style="flex: 2; padding: 12px; background: linear-gradient(135deg, #0b8f47, #16c96b); color: white; border: none; border-radius: 12px; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s ease;">
+                    <i data-lucide="send" class="icon" style="width: 18px; height: 18px;"></i>
+                    Post
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // ===== SEARCH AND FILTER =====
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const postItems = document.querySelectorAll('.post-item');
+
+        function filterPosts() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const category = categoryFilter.value;
+
+            postItems.forEach(item => {
+                const searchData = item.dataset.search || '';
+                const itemCategory = item.dataset.category || '';
+
+                const matchesSearch = searchData.includes(searchTerm);
+                const matchesCategory = !category || itemCategory === category;
+
+                item.style.display = (matchesSearch && matchesCategory) ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterPosts);
+        categoryFilter.addEventListener('change', filterPosts);
+
+        // ===== CATEGORY SIDEBAR FILTER =====
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const category = this.dataset.category;
+                categoryFilter.value = category;
+                filterPosts();
+            });
+        });
+
+        // ===== CREATE POST MODAL =====
+        function openCreatePostModal() {
+            document.getElementById('createPostModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCreatePostModal() {
+            document.getElementById('createPostModal').style.display = 'none';
+            document.body.style.overflow = '';
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postContent').value = '';
+        }
+
+        function submitPost() {
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            const category = document.getElementById('postCategory').value;
+
+            if (!title || title.length < 3) {
+                alert('Title must be at least 3 characters.');
+                return;
+            }
+
+            if (!content || content.length < 10) {
+                alert('Content must be at least 10 characters.');
+                return;
+            }
+
+            fetch('/api/community/post/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: title,
+                    content: content,
+                    category: category
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeCreatePostModal();
+                    location.reload();
+                } else {
+                    alert(data.message || 'Failed to create post.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Network error. Please try again.');
+            });
+        }
+
+        // Close modal on outside click
+        document.getElementById('createPostModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCreatePostModal();
+            }
+        });
+
+        // ===== LIKE POST =====
+        function toggleLike(postId) {
+            fetch(`/api/community/post/${postId}/like`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const btn = document.getElementById(`likeBtn_${postId}`);
+                    const count = document.getElementById(`likeCount_${postId}`);
+
+                    count.textContent = data.likes_count;
+
+                    if (data.action === 'liked') {
+                        btn.classList.add('liked');
+                    } else {
+                        btn.classList.remove('liked');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // ===== OPEN POST DETAIL =====
+        function openPostDetail(postId) {
+            // For now, just show a message
+            // You can expand this later to a full post detail page
+            alert(`Post #${postId} detail view coming soon!`);
+        }
+
+        // ===== SPINNER ANIMATION =====
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center | BizHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 0 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .help-card {
+            background: white;
+            border-radius: 24px;
+            padding: 48px 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        .help-card .icon {
+            width: 64px;
+            height: 64px;
+            color: #0b8f47;
+            margin-bottom: 16px;
+        }
+        .help-card h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .help-card p {
+            color: #6b7280;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #25D366;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 18px;
+            text-decoration: none;
+            transition: 0.3s ease;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+        .btn-whatsapp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
+        }
+        .btn-whatsapp .icon {
+            width: 28px;
+            height: 28px;
+        }
+        .back-link {
+            margin-top: 24px;
+            display: inline-block;
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            color: #0b8f47;
+        }
+        .back-link .icon {
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
+        }
+        @media (max-width: 600px) {
+            .help-card {
+                padding: 32px 20px;
+            }
+            .help-card h1 {
+                font-size: 24px;
+            }
+            .btn-whatsapp {
+                width: 100%;
+                font-size: 16px;
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="help-card">
+            <i data-lucide="life-buoy" class="icon"></i>
+            <h1>How can we help?</h1>
+            <p>Our support team is here to assist you. Click the button below to chat with us directly on WhatsApp.</p>
+
+            <a href="https://wa.me/{{ support_settings.support_phone }}?text=Hello%2C%20I%20need%20assistance."
+               target="_blank"
+               class="btn-whatsapp">
+                <i data-lucide="message-circle" class="icon"></i>
+                {{ support_settings.support_button_text }}
+            </a>
+        </div>
+
+        <a href="{{ url_for('customer_dashboard') if session.user_type == 'customer' else url_for('vendor_dashboard') }}" class="back-link">
+            <i data-lucide="arrow-left" class="icon"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

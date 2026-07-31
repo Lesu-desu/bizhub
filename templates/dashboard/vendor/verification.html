@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification | Vendor Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header h1 span {
+            color: #0b8f47;
+        }
+
+        .header .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .header .btn-back:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .header .btn-back .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Verification Card */
+        .verification-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            padding: 32px 36px;
+            margin-bottom: 24px;
+        }
+
+        .verification-card .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .verification-card .card-header .icon {
+            width: 32px;
+            height: 32px;
+            color: #0b8f47;
+        }
+
+        .verification-card .card-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .verification-card .card-header .badge {
+            margin-left: auto;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .verification-card .card-header .badge.verified {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .verification-card .card-header .badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .verification-card .card-header .badge.unverified {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .verification-card .card-body {
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .verification-card .card-body .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .verification-card .card-body .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .verification-card .card-body .detail-row .label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .verification-card .card-body .detail-row .value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .verification-card .card-body .detail-row .value.verified {
+            color: #0b8f47;
+        }
+
+        .verification-card .card-body .detail-row .value.pending {
+            color: #f59e0b;
+        }
+
+        .btn-verify {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: #0b8f47;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            text-decoration: none;
+            margin-top: 16px;
+        }
+
+        .btn-verify:hover {
+            background: #0a7a3d;
+            transform: translateY(-2px);
+        }
+
+        .btn-verify .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header .btn-back {
+                width: 100%;
+                justify-content: center;
+            }
+            .verification-card {
+                padding: 24px 20px;
+            }
+            .verification-card .card-header {
+                flex-wrap: wrap;
+            }
+            .verification-card .card-header .badge {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container page-transition">
+        <div class="header">
+            <h1>
+                <i data-lucide="shield-check" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>Verification</span>
+            </h1>
+            <a href="{{ url_for('vendor_dashboard') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back to Dashboard
+            </a>
+        </div>
+
+        <!-- Email Verification -->
+        <div class="verification-card">
+            <div class="card-header">
+                <i data-lucide="mail" class="icon"></i>
+                <h2>Email Verification</h2>
+                <span class="badge {{ 'verified' if user.is_verified else 'unverified' }}">
+                    {{ 'Verified' if user.is_verified else 'Not Verified' }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="detail-row">
+                    <span class="label">Email Address</span>
+                    <span class="value">{{ user.email }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Status</span>
+                    <span class="value {{ 'verified' if user.is_verified else 'pending' }}">
+                        {{ 'Verified ✅' if user.is_verified else 'Pending Verification' }}
+                    </span>
+                </div>
+                {% if not user.is_verified %}
+                <button class="btn-verify" onclick="resendVerification()">
+                    <i data-lucide="send" class="icon"></i>
+                    Resend Verification Email
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Business Verification -->
+        <div class="verification-card">
+            <div class="card-header">
+                <i data-lucide="building-2" class="icon"></i>
+                <h2>Business Verification</h2>
+                <span class="badge {{ 'verified' if vendor.business_verified else 'pending' }}">
+                    {{ 'Verified' if vendor.business_verified else 'Pending' }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="detail-row">
+                    <span class="label">Business Name</span>
+                    <span class="value">{{ vendor.business_name }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Business Type</span>
+                    <span class="value">{{ vendor.business_type or 'Not specified' }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">CAC Registration</span>
+                    <span class="value">{{ vendor.cac_number or 'Not provided' }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Tax ID (TIN)</span>
+                    <span class="value">{{ vendor.tin or 'Not provided' }}</span>
+                </div>
+                {% if not vendor.business_verified %}
+                <button class="btn-verify" onclick="verifyBusiness()">
+                    <i data-lucide="refresh-cw" class="icon"></i>
+                    Request Business Verification
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Bank Account Verification -->
+        <div class="verification-card">
+            <div class="card-header">
+                <i data-lucide="landmark" class="icon"></i>
+                <h2>Bank Account Verification</h2>
+                <span class="badge {{ 'verified' if vendor.bank_verified else 'pending' }}">
+                    {{ 'Verified' if vendor.bank_verified else 'Pending' }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="detail-row">
+                    <span class="label">Bank Name</span>
+                    <span class="value">{{ vendor.bank_name or 'Not set' }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Account Number</span>
+                    <span class="value">{{ vendor.bank_account_number or 'Not set' }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Account Name</span>
+                    <span class="value">{{ vendor.bank_account_name or 'Not set' }}</span>
+                </div>
+                {% if not vendor.bank_verified %}
+                <button class="btn-verify" onclick="verifyBankAccount()">
+                    <i data-lucide="check-circle" class="icon"></i>
+                    Verify Bank Account
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function resendVerification() {
+            fetch('/vendor/verification/resend-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Verification email sent! Please check your inbox.');
+                } else {
+                    alert(data.message || 'Failed to send verification email.');
+                }
+            })
+            .catch(error => {
+                alert('Network error. Please try again.');
+            });
+        }
+
+        function verifyBusiness() {
+            if (!confirm('Submit your business for verification? This will be reviewed by our team.')) {
+                return;
+            }
+            fetch('/vendor/verification/business', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Business verification request submitted!');
+                    location.reload();
+                } else {
+                    alert(data.message || 'Failed to submit verification.');
+                }
+            })
+            .catch(error => {
+                alert('Network error. Please try again.');
+            });
+        }
+
+        function verifyBankAccount() {
+            fetch('/vendor/verification/bank', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Bank account verified successfully!');
+                    location.reload();
+                } else {
+                    alert(data.message || 'Failed to verify bank account.');
+                }
+            })
+            .catch(error => {
+                alert('Network error. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>

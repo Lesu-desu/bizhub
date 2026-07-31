@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+{% block title %}Failed Emails{% endblock %}
+{% block page_title %}Failed Emails{% endblock %}
+{% block content %}
+<table>
+    <thead><tr><th>Recipient</th><th>Subject</th><th>Type</th><th>Error</th><th>Date</th><th>Action</th></tr></thead>
+    <tbody>
+        {% for email in emails %}
+        <tr>
+            <td>{{ email.recipient_email }}</td>
+            <td>{{ email.subject }}</td>
+            <td>{{ email.type }}</td>
+            <td>{{ email.error_message or 'N/A' }}</td>
+            <td>{{ email.created_at[:16] }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('admin_resend_email', email_id=email.id) }}">
+                    <button class="btn btn-secondary" type="submit">Resend</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" style="text-align:center;">No failed emails.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

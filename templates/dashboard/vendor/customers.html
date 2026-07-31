@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers | Vendor Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor-dashboard.css') }}">
+
+    <style>
+        .customers-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 20px 60px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-header h1 span {
+            color: #0b8f47;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .btn-back:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .btn-back .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .customers-table-wrapper {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .customers-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .customers-table th {
+            background: #f9fafb;
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .customers-table td {
+            padding: 16px 20px;
+            font-size: 14px;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: middle;
+        }
+
+        .customers-table tr:hover td {
+            background: #fafbfc;
+        }
+
+        .customer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #dcfce7;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0b8f47;
+        }
+
+        .customer-name {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state .icon {
+            width: 48px;
+            height: 48px;
+            color: #9ca3af;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .customers-table-wrapper {
+                overflow-x: auto;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-back {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="customers-container page-transition">
+        <div class="page-header">
+            <h1>
+                <i data-lucide="users" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>Customers</span>
+            </h1>
+            <a href="{{ url_for('vendor_dashboard') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back to Dashboard
+            </a>
+        </div>
+
+        <div class="customers-table-wrapper">
+            {% if customers %}
+            <table class="customers-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Orders</th>
+                        <th>Total Spent</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td>
+                            <div class="customer-name">
+                                <span class="customer-avatar">{{ customer.full_name[0]|upper if customer.full_name else 'U' }}</span>
+                                {{ customer.full_name or 'Guest' }}
+                            </div>
+                        </td>
+                        <td>{{ customer.email or 'N/A' }}</td>
+                        <td>{{ customer.total_orders or 0 }}</td>
+                        <td>₦{{ "%.2f"|format(customer.total_spent or 0) }}</td>
+                        <td>{{ customer.joined_date.strftime('%Y-%m-%d %H:%M') if customer.joined_date else 'N/A' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <i data-lucide="users" class="icon"></i>
+                <h3>No customers yet</h3>
+                <p>When customers purchase your products, they'll appear here.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

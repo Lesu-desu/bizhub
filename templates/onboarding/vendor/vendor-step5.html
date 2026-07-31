@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Setup | Step 5 | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+
+    <style>
+        .vendor-layout {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 7%;
+        }
+        .vendor-card {
+            max-width: 620px;
+            width: 100%;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px);
+            border-radius: 32px;
+            padding: 42px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        }
+        .wizard-top {
+            margin-bottom: 34px;
+        }
+        .wizard-step {
+            display: inline-block;
+            background: rgba(25, 193, 95, 0.12);
+            color: #0f9f49;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .wizard-top h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .wizard-top p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .progress {
+            width: 100%;
+            height: 6px;
+            background: #e2e8e5;
+            border-radius: 999px;
+            margin: 20px 0 16px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #16bf5c, #0f9e48);
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+        .progress-100 { width: 100%; }
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .step-indicator .circle {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e2e8e5;
+            transition: 0.3s ease;
+        }
+        .step-indicator .circle.active {
+            background: #13b355;
+        }
+        .step-indicator .line {
+            flex: 1;
+            height: 2px;
+            background: #e2e8e5;
+            transition: 0.3s ease;
+            min-width: 20px;
+        }
+        .step-indicator .line.active {
+            background: #13b355;
+        }
+        .wizard-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+        .wizard-buttons .secondary-btn {
+            flex: 1;
+            text-align: center;
+            padding: 16px;
+            border: 1.5px solid #e2e8e5;
+            border-radius: 14px;
+            background: white;
+            color: #333;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+        .wizard-buttons .secondary-btn:hover {
+            border-color: #13b355;
+            background: rgba(19, 179, 85, 0.05);
+        }
+        .wizard-buttons .primary-btn {
+            flex: 2;
+        }
+        .input-group select {
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 16px;
+            border: 1.5px solid #e2e8e5;
+            background: white;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.25s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+        .input-group select:focus {
+            outline: none;
+            border-color: #18b75b;
+            box-shadow: 0 0 0 5px rgba(24,183,91,0.12);
+        }
+        .review-box {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 24px;
+            margin: 24px 0;
+            border: 1px solid #e2e8e5;
+        }
+        .review-box h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #111;
+        }
+        .review-box ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .review-box ul li {
+            padding: 6px 0;
+            color: #333;
+            font-weight: 500;
+        }
+        .review-box ul li::before {
+            content: "✅ ";
+            color: #13b355;
+        }
+        .terms-box {
+            margin: 20px 0;
+            padding: 16px 20px;
+            background: #f0fdf4;
+            border-radius: 12px;
+            border: 1px solid #dcfce7;
+        }
+        .terms-box label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .terms-box input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            accent-color: #13b355;
+            cursor: pointer;
+        }
+        /* Account verification styles */
+        .account-verification-status {
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        .account-verification-status.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+        }
+        .account-verification-status.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+        .account-verification-status.loading {
+            display: block;
+            background: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid #f59e0b;
+        }
+        @media (max-width: 500px) {
+            .vendor-card { padding: 28px 20px; }
+            .wizard-buttons { flex-direction: column; }
+            .wizard-buttons .secondary-btn { order: 2; }
+        }
+    </style>
+</head>
+
+<body class="page-transition">
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<header class="topbar fade-down">
+    <a href="{{ url_for('index') }}" class="logo-wrapper">
+        <div class="logo-icon">B</div>
+        <div>
+            <h1 class="logo-text">BizHub</h1>
+            <p class="logo-subtext">Marketplace & Learning Platform</p>
+        </div>
+    </a>
+</header>
+
+<main class="vendor-layout fade-up">
+    <div class="vendor-card">
+        <div class="wizard-top">
+            <span class="wizard-step">Step 5 of 5</span>
+            <h2>Payments & Final Review</h2>
+            <p>Choose how you'd like to receive your earnings and complete your BizHub vendor profile.</p>
+
+            <div class="progress">
+                <div class="progress-fill progress-100"></div>
+            </div>
+
+            <div class="step-indicator">
+                <div class="circle active"></div><div class="line active"></div>
+                <div class="circle active"></div><div class="line active"></div>
+                <div class="circle active"></div><div class="line active"></div>
+                <div class="circle active"></div><div class="line active"></div>
+                <div class="circle active"></div>
+            </div>
+        </div>
+
+        <form id="vendorStep5Form">
+            <div class="input-group">
+                <label>Bank Name</label>
+                <select id="bank_name" required>
+                    <option value="">Select Bank</option>
+                    <!-- Banks will be loaded dynamically via JavaScript -->
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Account Number</label>
+                <input type="text" id="account_number" maxlength="10" placeholder="0123456789" required>
+                <div class="account-verification-status" id="verificationStatus"></div>
+            </div>
+
+            <div class="input-group">
+                <label>Account Name</label>
+                <input type="text" id="account_name" placeholder="Account name will appear here" readonly>
+            </div>
+
+            <div class="review-box">
+                <h3>Review Your Information</h3>
+                <p style="color: #666; font-size: 14px; margin-bottom: 12px;">You'll be able to edit any information later from your Vendor Dashboard.</p>
+                <ul>
+                    <li>Business Information</li>
+                    <li>Business Branding</li>
+                    <li>Business Location</li>
+                    <li>Verification Information</li>
+                    <li>Payment Details</li>
+                </ul>
+            </div>
+
+            <div class="terms-box">
+                <label>
+                    <input type="checkbox" id="terms" required>
+                    I agree to the BizHub Vendor Terms & Conditions and Marketplace Policy.
+                </label>
+            </div>
+
+            <div class="wizard-buttons">
+                <a href="{{ url_for('vendor_step4') }}" class="secondary-btn">← Back</a>
+                <button type="submit" class="primary-btn">Complete Setup</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script src="{{ url_for('static', filename='js/transitions.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('vendorStep5Form');
+    const bankSelect = document.getElementById('bank_name');
+    const accountNumber = document.getElementById('account_number');
+    const accountName = document.getElementById('account_name');
+    const verificationStatus = document.getElementById('verificationStatus');
+    let verificationTimeout = null;
+
+    // ===== LOAD BANKS =====
+    async function loadBanks() {
+        try {
+            const response = await fetch('/api/banks');
+            const result = await response.json();
+
+            if (result.banks && result.banks.length > 0) {
+                bankSelect.innerHTML = '<option value="">Select Bank</option>';
+                result.banks.forEach(bank => {
+                    const option = document.createElement('option');
+                    option.value = bank.code;
+                    option.textContent = bank.name;
+                    bankSelect.appendChild(option);
+                });
+            }
+        } catch (error) {
+            console.error('Error loading banks:', error);
+        }
+    }
+    loadBanks();
+
+    // ===== VERIFY ACCOUNT =====
+    function verifyAccount() {
+        const bankCode = bankSelect.value;
+        const accountNum = accountNumber.value.trim();
+
+        // Clear previous status
+        verificationStatus.className = 'account-verification-status';
+        verificationStatus.textContent = '';
+        accountName.value = '';
+
+        if (!bankCode || accountNum.length < 10) {
+            return;
+        }
+
+        // Show loading
+        verificationStatus.className = 'account-verification-status loading';
+        verificationStatus.textContent = '⏳ Verifying account...';
+
+        if (verificationTimeout) {
+            clearTimeout(verificationTimeout);
+        }
+
+        verificationTimeout = setTimeout(async function() {
+            try {
+                const response = await fetch('/api/verify-account', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        account_number: accountNum,
+                        bank_code: bankCode
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    verificationStatus.className = 'account-verification-status success';
+                    verificationStatus.textContent = `✅ Verified: ${result.account_name}`;
+                    accountName.value = result.account_name;
+                } else {
+                    // Show the actual error message from Paystack
+                    verificationStatus.className = 'account-verification-status error';
+
+                    // Customize error messages for common issues
+                    let errorMessage = result.message;
+                    if (errorMessage.includes('bank code')) {
+                        errorMessage = 'Invalid bank selected. Please refresh and try again.';
+                    } else if (errorMessage.includes('account number')) {
+                        errorMessage = 'Invalid account number. Please check and try again.';
+                    } else if (result.status_code === 401) {
+                        errorMessage = 'Paystack authentication failed. Please contact support.';
+                    }
+
+                    verificationStatus.textContent = `❌ ${errorMessage}`;
+                    accountName.value = '';
+                }
+            } catch (error) {
+                verificationStatus.className = 'account-verification-status error';
+                verificationStatus.textContent = '❌ Network error. Please try again.';
+                accountName.value = '';
+            }
+        }, 500);
+    }
+
+
+    // ===== EVENT LISTENERS =====
+    bankSelect.addEventListener('change', verifyAccount);
+    accountNumber.addEventListener('input', verifyAccount);
+
+    // ===== FORM SUBMISSION =====
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const button = this.querySelector('.primary-btn');
+            const termsCheckbox = document.getElementById('terms');
+
+            if (!termsCheckbox.checked) {
+                alert('Please agree to the Terms & Conditions.');
+                return;
+            }
+
+            if (!accountName.value) {
+                alert('Please verify your account details first.');
+                accountNumber.focus();
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = 'Setting up...';
+
+            const data = {
+                bank_name: bankSelect.options[bankSelect.selectedIndex]?.text || '',
+                account_number: accountNumber.value.trim(),
+                account_name: accountName.value.trim()
+            };
+            
+            try {
+                const response = await fetch('{{ url_for("vendor_step5") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    window.location.href = result.redirect;
+                } else {
+                    alert(result.message || 'Something went wrong');
+                    button.disabled = false;
+                    button.textContent = 'Complete Setup';
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+                button.disabled = false;
+                button.textContent = 'Complete Setup';
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>

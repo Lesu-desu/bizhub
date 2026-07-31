@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Learning | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/learning.css') }}" />
+
+    <style>
+        /* ── reset & base ── */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        .bg-glow { display: none; }
+
+        /* ── header ── */
+        .products-header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 20px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0b8f47;
+            line-height: 1.2;
+        }
+
+        .logo-subtext {
+            font-size: 10px;
+            color: #6b7280;
+            letter-spacing: 1px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .products-nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .products-nav a {
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.2s ease;
+            padding: 4px 0;
+            border-bottom: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .products-nav a:hover {
+            color: #0b8f47;
+        }
+
+        .products-nav a.active {
+            color: #0b8f47;
+            border-bottom-color: #0b8f47;
+        }
+
+        .products-nav a .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: 0.2s;
+            color: #4b5563;
+        }
+
+        .icon-btn:hover {
+            background: #f3f4f6;
+            color: #0b8f47;
+        }
+
+        .icon-btn .icon {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* ── breadcrumb ── */
+        .breadcrumb {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px 0;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a {
+            color: #0b8f47;
+            text-decoration: none;
+        }
+
+        .breadcrumb span {
+            margin: 0 6px;
+        }
+
+        /* ── hero ── */
+        .learning-hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px 24px;
+            text-align: center;
+        }
+
+        .learning-hero h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #111827;
+            margin-top: 8px;
+        }
+
+        .learning-hero p {
+            color: #6b7280;
+            font-size: 16px;
+            max-width: 600px;
+            margin: 8px auto 0;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: #dcfce7;
+            color: #166534;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── main container ── */
+        .learning-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 60px;
+        }
+
+        /* ── continue card ── */
+        .continue-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e5e7eb;
+            padding: 28px 32px;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 28px;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: 0.2s;
+        }
+
+        .continue-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            border-color: #0b8f47;
+        }
+
+        .continue-content {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .continue-content h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 8px 0 6px;
+            color: #111827;
+        }
+
+        .continue-content p {
+            color: #4b5563;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .course-progress {
+            margin: 12px 0 16px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-bottom: 4px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0b8f47, #16c96b);
+            border-radius: 999px;
+            transition: width 0.6s ease;
+        }
+
+        .resume-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 28px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.3s ease;
+            cursor: pointer;
+        }
+
+        .resume-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11, 143, 71, 0.25);
+        }
+
+        .resume-btn .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .continue-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 16px;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            font-size: 48px;
+        }
+
+        .continue-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ── section headings ── */
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 40px 0 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .section-heading h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #111827;
+            margin-top: 4px;
+        }
+
+        /* ── course grid ── */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            transition: 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            border-color: #0b8f47;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .course-image {
+            height: 160px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .course-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .course-image .icon {
+            width: 48px;
+            height: 48px;
+            color: #9ca3af;
+        }
+
+        .course-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-content h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+
+        .course-content .instructor {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .course-content .course-progress {
+            margin: 0 0 12px;
+        }
+
+        .course-content .resume-btn {
+            align-self: flex-start;
+            padding: 8px 20px;
+            font-size: 13px;
+        }
+
+        /* ── stats ── */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: #0b8f47;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .stat-card .stat-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #0b8f47;
+            margin-bottom: 6px;
+        }
+
+        .stat-card .stat-icon .icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .stat-card h3 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0b8f47;
+            margin: 0;
+        }
+
+        .stat-card p {
+            color: #6b7280;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        /* ── achievements ── */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .achievement-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .achievement-card:hover {
+            border-color: #f59e0b;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+        }
+
+        .achievement-card .icon {
+            width: 32px;
+            height: 32px;
+            color: #f59e0b;
+            margin-bottom: 6px;
+        }
+
+        .achievement-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111827;
+            margin: 4px 0;
+        }
+
+        .achievement-card p {
+            color: #6b7280;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* ── empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .empty-state .primary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-top: 16px;
+            transition: 0.3s ease;
+        }
+
+        .empty-state .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11, 143, 71, 0.25);
+        }
+
+        /* ── footer ── */
+        .site-footer {
+            border-top: 1px solid #e5e7eb;
+            background: white;
+            padding: 40px 24px 24px;
+            margin-top: 40px;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 32px;
+        }
+
+        .footer-column h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 12px;
+        }
+
+        .footer-column a {
+            display: block;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 13px;
+            margin-bottom: 6px;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-column a:hover {
+            color: #0b8f47;
+        }
+
+        .footer-column a .icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 24px auto 0;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .footer-socials a {
+            margin-left: 12px;
+            text-decoration: none;
+            color: #4b5563;
+        }
+
+        .footer-socials a:hover {
+            color: #0b8f47;
+        }
+
+        /* ── responsive ── */
+        @media (max-width: 768px) {
+            .products-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .products-nav {
+                width: 100%;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+            .continue-card {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .continue-image {
+                width: 100%;
+                height: 160px;
+            }
+            .learning-hero h1 {
+                font-size: 26px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- HEADER -->
+    <header class="products-header fade-down">
+        <a href="{{ url_for('index') }}" class="logo-wrapper">
+            <div class="logo-icon">B</div>
+            <div>
+                <h1 class="logo-text">BizHub</h1>
+                <p class="logo-subtext">Learn • Connect • Grow</p>
+            </div>
+        </a>
+
+        <nav class="products-nav">
+            <a href="{{ url_for('marketplace') }}">
+                <i data-lucide="shopping-bag" class="icon"></i>
+                Marketplace
+            </a>
+            <a href="{{ url_for('products') }}">
+                <i data-lucide="package" class="icon"></i>
+                Products
+            </a>
+            <a class="active" href="{{ url_for('learning') }}">
+                <i data-lucide="book-open" class="icon"></i>
+                Learning
+            </a>
+            <a href="{{ url_for('vendors') }}">
+                <i data-lucide="store" class="icon"></i>
+                Vendors
+            </a>
+        </nav>
+
+        <div class="header-actions">
+            <button class="icon-btn" aria-label="Search">
+                <i data-lucide="search" class="icon"></i>
+            </button>
+            <button class="icon-btn" aria-label="Notifications">
+                <i data-lucide="bell" class="icon"></i>
+            </button>
+            <a href="{{ url_for('logout') }}" class="icon-btn" title="Logout">
+                <i data-lucide="log-out" class="icon"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- BREADCRUMB -->
+    <section class="breadcrumb fade-up">
+        <a href="{{ url_for('customer_dashboard') }}">
+            <i data-lucide="layout-dashboard" class="icon" style="width:14px;height:14px;vertical-align:middle;"></i>
+            Dashboard
+        </a>
+        <span>›</span>
+        <span>My Learning</span>
+    </section>
+
+    <!-- HERO -->
+    <section class="learning-hero fade-up">
+        <span class="section-tag">📚 My Learning</span>
+        <h1>Continue Your Learning Journey</h1>
+        <p>Access your purchased courses, track your progress, and continue building valuable skills.</p>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <div class="learning-container">
+
+        <!-- CONTINUE LEARNING -->
+        <section class="continue-learning-section">
+            {% if current_course %}
+            <div class="continue-card">
+                <div class="continue-content">
+                    <span class="section-tag">Continue Learning</span>
+                    <h2>{{ current_course.title }}</h2>
+                    <p>{{ current_course.description|truncate(120) }}</p>
+                    <div class="course-progress">
+                        <div class="progress-info">
+                            <span>Progress</span>
+                            <strong>{{ current_course.progress }}%</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width:{{ current_course.progress }}%;"></div>
+                        </div>
+                    </div>
+                    <!-- ✅ Fixed: now points to learning_detail -->
+                    <a href="{{ url_for('learning_detail', course_id=current_course.id) }}" class="resume-btn">
+                        <i data-lucide="play-circle" class="icon"></i>
+                        Resume Learning
+                    </a>
+                </div>
+                <div class="continue-image">
+                    {% if current_course.cover_image %}
+                        <img src="{{ current_course.cover_image }}" alt="{{ current_course.title }}" />
+                    {% else %}
+                        <i data-lucide="book-open" class="icon" style="width:48px;height:48px;color:#9ca3af;"></i>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div class="continue-card">
+                <div class="continue-content">
+                    <span class="section-tag">Continue Learning</span>
+                    <h2>Start Your First Course</h2>
+                    <p>You haven't enrolled in any courses yet. Browse our marketplace and start learning today!</p>
+                    <a href="{{ url_for('marketplace') }}" class="resume-btn">
+                        <i data-lucide="shopping-bag" class="icon"></i>
+                        Browse Courses
+                    </a>
+                </div>
+                <div class="continue-image">
+                    <i data-lucide="book-open" class="icon" style="width:48px;height:48px;color:#9ca3af;"></i>
+                </div>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- MY COURSES -->
+        <section class="my-courses-section">
+            <div class="section-heading">
+                <div>
+                    <span class="section-tag">My Library</span>
+                    <h2>My Courses</h2>
+                </div>
+                <span style="color:#6b7280; font-size:14px;">{{ courses|length }} enrolled</span>
+            </div>
+
+            <div class="courses-grid">
+                {% if courses %}
+                    {% for course in courses %}
+                    <div class="course-card">
+                        <div class="course-image">
+                            {% if course.cover_image %}
+                                <img src="{{ course.cover_image }}" alt="{{ course.title }}" />
+                            {% else %}
+                                <i data-lucide="book-open" class="icon"></i>
+                            {% endif %}
+                        </div>
+                        <div class="course-content">
+                            <h3>{{ course.title }}</h3>
+                            <div class="instructor">by {{ course.instructor }} • {{ course.level }}</div>
+                            <div class="course-progress">
+                                <div class="progress-info">
+                                    <span>Progress</span>
+                                    <strong>{{ course.progress }}%</strong>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width:{{ course.progress }}%;"></div>
+                                </div>
+                            </div>
+                            {% if course.progress == 100 %}
+                                <a href="{{ url_for('learning_detail', course_id=course.id) }}" class="resume-btn">View Certificate</a>
+                            {% else %}
+                                <a href="{{ url_for('learning_detail', course_id=course.id) }}" class="resume-btn">Resume Course</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i data-lucide="book-open" class="icon" style="width:64px;height:64px;color:#d1d5db;margin-bottom:16px;"></i>
+                        <p style="font-size:18px; font-weight:600; color:#111827;">You haven't enrolled in any courses yet.</p>
+                        <p style="color:#6b7280;">Explore the marketplace and purchase your first course.</p>
+                        <a href="{{ url_for('marketplace') }}" class="primary-btn">
+                            <i data-lucide="shopping-bag" class="icon"></i>
+                            Browse Courses
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- STATISTICS -->
+        <section class="learning-stats-section">
+            <div class="section-heading">
+                <div>
+                    <span class="section-tag">Your Progress</span>
+                    <h2>Learning Statistics</h2>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i data-lucide="book-open" class="icon"></i></div>
+                    <h3>{{ stats.total_courses }}</h3>
+                    <p>Courses Enrolled</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i data-lucide="clock" class="icon"></i></div>
+                    <h3>{{ stats.total_hours }} hrs</h3>
+                    <p>Total Learning Time</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i data-lucide="award" class="icon"></i></div>
+                    <h3>{{ stats.certificates }}</h3>
+                    <p>Certificates Earned</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i data-lucide="star" class="icon"></i></div>
+                    <h3>{{ stats.avg_score }}%</h3>
+                    <p>Average Quiz Score</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACHIEVEMENTS -->
+        <section class="achievements-section">
+            <div class="section-heading">
+                <div>
+                    <span class="section-tag">Milestones</span>
+                    <h2>Your Achievements</h2>
+                </div>
+            </div>
+            <div class="achievements-grid">
+                {% if achievements %}
+                    {% for achievement in achievements %}
+                    <div class="achievement-card">
+                        <i data-lucide="trophy" class="icon" style="width:32px;height:32px;color:#f59e0b;margin-bottom:6px;"></i>
+                        <h3>{{ achievement.title }}</h3>
+                        <p>{{ achievement.description }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="achievement-card">
+                        <i data-lucide="target" class="icon" style="width:32px;height:32px;color:#9ca3af;margin-bottom:6px;"></i>
+                        <h3>Start Your Journey</h3>
+                        <p>Complete your first course to earn achievements!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-column">
+                <a href="{{ url_for('index') }}" class="logo-wrapper">
+                    <div class="logo-icon" style="width:32px;height:32px;font-size:16px;">B</div>
+                    <div>
+                        <h2 class="logo-text" style="font-size:18px;">BizHub</h2>
+                        <p class="logo-subtext">Learn • Connect • Grow</p>
+                    </div>
+                </a>
+                <p class="footer-description" style="margin-top:8px;font-size:13px;color:#6b7280;">Africa's leading marketplace for digital products, online learning and business growth.</p>
+            </div>
+            <div class="footer-column">
+                <h3>Marketplace</h3>
+                <a href="{{ url_for('products') }}"><i data-lucide="package" class="icon"></i> Products</a>
+                <a href="{{ url_for('courses') }}"><i data-lucide="book-open" class="icon"></i> Courses</a>
+                <a href="{{ url_for('vendors') }}"><i data-lucide="store" class="icon"></i> Vendors</a>
+            </div>
+            <div class="footer-column">
+                <h3>Company</h3>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-column">
+                <h3>Support</h3>
+                <a href="#">Help Center</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 BizHub. All rights reserved.</p>
+            <div class="footer-socials">
+                <a href="#">🌐</a>
+                <a href="#">📘</a>
+                <a href="#">📸</a>
+                <a href="#">💼</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/transitions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/learning.js') }}"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>

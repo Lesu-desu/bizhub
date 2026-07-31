@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .header h1 span {
+            color: #0b8f47;
+        }
+
+        .header .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .header .btn-back:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .checkout-card {
+            background: white;
+            border-radius: 20px;
+            padding: 36px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .checkout-card h2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkout-card .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .order-summary {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .order-summary .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .order-summary .row .label {
+            color: #6b7280;
+        }
+
+        .order-summary .row .value {
+            font-weight: 600;
+        }
+
+        .order-summary .divider {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 12px 0;
+        }
+
+        .order-summary .total {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0b8f47;
+        }
+
+        .pay-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11, 143, 71, 0.25);
+        }
+
+        .pay-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .pay-button .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .checkout-card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container page-transition">
+        <div class="header">
+            <h1>
+                <i data-lucide="credit-card" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>Checkout</span>
+            </h1>
+            <a href="{{ url_for('marketplace') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back
+            </a>
+        </div>
+
+        <div class="checkout-card">
+            <h2>
+                <i data-lucide="{% if item_type == 'course' %}graduation-cap{% else %}package{% endif %}" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                {% if item_type == 'course' %}Course{% else %}Product{% endif %} Purchase
+            </h2>
+            <p class="subtitle">Complete your purchase securely with Paystack</p>
+
+            <div class="order-summary">
+                <div class="row">
+                    <span class="label">Item</span>
+                    <span class="value">{{ item.title }}</span>
+                </div>
+                <div class="row">
+                    <span class="label">Vendor</span>
+                    <span class="value">{{ item.vendor_name }}</span>
+                </div>
+                <hr class="divider">
+                <div class="row">
+                    <span class="label">Total</span>
+                    <span class="value total">₦{{ item.price }}</span>
+                </div>
+            </div>
+
+            <button class="pay-button" id="payButton" onclick="initiatePayment()">
+                <i data-lucide="lock" class="icon"></i>
+                Pay ₦{{ item.price }}
+            </button>
+
+            <p style="text-align: center; color: #6b7280; font-size: 13px; margin-top: 16px;">
+                Secured by <strong>Paystack</strong> • You'll be redirected to complete payment
+            </p>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        function initiatePayment() {
+            const payButton = document.getElementById('payButton');
+            const originalText = payButton.innerHTML;
+
+            payButton.disabled = true;
+            payButton.innerHTML = `
+                <i data-lucide="loader-2" class="icon" style="animation: spin 1s linear infinite;"></i>
+                Processing...
+            `;
+            lucide.createIcons();
+
+            fetch('/api/checkout/initiate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    item_type: '{{ item_type }}',
+                    item_id: {{ item.id }}
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.authorization_url) {
+                    // Redirect to Paystack
+                    window.location.href = data.authorization_url;
+                } else {
+                    alert(data.message || 'Failed to initiate payment. Please try again.');
+                    resetButton();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Network error. Please try again.');
+                resetButton();
+            });
+        }
+
+        function resetButton() {
+            const payButton = document.getElementById('payButton');
+            payButton.disabled = false;
+            payButton.innerHTML = `
+                <i data-lucide="lock" class="icon"></i>
+                Pay ₦{{ item.price }}
+            `;
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

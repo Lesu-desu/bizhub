@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f7faf8; color: #111827; min-height: 100vh; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px 60px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+        .header h1 { font-size: 28px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .header h1 span { color: #0b8f47; }
+        .header .btn-back { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1.5px solid #e5e7eb; border-radius: 10px; background: white; color: #4b5563; font-weight: 600; font-size: 14px; text-decoration: none; transition: 0.2s ease; }
+        .header .btn-back:hover { border-color: #0b8f47; color: #0b8f47; background: #f0fdf4; }
+
+        .checkout-layout { display: grid; grid-template-columns: 1fr 380px; gap: 32px; align-items: start; }
+        .checkout-card, .summary-card { background: white; border-radius: 20px; padding: 32px; border: 1px solid #e5e7eb; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+        .checkout-card h2, .summary-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 600; font-size: 14px; margin-bottom: 6px; color: #111827; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 16px; border: 1.5px solid #e5e7eb; border-radius: 10px; font-size: 14px; font-family: 'Inter', sans-serif; transition: 0.2s ease; background: white; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #0b8f47; box-shadow: 0 0 0 4px rgba(11,143,71,0.1); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        .shipping-section { margin-top: 24px; padding-top: 24px; border-top: 1px solid #e5e7eb; }
+        .shipping-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+        .summary-card { position: sticky; top: 20px; }
+        .summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; color: #4b5563; }
+        .summary-row .value { font-weight: 600; }
+        .summary-divider { border: none; border-top: 1px solid #e5e7eb; margin: 12px 0; }
+        .summary-total { font-size: 20px; font-weight: 800; color: #0b8f47; }
+
+        .promo-box { display: flex; gap: 8px; margin: 16px 0; }
+        .promo-box input { flex: 1; padding: 8px 12px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 14px; font-family: inherit; outline: none; }
+        .promo-box input:focus { border-color: #0b8f47; }
+        .promo-box button { padding: 8px 16px; background: #0b8f47; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .promo-box button:hover { background: #0a7a3d; }
+
+        .pay-button { width: 100%; padding: 16px; background: linear-gradient(135deg, #0b8f47, #16c96b); color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .pay-button:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(11,143,71,0.25); }
+        .pay-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .pay-button .icon { width: 20px; height: 20px; }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        @media (max-width: 1024px) { .checkout-layout { grid-template-columns: 1fr; } .summary-card { position: static; } }
+        @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } .checkout-card, .summary-card { padding: 24px 20px; } }
+    </style>
+</head>
+<body>
+    <div class="container page-transition">
+        <div class="header">
+            <h1>
+                <i data-lucide="credit-card" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>Checkout</span>
+            </h1>
+            <a href="{{ url_for('view_cart') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back to Cart
+            </a>
+        </div>
+
+        <div class="checkout-layout">
+            <!-- LEFT COLUMN -->
+            <div class="checkout-card">
+                <h2>
+                    <i data-lucide="user" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                    Customer Information
+                </h2>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="john@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+234 800 000 0000" required>
+                </div>
+
+                {% if has_physical_items %}
+                <div class="shipping-section">
+                    <h3>
+                        <i data-lucide="truck" style="width: 20px; height: 20px; color: #0b8f47;"></i>
+                        Shipping Address
+                    </h3>
+
+                    <div class="form-group">
+                        <label>Address Line 1</label>
+                        <input type="text" id="shippingAddress1" placeholder="123 Main Street" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address Line 2 (Optional)</label>
+                        <input type="text" id="shippingAddress2" placeholder="Apartment, Suite, etc.">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="shippingCity" placeholder="Lagos" required>
+                        </div>
+                        <div class="form-group">
+                            <label>State</label>
+                            <input type="text" id="shippingState" placeholder="Lagos State" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Postal Code</label>
+                            <input type="text" id="shippingPostal" placeholder="100001">
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <select id="shippingCountry" required>
+                                <option value="Nigeria">Nigeria</option>
+                                <option value="Ghana">Ghana</option>
+                                <option value="Kenya">Kenya</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="summary-card">
+                <h2>
+                    <i data-lucide="shopping-bag" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                    Order Summary
+                </h2>
+
+                {% for item in cart_items %}
+                <div class="summary-row">
+                    <span>
+                        {{ item.title }}
+                        {% if item.item_type == 'course' %}
+                            (Course)
+                        {% elif item.is_digital %}
+                            (Digital)
+                        {% else %}
+                            (Physical)
+                        {% endif %}
+                    </span>
+                    <span class="value">₦{{ item.price }}</span>
+                </div>
+                {% endfor %}
+
+                {% if has_physical_items %}
+                <div class="summary-row shipping-row">
+                    <span>Shipping</span>
+                    <span class="value" id="shippingCostDisplay">₦0.00</span>
+                </div>
+                {% endif %}
+
+                <hr class="summary-divider">
+
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <span>₦<span id="totalDisplay">{{ total_price }}</span></span>
+                </div>
+
+                <div class="promo-box">
+                    <input type="text" id="promoCode" placeholder="Promo code">
+                    <button onclick="applyPromo()">Apply</button>
+                </div>
+
+                <button class="pay-button" id="payButton" onclick="initiatePayment()">
+                    <i data-lucide="lock" class="icon"></i>
+                    Pay ₦<span id="payAmount">{{ total_price }}</span>
+                </button>
+
+                <p style="text-align: center; color: #6b7280; font-size: 13px; margin-top: 16px;">
+                    Secured by <strong>Paystack</strong> • You'll be redirected to complete payment
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let shippingCost = 0;
+        let totalAmount = {{ total_price }};
+
+        {% if has_physical_items %}
+        document.getElementById('shippingCountry').addEventListener('change', function() {
+            const country = this.value;
+            if (country === 'Nigeria') shippingCost = 2000;
+            else if (country === 'Ghana' || country === 'Kenya') shippingCost = 5000;
+            else if (country === 'South Africa') shippingCost = 8000;
+            else shippingCost = 10000;
+
+            document.getElementById('shippingCostDisplay').textContent = `₦${shippingCost.toFixed(2)}`;
+            updateTotal();
+        });
+        document.getElementById('shippingCountry').dispatchEvent(new Event('change'));
+        {% endif %}
+
+        function updateTotal() {
+            totalAmount = {{ total_price }} + shippingCost;
+            document.getElementById('totalDisplay').textContent = totalAmount.toFixed(2);
+            document.getElementById('payAmount').textContent = totalAmount.toFixed(2);
+        }
+
+        function applyPromo() {
+            const code = document.getElementById('promoCode').value.trim();
+            if (!code) {
+                alert('Please enter a promo code.');
+                return;
+            }
+            alert('Promo code "' + code + '" applied! (Demo)');
+        }
+
+        function initiatePayment() {
+            const payButton = document.getElementById('payButton');
+            const originalText = payButton.innerHTML;
+
+            // Validate customer info
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            if (!fullName || !email || !phone) {
+                alert('Please fill in all customer information fields.');
+                return;
+            }
+
+            {% if has_physical_items %}
+            const address1 = document.getElementById('shippingAddress1').value.trim();
+            const city = document.getElementById('shippingCity').value.trim();
+            const state = document.getElementById('shippingState').value.trim();
+            const country = document.getElementById('shippingCountry').value;
+            if (!address1 || !city || !state || !country) {
+                alert('Please fill in all required shipping fields.');
+                return;
+            }
+            {% endif %}
+
+            payButton.disabled = true;
+            payButton.innerHTML = `
+                <i data-lucide="loader-2" class="icon" style="animation: spin 1s linear infinite;"></i>
+                Processing...
+            `;
+            lucide.createIcons();
+
+            let shippingAddress = null;
+            {% if has_physical_items %}
+            const address2 = document.getElementById('shippingAddress2').value.trim();
+            const postal = document.getElementById('shippingPostal').value.trim();
+            shippingAddress = `${fullName}\n${address1}${address2 ? '\n' + address2 : ''}\n${city}, ${state} ${postal}\n${country}`;
+            {% endif %}
+
+            fetch('/api/checkout/cart/initiate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    shipping_address: shippingAddress,
+                    shipping_cost: shippingCost
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.authorization_url) {
+                    window.location.href = data.authorization_url;
+                } else {
+                    alert(data.message || 'Failed to initiate payment. Please try again.');
+                    resetButton();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Network error. Please try again.');
+                resetButton();
+            });
+        }
+
+        function resetButton() {
+            const payButton = document.getElementById('payButton');
+            payButton.disabled = false;
+            payButton.innerHTML = `
+                <i data-lucide="lock" class="icon"></i>
+                Pay ₦${totalAmount.toFixed(2)}
+            `;
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

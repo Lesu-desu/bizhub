@@ -1,0 +1,47 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Pending Courses{% endblock %}
+{% block page_title %}Pending Courses{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Vendor</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Level</th>
+            <th>Submitted</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for course in courses %}
+        <tr>
+            <td>{{ course.title }}</td>
+            <td>{{ course.vendor_name }}</td>
+            <td>₦{{ course.price }}</td>
+            <td>{{ course.category or 'N/A' }}</td>
+            <td>{{ course.level or 'N/A' }}</td>
+            <td>{{ course.created_at.strftime('%Y-%m-%d') if course.created_at else 'N/A' }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('admin_approve_course', course_id=course.id) }}" style="display:inline;">
+                    <button class="btn btn-success" type="submit">Approve</button>
+                </form>
+                <form method="POST" action="{{ url_for('admin_reject_course', course_id=course.id) }}" style="display:inline;">
+                    <button class="btn btn-danger" type="submit">Reject</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="7" style="text-align:center; padding:40px; color:#6b7280;">
+                <i data-lucide="book-open" style="width:32px; height:32px; display:block; margin:0 auto 8px;"></i>
+                No pending courses to review.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

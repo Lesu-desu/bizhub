@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Setup | Step 3 | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+
+    <style>
+        .vendor-layout {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 7%;
+        }
+        .vendor-card {
+            max-width: 620px;
+            width: 100%;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(16px);
+            border-radius: 32px;
+            padding: 42px;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        }
+        .wizard-top {
+            margin-bottom: 34px;
+        }
+        .wizard-step {
+            display: inline-block;
+            background: rgba(25, 193, 95, 0.12);
+            color: #0f9f49;
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .wizard-top h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .wizard-top p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        .progress {
+            width: 100%;
+            height: 6px;
+            background: #e2e8e5;
+            border-radius: 999px;
+            margin: 20px 0 16px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #16bf5c, #0f9e48);
+            border-radius: 999px;
+            transition: width 0.5s ease;
+        }
+        .progress-60 { width: 60%; }
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .step-indicator .circle {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #e2e8e5;
+            transition: 0.3s ease;
+        }
+        .step-indicator .circle.active {
+            background: #13b355;
+        }
+        .step-indicator .line {
+            flex: 1;
+            height: 2px;
+            background: #e2e8e5;
+            transition: 0.3s ease;
+            min-width: 20px;
+        }
+        .step-indicator .line.active {
+            background: #13b355;
+        }
+        .wizard-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+        .wizard-buttons .secondary-btn {
+            flex: 1;
+            text-align: center;
+            padding: 16px;
+            border: 1.5px solid #e2e8e5;
+            border-radius: 14px;
+            background: white;
+            color: #333;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+        .wizard-buttons .secondary-btn:hover {
+            border-color: #13b355;
+            background: rgba(19, 179, 85, 0.05);
+        }
+        .wizard-buttons .primary-btn {
+            flex: 2;
+        }
+        .input-group select {
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 16px;
+            border: 1.5px solid #e2e8e5;
+            background: white;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.25s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+        }
+        .input-group select:focus {
+            outline: none;
+            border-color: #18b75b;
+            box-shadow: 0 0 0 5px rgba(24,183,91,0.12);
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #333;
+        }
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #13b355;
+            cursor: pointer;
+        }
+        @media (max-width: 500px) {
+            .vendor-card { padding: 28px 20px; }
+            .wizard-buttons { flex-direction: column; }
+            .wizard-buttons .secondary-btn { order: 2; }
+        }
+    </style>
+</head>
+
+<body class="page-transition">
+
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<header class="topbar fade-down">
+    <a href="{{ url_for('index') }}" class="logo-wrapper">
+        <div class="logo-icon">B</div>
+        <div>
+            <h1 class="logo-text">BizHub</h1>
+            <p class="logo-subtext">Marketplace & Learning Platform</p>
+        </div>
+    </a>
+</header>
+
+<main class="vendor-layout fade-up">
+    <div class="vendor-card">
+        <div class="wizard-top">
+            <span class="wizard-step">Step 3 of 5</span>
+            <h2>Business Location</h2>
+            <p>Help customers know where your business operates.</p>
+
+            <div class="progress">
+                <div class="progress-fill progress-60"></div>
+            </div>
+
+            <div class="step-indicator">
+                <div class="circle active"></div><div class="line active"></div>
+                <div class="circle active"></div><div class="line active"></div>
+                <div class="circle active"></div><div class="line active"></div>
+                <div class="circle"></div><div class="line"></div>
+                <div class="circle"></div>
+            </div>
+        </div>
+
+        <form id="vendorStep3Form">
+            <div class="input-group">
+                <label>Business Address</label>
+                <input type="text" id="business_address" required placeholder="12 Admiralty Way, Lekki">
+            </div>
+
+            <div class="input-group">
+                <label>Country</label>
+                <select id="country" required>
+                    <option value="Nigeria">Nigeria</option>
+                    <option value="Ghana">Ghana</option>
+                    <option value="Kenya">Kenya</option>
+                    <option value="South Africa">South Africa</option>
+                    <option value="Rwanda">Rwanda</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>State</label>
+                <select id="state" required>
+                    <option value="">Select State</option>
+                    <option value="Lagos">Lagos</option>
+                    <option value="Abuja (FCT)">Abuja (FCT)</option>
+                    <option value="Oyo">Oyo</option>
+                    <option value="Rivers">Rivers</option>
+                    <option value="Kano">Kano</option>
+                    <option value="Ogun">Ogun</option>
+                    <option value="Kaduna">Kaduna</option>
+                    <option value="Enugu">Enugu</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>City / LGA</label>
+                <input type="text" id="city" required placeholder="Ikeja">
+            </div>
+
+            <div class="input-group">
+                <label>Areas You Serve</label>
+                <textarea id="areas_served" placeholder="Example: Lagos Mainland, Lekki, Victoria Island..." required></textarea>
+            </div>
+
+            <div class="input-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="has_physical_location">
+                    I have a physical business location customers can visit.
+                </label>
+            </div>
+
+            <div class="wizard-buttons">
+                <a href="{{ url_for('vendor_step2') }}" class="secondary-btn">← Back</a>
+                <button type="submit" class="primary-btn">Continue →</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script src="{{ url_for('static', filename='js/transitions.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('vendorStep3Form');
+
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const button = this.querySelector('.primary-btn');
+            button.disabled = true;
+            button.textContent = 'Saving...';
+
+            const data = {
+                business_address: document.getElementById('business_address').value.trim(),
+                country: document.getElementById('country').value,
+                state: document.getElementById('state').value,
+                city: document.getElementById('city').value.trim(),
+                areas_served: document.getElementById('areas_served').value.trim(),
+                has_physical_location: document.getElementById('has_physical_location').checked
+            };
+
+            if (!data.business_address) {
+                alert('Business address is required.');
+                button.disabled = false;
+                button.textContent = 'Continue →';
+                return;
+            }
+
+            try {
+                const response = await fetch('{{ url_for("vendor_step3") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    window.location.href = result.redirect;
+                } else {
+                    alert(result.message || 'Something went wrong');
+                    button.disabled = false;
+                    button.textContent = 'Continue →';
+                }
+            } catch (error) {
+                alert('Network error. Please try again.');
+                button.disabled = false;
+                button.textContent = 'Continue →';
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>

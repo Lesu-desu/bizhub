@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BizHub | Choose Account Type</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- CSS Connections -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}" />
+
+  <style>
+    .role-selection-card {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .role-selection-card:hover {
+      transform: translateY(-10px);
+      border-color: #13b355;
+    }
+    .role-selection-card.selected {
+      border: 2px solid #13b355;
+      background: rgba(19, 179, 85, 0.05);
+      box-shadow: 0 0 30px rgba(19, 179, 85, 0.1);
+    }
+    .role-selection-card.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .loading-overlay.active {
+      display: flex;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #e2e8e5;
+      border-top-color: #13b355;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loading-text {
+      margin-top: 20px;
+      color: #333;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="page-transition">
+
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Setting up your account...</div>
+  </div>
+
+  <main class="role-layout fade-up">
+
+    <div class="role-header fade-down delay-1">
+      <span class="intro-badge">PERSONALIZE YOUR EXPERIENCE</span>
+      <h1>How do you want to use BizHub?</h1>
+      <p>Select the path that best matches your goals.</p>
+    </div>
+
+    <div class="role-selection-grid">
+
+      <div class="role-selection-card fade-left delay-2" data-role="customer" id="customerCard">
+        <div class="role-icon">🎓</div>
+        <h3>Customer / Learner</h3>
+        <p>Buy products, learn new skills, and discover valuable resources.</p>
+      </div>
+
+      <div class="role-selection-card fade-right delay-3" data-role="vendor" id="vendorCard">
+        <div class="role-icon">🏪</div>
+        <h3>Vendor / Business</h3>
+        <p>Sell products, upload courses, and build your digital business.</p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- JavaScript Connections -->
+  <script src="{{ url_for('static', filename='js/transitions.js') }}"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const customerCard = document.getElementById('customerCard');
+    const vendorCard = document.getElementById('vendorCard');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    // Remove any existing selected state
+    function resetSelection() {
+      customerCard.classList.remove('selected');
+      vendorCard.classList.remove('selected');
+    }
+
+    // Handle role selection
+    async function selectRole(role) {
+      // Don't allow if already selected/loading
+      if (customerCard.classList.contains('disabled') || vendorCard.classList.contains('disabled')) {
+        return;
+      }
+
+      // Show loading
+      loadingOverlay.classList.add('active');
+
+      // Disable both cards
+      customerCard.classList.add('disabled');
+      vendorCard.classList.add('disabled');
+
+      try {
+        const response = await fetch('/choose-role', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ role: role })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          // Redirect to onboarding
+          window.location.href = result.redirect;
+        } else {
+          alert(result.message || 'Something went wrong. Please try again.');
+          loadingOverlay.classList.remove('active');
+          customerCard.classList.remove('disabled');
+          vendorCard.classList.remove('disabled');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Network error. Please try again.');
+        loadingOverlay.classList.remove('active');
+        customerCard.classList.remove('disabled');
+        vendorCard.classList.remove('disabled');
+      }
+    }
+
+    // Click handlers
+    customerCard.addEventListener('click', function(e) {
+      e.preventDefault();
+      resetSelection();
+      this.classList.add('selected');
+      selectRole('customer');
+    });
+
+    vendorCard.addEventListener('click', function(e) {
+      e.preventDefault();
+      resetSelection();
+      this.classList.add('selected');
+      selectRole('vendor');
+    });
+
+    // Keyboard support
+    customerCard.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+    vendorCard.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+
+    // Make cards focusable
+    customerCard.setAttribute('tabindex', '0');
+    vendorCard.setAttribute('tabindex', '0');
+  });
+  </script>
+</body>
+</html>

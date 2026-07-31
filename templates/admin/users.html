@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+{% block title %}Users{% endblock %}
+{% block page_title %}Users{% endblock %}
+{% block content %}
+<table>
+    <thead><tr><th>Name</th><th>Email</th><th>Type</th><th>Verified</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.full_name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.user_type }}</td>
+            <td>{{ 'Yes' if user.is_verified else 'No' }}</td>
+            <td>{{ 'Active' if user.is_active else 'Inactive' }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('admin_toggle_user', user_id=user.id) }}">
+                    <button class="btn btn-{{ 'warning' if user.is_active else 'success' }}" type="submit">
+                        {{ 'Deactivate' if user.is_active else 'Activate' }}
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

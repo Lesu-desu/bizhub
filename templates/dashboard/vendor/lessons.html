@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lessons | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #111827;
+        }
+
+        .header-left h1 span {
+            color: #0b8f47;
+        }
+
+        .header-left .course-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-left .course-title .icon {
+            width: 16px;
+            height: 16px;
+            color: #0b8f47;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11, 143, 71, 0.25);
+        }
+
+        .btn-primary .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: 1.5px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .btn-outline .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: 1.5px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .btn-secondary .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        .btn-danger-sm {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn-danger-sm:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger-sm .icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ===== STATS ROW ===== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 24px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-card .stat-label {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .stat-card .stat-value.green {
+            color: #0b8f47;
+        }
+
+        /* ===== LESSONS SECTION ===== */
+        .lessons-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+        }
+
+        .lessons-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .lessons-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .lessons-header .lesson-count {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* ===== LESSON LIST ===== */
+        .lesson-list {
+            padding: 20px 24px;
+        }
+
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            border: 1px solid #f3f4f6;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: 0.2s ease;
+        }
+
+        .lesson-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .lesson-item:hover {
+            background: #f9fafb;
+            border-color: #e5e7eb;
+        }
+
+        .lesson-item .lesson-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: #0b8f47;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .lesson-item .lesson-content {
+            flex: 1;
+        }
+
+        .lesson-item .lesson-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 2px;
+        }
+
+        .lesson-item .lesson-content p {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .lesson-item .lesson-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .lesson-item .lesson-meta .icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        .lesson-item .lesson-meta .free-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .lesson-item .lesson-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .lesson-item .lesson-actions .icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            cursor: pointer;
+            transition: 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lesson-item .lesson-actions .icon-btn:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .lesson-item .lesson-actions .icon-btn.edit:hover {
+            background: #dcfce7;
+            color: #0b8f47;
+        }
+
+        .lesson-item .lesson-actions .icon-btn.delete:hover {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        .lesson-item .lesson-actions .icon-btn .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .lesson-item .drag-handle {
+            cursor: grab;
+            color: #9ca3af;
+        }
+
+        .lesson-item .drag-handle .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 24px;
+        }
+
+        .empty-state .empty-icon {
+            width: 80px;
+            height: 80px;
+            color: #d1d5db;
+            margin: 0 auto 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #6b7280;
+            font-size: 15px;
+            line-height: 1.6;
+            max-width: 400px;
+            margin: 0 auto 24px;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            max-width: 600px;
+            width: 90%;
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            transition: 0.2s ease;
+        }
+
+        .modal .close-btn:hover {
+            color: #111827;
+        }
+
+        .modal h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal p.subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .modal .form-group {
+            margin-bottom: 16px;
+        }
+
+        .modal .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #111827;
+        }
+
+        .modal .form-group label .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+
+        .modal .form-group input,
+        .modal .form-group select,
+        .modal .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s ease;
+            background: white;
+        }
+
+        .modal .form-group input:focus,
+        .modal .form-group select:focus,
+        .modal .form-group textarea:focus {
+            outline: none;
+            border-color: #0b8f47;
+            box-shadow: 0 0 0 4px rgba(11, 143, 71, 0.1);
+        }
+
+        .modal .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .modal .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .modal .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal .btn-group .btn-secondary {
+            flex: 1;
+            padding: 12px;
+            border: 1.5px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .modal .btn-group .btn-secondary:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .modal .btn-group .btn-primary {
+            flex: 2;
+            padding: 12px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .modal .btn-group .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11, 143, 71, 0.25);
+        }
+
+        /* ===== FLASH MESSAGES ===== */
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            animation: fadeIn 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flash-success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #22c55e;
+        }
+
+        .flash-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .flash-message .icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-right {
+                width: 100%;
+            }
+
+            .header-right .btn-primary,
+            .header-right .btn-outline {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .lesson-item {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .lesson-item .lesson-meta {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .lesson-item .lesson-actions {
+                margin-left: auto;
+            }
+
+            .modal .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal .btn-group {
+                flex-direction: column;
+            }
+
+            .modal .btn-group .btn-secondary,
+            .modal .btn-group .btn-primary {
+                width: 100%;
+                flex: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header-left h1 {
+                font-size: 22px;
+            }
+
+            .stat-card .stat-value {
+                font-size: 22px;
+            }
+
+            .lesson-item {
+                padding: 12px 16px;
+            }
+            /* ===== REQUIRED FIELD INDICATORS ===== */
+            .form-group .helper-text {
+                font-size: 12px;
+                color: #6b7280;
+                margin-top: 4px;
+            }
+
+            .form-group .helper-text.required {
+                color: #ef4444;
+            }
+
+            /* ===== VALIDATION STYLES ===== */
+            .form-group input:invalid,
+            .form-group textarea:invalid {
+                border-color: #ef4444;
+            }
+
+            .form-group input:invalid:focus,
+            .form-group textarea:invalid:focus {
+                border-color: #ef4444;
+                box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+            }
+
+            .form-group input:valid,
+            .form-group textarea:valid {
+                border-color: #0b8f47;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container page-transition">
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <div class="header-left">
+                <h1>
+                    <i data-lucide="list" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                    Course <span>Lessons</span>
+                </h1>
+                <div class="course-title">
+                    <i data-lucide="book-open" class="icon"></i>
+                    {{ course.title }}
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="{{ url_for('vendor_courses') }}" class="btn-outline">
+                    <i data-lucide="arrow-left" class="icon"></i>
+                    Back to Courses
+                </a>
+                <button onclick="openCreateModal()" class="btn-primary">
+                    <i data-lucide="plus" class="icon"></i>
+                    Add Lesson
+                </button>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            <i data-lucide="{% if category == 'success' %}check-circle{% else %}alert-circle{% endif %}" class="icon"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- ===== STATS ROW ===== -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-label">Total Lessons</div>
+                <div class="stat-value green">{{ lessons|length }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Free Lessons</div>
+                <div class="stat-value">{{ lessons|selectattr('is_free', 'equalto', 1)|list|length }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Duration</div>
+                <div class="stat-value">{{ lessons|sum(attribute='duration') }} min</div>
+            </div>
+        </div>
+
+        <!-- ===== LESSONS SECTION ===== -->
+        <div class="lessons-section">
+            <div class="lessons-header">
+                <div>
+                    <h2>Lessons</h2>
+                    <span class="lesson-count">{{ lessons|length }} lesson(s) total</span>
+                </div>
+            </div>
+
+            {% if lessons %}
+            <div class="lesson-list" id="lessonList">
+                {% for lesson in lessons %}
+                <div class="lesson-item" data-lesson-id="{{ lesson.id }}">
+                    <div class="drag-handle">
+                        <i data-lucide="grip-vertical" class="icon"></i>
+                    </div>
+
+                    <div class="lesson-number">{{ loop.index }}</div>
+
+                    <div class="lesson-content">
+                        <h4>{{ lesson.title }}</h4>
+                        {% if lesson.description %}
+                        <p>{{ lesson.description|truncate(60) }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="lesson-meta">
+                        {% if lesson.duration %}
+                        <span>
+                            <i data-lucide="clock" class="icon"></i>
+                            {{ lesson.duration }} min
+                        </span>
+                        {% endif %}
+
+                        {% if lesson.is_free %}
+                        <span class="free-badge">Free</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="lesson-actions">
+                        <button onclick="openEditModal({{ lesson.id }})" class="icon-btn edit" title="Edit lesson">
+                            <i data-lucide="pen-tool" class="icon"></i>
+                        </button>
+                        <button onclick="deleteLesson({{ lesson.id }})" class="icon-btn delete" title="Delete lesson">
+                            <i data-lucide="trash-2" class="icon"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <i data-lucide="video" class="empty-icon"></i>
+                <h3>No lessons yet</h3>
+                <p>Start building your course by adding lessons. Each lesson can contain video, text, or quizzes.</p>
+                <button onclick="openCreateModal()" class="btn-primary">
+                    <i data-lucide="plus" class="icon"></i>
+                    Add Your First Lesson
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+<!-- ===== CREATE/EDIT LESSON MODAL ===== -->
+    <div class="modal-overlay" id="lessonModal">
+        <div class="modal">
+            <button onclick="closeModal()" class="close-btn">✕</button>
+
+            <h2 id="modalTitle">
+                <i data-lucide="plus-circle" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                Add Lesson
+            </h2>
+            <p class="subtitle" id="modalSubtitle">Add a new lesson to your course. All fields marked with * are required.</p>
+
+            <form id="lessonForm" enctype="multipart/form-data">
+                <input type="hidden" name="lesson_id" id="lessonId">
+                <input type="hidden" name="course_id" value="{{ course.id }}">
+
+                <div class="form-group">
+                    <label>Lesson Title <span class="required">*</span></label>
+                    <input type="text" name="title" id="lessonTitle" placeholder="e.g. Introduction to Python" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Description <span class="required">*</span></label>
+                    <textarea name="description" id="lessonDescription" placeholder="Describe what students will learn in this lesson..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Video <span class="required">*</span></label>
+
+                    <!-- Option 1: Upload Video File -->
+                    <div class="video-upload-area" id="videoDropZone">
+                        <i data-lucide="upload-cloud" class="icon"></i>
+                        <h4>Upload Video File</h4>
+                        <p>Drag & drop or click to upload</p>
+                        <p class="video-note">MP4, MOV, AVI, WEBM • Max 500MB</p>
+                        <input type="file" name="video_file" id="videoInput" accept="video/*">
+                    </div>
+                    <div class="video-file-name" id="videoFileName">
+                        <i data-lucide="video" class="icon"></i>
+                        <span id="videoFileNameText"></span>
+                    </div>
+
+                    <div class="or-divider">OR</div>
+
+                    <!-- Option 2: Video URL -->
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Video URL (YouTube, Vimeo, etc.) <span class="required">*</span></label>
+                        <input type="url" name="video_url" id="lessonVideo" placeholder="https://www.youtube.com/watch?v=..." required>
+                        <div class="helper-text">Paste a YouTube, Vimeo, or other video link.</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration (minutes)</label>
+                        <input type="number" name="duration" id="lessonDuration" placeholder="10" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Order</label>
+                        <input type="number" name="order_index" id="lessonOrder" placeholder="1" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="is_free" id="lessonFree" style="width: auto; margin-right: 8px;">
+                        Make this lesson free (available without enrollment)
+                    </label>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" onclick="closeModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary" id="modalSubmitBtn">
+                        <i data-lucide="check" class="icon"></i>
+                        Save Lesson
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        lucide.createIcons();
+
+        // ===== MODAL CONTROLS =====
+        const modal = document.getElementById('lessonModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSubtitle = document.getElementById('modalSubtitle');
+        const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+        const lessonForm = document.getElementById('lessonForm');
+        const lessonId = document.getElementById('lessonId');
+        const lessonTitle = document.getElementById('lessonTitle');
+        const lessonDuration = document.getElementById('lessonDuration');
+        const lessonOrder = document.getElementById('lessonOrder');
+        const lessonVideo = document.getElementById('lessonVideo');
+        const lessonDescription = document.getElementById('lessonDescription');
+        const lessonFree = document.getElementById('lessonFree');
+
+        function openModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            lessonForm.reset();
+            lessonId.value = '';
+        }
+
+        function openCreateModal() {
+            modalTitle.innerHTML = `
+                <i data-lucide="plus-circle" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                Add Lesson
+            `;
+            modalSubtitle.textContent = 'Add a new lesson to your course.';
+            modalSubmitBtn.innerHTML = `
+                <i data-lucide="check" class="icon"></i>
+                Add Lesson
+            `;
+            lessonForm.action = "{{ url_for('vendor_create_lesson', course_id=course.id) }}";
+            openModal();
+        }
+
+        function openEditModal(id) {
+            // Fetch lesson data
+            fetch(`/vendor/lessons/${id}/edit`)
+                .then(response => response.json())
+                .then(data => {
+                    modalTitle.innerHTML = `
+                        <i data-lucide="pen-tool" class="icon" style="width: 24px; height: 24px; color: #0b8f47;"></i>
+                        Edit Lesson
+                    `;
+                    modalSubtitle.textContent = 'Update your lesson information.';
+                    modalSubmitBtn.innerHTML = `
+                        <i data-lucide="check" class="icon"></i>
+                        Update Lesson
+                    `;
+
+                    lessonId.value = data.id;
+                    lessonTitle.value = data.title;
+                    lessonDuration.value = data.duration || '';
+                    lessonOrder.value = data.order_index || '';
+                    lessonVideo.value = data.video_url || '';
+                    lessonDescription.value = data.description || '';
+                    lessonFree.checked = data.is_free == 1;
+
+                    lessonForm.action = `/vendor/lessons/${id}/update`;
+                    openModal();
+                })
+                .catch(error => {
+                    alert('Error loading lesson data. Please try again.');
+                    console.error(error);
+                });
+        }
+
+        // Close modal on outside click
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // ===== FORM SUBMISSION =====
+        lessonForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('modalSubmitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <i data-lucide="loader-2" class="icon" style="animation: spin 1s linear infinite;"></i>
+                Saving...
+            `;
+            lucide.createIcons();
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeModal();
+                    location.reload();
+                } else {
+                    alert(data.message || 'Something went wrong.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = `
+                        <i data-lucide="check" class="icon"></i>
+                        Save Lesson
+                    `;
+                    lucide.createIcons();
+                }
+            })
+            .catch(error => {
+                alert('Network error. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `
+                    <i data-lucide="check" class="icon"></i>
+                    Save Lesson
+                `;
+                lucide.createIcons();
+            });
+        });
+
+        // ===== DELETE LESSON =====
+        function deleteLesson(id) {
+            if (!confirm('Are you sure you want to delete this lesson? This action cannot be undone.')) {
+                return;
+            }
+
+            fetch(`/vendor/lessons/${id}/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message || 'Something went wrong.');
+                }
+            })
+            .catch(error => {
+                alert('Network error. Please try again.');
+                console.error(error);
+            });
+        }
+
+        // ===== DRAG AND DROP REORDERING =====
+        const lessonList = document.getElementById('lessonList');
+        if (lessonList) {
+            let dragItem = null;
+
+            lessonList.addEventListener('dragstart', function(e) {
+                dragItem = e.target.closest('.lesson-item');
+                if (dragItem) {
+                    dragItem.style.opacity = '0.5';
+                }
+            });
+
+            lessonList.addEventListener('dragend', function(e) {
+                if (dragItem) {
+                    dragItem.style.opacity = '';
+                    dragItem = null;
+                }
+            });
+
+            lessonList.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                const target = e.target.closest('.lesson-item');
+                if (target && target !== dragItem) {
+                    const rect = target.getBoundingClientRect();
+                    const midpoint = rect.y + rect.height / 2;
+
+                    if (e.clientY < midpoint) {
+                        target.parentNode.insertBefore(dragItem, target);
+                    } else {
+                        target.parentNode.insertBefore(dragItem, target.nextSibling);
+                    }
+                }
+            });
+
+            lessonList.addEventListener('drop', function(e) {
+                e.preventDefault();
+                if (dragItem) {
+                    // Save new order
+                    const items = lessonList.querySelectorAll('.lesson-item');
+                    const order = Array.from(items).map((item, index) => ({
+                        id: item.dataset.lessonId,
+                        order: index + 1
+                    }));
+
+                    fetch('/vendor/lessons/reorder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ lessons: order })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            alert('Failed to save order. Please refresh and try again.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error saving order:', error);
+                    });
+                }
+            });
+        }
+
+        // Spinner animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

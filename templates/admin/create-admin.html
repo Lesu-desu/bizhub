@@ -1,0 +1,33 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Create Admin{% endblock %}
+{% block page_title %}Create Admin Account{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px;">
+    <form method="POST">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+            <div>
+                <label style="display:block; font-weight:600; margin-bottom:4px;">Full Name</label>
+                <input type="text" name="full_name" required style="width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px;">
+            </div>
+            <div>
+                <label style="display:block; font-weight:600; margin-bottom:4px;">Email</label>
+                <input type="email" name="email" required style="width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px;">
+            </div>
+            <div>
+                <label style="display:block; font-weight:600; margin-bottom:4px;">Password</label>
+                <input type="password" name="password" required style="width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px;">
+            </div>
+            <div>
+                <label style="display:block; font-weight:600; margin-bottom:4px;">Confirm Password</label>
+                <input type="password" name="confirm_password" required style="width:100%; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px;">
+            </div>
+        </div>
+        <div style="margin-top:20px; display:flex; gap:12px;">
+            <button type="submit" class="btn btn-success">Create Admin</button>
+            <a href="{{ url_for('admin_users') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

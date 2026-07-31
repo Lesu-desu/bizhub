@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Purchases | BizHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f7faf8; color: #111827; min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px 60px; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+        .header h1 { font-size: 28px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .header h1 span { color: #0b8f47; }
+        .header .btn-back { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1.5px solid #e5e7eb; border-radius: 10px; background: white; color: #4b5563; font-weight: 600; font-size: 14px; text-decoration: none; transition: 0.2s ease; }
+        .header .btn-back:hover { border-color: #0b8f47; color: #0b8f47; background: #f0fdf4; }
+
+        .empty-state { text-align: center; padding: 60px 40px; background: white; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .empty-state .icon { width: 64px; height: 64px; color: #d1d5db; margin-bottom: 16px; }
+        .empty-state h3 { font-size: 20px; font-weight: 700; color: #111827; }
+        .empty-state p { color: #6b7280; margin-bottom: 24px; }
+        .empty-state .btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 12px 28px; background: linear-gradient(135deg, #0b8f47, #16c96b); color: white; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 14px; transition: 0.3s ease; }
+        .empty-state .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(11,143,71,0.25); }
+
+        .purchases-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+
+        .purchase-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .purchase-card:hover {
+            border-color: #0b8f47;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(11,143,71,0.08);
+        }
+
+        .purchase-card .cover {
+            height: 180px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        .purchase-card .cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .purchase-card .cover .icon {
+            width: 48px;
+            height: 48px;
+            color: #9ca3af;
+        }
+        .purchase-card .cover .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 12px;
+            background: #0b8f47;
+            color: white;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .purchase-card .content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .purchase-card .content h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+        .purchase-card .content h3:hover { color: #0b8f47; }
+        .purchase-card .content .vendor {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .purchase-card .content .date {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+        .purchase-card .content .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0b8f47;
+            margin-bottom: 16px;
+        }
+
+        .purchase-card .content .actions {
+            margin-top: auto;
+            display: flex;
+            gap: 8px;
+        }
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s ease;
+            flex: 1;
+        }
+        .btn-view {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+        .btn-view:hover {
+            background: #e5e7eb;
+        }
+        .btn-download {
+            background: #0b8f47;
+            color: white;
+        }
+        .btn-download:hover {
+            background: #0a7a3d;
+            transform: translateY(-1px);
+        }
+        .btn-learn {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .btn-learn:hover {
+            background: #bfdbfe;
+        }
+
+        @media (max-width: 640px) {
+            .purchases-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container page-transition">
+        <div class="header">
+            <h1>
+                <i data-lucide="shopping-bag" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>My Purchases</span>
+            </h1>
+            <a href="{{ url_for('customer_dashboard') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back to Dashboard
+            </a>
+        </div>
+
+        {% if purchases %}
+            <div class="purchases-grid">
+                {% for purchase in purchases %}
+                <div class="purchase-card">
+                    <!-- Determine the correct detail page URL -->
+                    {% if purchase.item_type == 'cart' %}
+                        {% set detail_url = url_for('purchase_detail', purchase_id=purchase.id) %}
+                    {% elif purchase.item_type == 'product' %}
+                        {% set detail_url = url_for('product_detail', product_id=purchase.item_id) %}
+                    {% else %}
+                        {% set detail_url = url_for('course_detail', course_id=purchase.item_id) %}
+                    {% endif %}
+
+                    <div class="cover" onclick="window.location.href='{{ detail_url }}'">
+                        {% if purchase.cover_image %}
+                            <img src="{{ purchase.cover_image }}" alt="{{ purchase.item_title }}">
+                        {% else %}
+                            <i data-lucide="package" class="icon"></i>
+                        {% endif %}
+                        <span class="badge">{{ purchase.item_type|capitalize }}</span>
+                    </div>
+                    <div class="content">
+                        <h3 onclick="window.location.href='{{ detail_url }}'">{{ purchase.item_title }}</h3>
+                        <div class="vendor">{{ purchase.vendor_name }}</div>
+                        <div class="date">Purchased {{ purchase.created_at.strftime('%Y-%m-%d') if purchase.created_at else 'N/A' }}</div>
+                        <div class="price">₦{{ purchase.amount }}</div>
+                        <div class="actions">
+                            <a href="{{ detail_url }}" class="btn-action btn-view">
+                                <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                                View
+                            </a>
+
+                            {% if purchase.item_type == 'product' %}
+                                <a href="{{ url_for('download_product', product_id=purchase.item_id) }}" class="btn-action btn-download">
+                                    <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                                    Download
+                                </a>
+                            {% elif purchase.item_type == 'course' %}
+                                <a href="{{ url_for('learning') }}" class="btn-action btn-learn">
+                                    <i data-lucide="book-open" style="width: 18px; height: 18px;"></i>
+                                    Start Learning
+                                </a>
+                            {% elif purchase.item_type == 'cart' %}
+                                <!-- Cart purchases have no single download button; handled inside the detail view -->
+                                <a href="{{ detail_url }}" class="btn-action btn-view" style="background:#0b8f47; color:white;">
+                                    <i data-lucide="list" style="width: 18px; height: 18px;"></i>
+                                    View Items
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <i data-lucide="shopping-bag" class="icon"></i>
+                <h3>No purchases yet</h3>
+                <p>You haven't bought anything yet. Explore the marketplace and find great products and courses.</p>
+                <a href="{{ url_for('marketplace') }}" class="btn-primary">
+                    <i data-lucide="shopping-bag" style="width: 18px; height: 18px;"></i>
+                    Browse Marketplace
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

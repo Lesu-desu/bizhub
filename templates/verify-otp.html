@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verify OTP | BizHub</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+
+  <style>
+    .back-home {
+      color: #13b355;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s ease;
+    }
+    .back-home:hover { opacity: 0.7; }
+
+    .error-message {
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border-left: 4px solid #ef4444;
+      display: none;
+      margin-bottom: 16px;
+      animation: shake 0.5s ease;
+    }
+    .error-message.show { display: block; }
+
+    .success-message {
+      background: #dcfce7;
+      color: #166534;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border-left: 4px solid #22c55e;
+      display: none;
+      margin-bottom: 16px;
+    }
+    .success-message.show { display: block; }
+
+    .otp-input-group {
+      margin: 24px 0;
+    }
+    .otp-input-group input {
+      width: 100%;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: 2px solid #e2e8e5;
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 8px;
+      font-family: monospace;
+      transition: 0.3s ease;
+    }
+    .otp-input-group input:focus {
+      outline: none;
+      border-color: #13b355;
+      box-shadow: 0 0 0 5px rgba(19, 179, 85, 0.12);
+    }
+    .otp-input-group input::placeholder {
+      letter-spacing: 2px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #aaa;
+    }
+
+    .resend-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8e5;
+      text-align: center;
+    }
+    .resend-btn {
+      background: transparent;
+      border: none;
+      color: #13b355;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s ease;
+    }
+    .resend-btn:hover { opacity: 0.7; }
+    .resend-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .resend-status { margin-top: 8px; font-size: 14px; color: #13b355; }
+
+    .auto-send-status {
+      padding: 12px 16px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-weight: 500;
+      display: none;
+    }
+    .auto-send-status.show { display: block; }
+    .auto-send-status.sent {
+      background: #dcfce7;
+      color: #166534;
+      border-left: 4px solid #22c55e;
+    }
+    .auto-send-status.sending {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 4px solid #f59e0b;
+    }
+    .auto-send-status.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 4px solid #ef4444;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <header class="topbar fade-in">
+    <a href="{{ url_for('index') }}" class="logo-wrapper">
+      <div class="logo-icon">B</div>
+      <div>
+        <div class="logo-text">BizHub</div>
+        <div class="logo-subtext">LEARN • CONNECT • GROW</div>
+      </div>
+    </a>
+    <a href="{{ url_for('login') }}" class="back-home">← Back to Login</a>
+  </header>
+
+  <main class="auth-layout page-transition">
+
+    <section class="auth-intro fade-up">
+      <span class="intro-badge">VERIFY OTP</span>
+      <h2>Enter Your <span>Verification Code</span></h2>
+      <p>We've sent a 6-digit OTP to <strong id="userEmail">{{ email if email else 'your email' }}</strong></p>
+    </section>
+
+    <div class="auth-card fade-up">
+
+      <div class="form-header">
+        <h3>Verification Code</h3>
+        <p>Enter the 6-digit code sent to your email address.</p>
+      </div>
+
+      <!-- Auto-send status message -->
+      <div id="autoSendStatus" class="auto-send-status">
+        <span id="autoSendText"></span>
+      </div>
+
+      <div id="errorMessage" class="error-message">
+        <span id="errorText"></span>
+      </div>
+
+      <div id="successMessage" class="success-message">
+        <span id="successText"></span>
+      </div>
+
+      <div class="otp-input-group">
+        <input type="text" id="otpCode" placeholder="000000" maxlength="6" pattern="[0-9]{6}" inputmode="numeric">
+      </div>
+
+      <button class="primary-btn" id="verifyBtn">Verify OTP</button>
+
+      <div class="resend-section">
+        <p style="font-size: 14px; color: #666;">Didn't receive the code?</p>
+        <button class="resend-btn" id="resendBtn">Resend OTP</button>
+        <div class="resend-status" id="resendStatus"></div>
+        <div style="margin-top: 12px;">
+          <a href="{{ url_for('forgot_password') }}" style="color:#13b355; font-weight:600; text-decoration:none;">← Back to Forgot Password</a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='js/transitions.js') }}"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const otpInput = document.getElementById('otpCode');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const errorMessage = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    const successMessage = document.getElementById('successMessage');
+    const successText = document.getElementById('successText');
+    const resendBtn = document.getElementById('resendBtn');
+    const resendStatus = document.getElementById('resendStatus');
+    const autoSendStatus = document.getElementById('autoSendStatus');
+    const autoSendText = document.getElementById('autoSendText');
+    const userEmail = document.getElementById('userEmail');
+
+    let currentEmail = '{{ email if email else "" }}';
+    let isFirstLoad = true;
+
+    function showError(message) {
+      successMessage.classList.remove('show');
+      errorText.textContent = message;
+      errorMessage.classList.add('show');
+      setTimeout(() => {
+        errorMessage.classList.remove('show');
+      }, 5000);
+    }
+
+    function showSuccess(message) {
+      errorMessage.classList.remove('show');
+      successText.textContent = message;
+      successMessage.classList.add('show');
+    }
+
+    function hideError() {
+      errorMessage.classList.remove('show');
+      successMessage.classList.remove('show');
+    }
+
+    function showAutoSendStatus(message, type) {
+      autoSendText.textContent = message;
+      autoSendStatus.className = 'auto-send-status show ' + type;
+    }
+
+    function hideAutoSendStatus() {
+      autoSendStatus.className = 'auto-send-status';
+    }
+
+    // ===== AUTO-SEND OTP ON PAGE LOAD =====
+    async function autoSendOTP() {
+      if (!currentEmail) {
+        showAutoSendStatus('❌ No email found. Please go back and try again.', 'error');
+        return;
+      }
+
+      showAutoSendStatus('⏳ Sending verification code to your email...', 'sending');
+
+      try {
+        const response = await fetch('{{ url_for("send_password_otp") }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: currentEmail })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showAutoSendStatus('✅ Verification code sent to your email! Check your inbox.', 'sent');
+          otpInput.focus();
+
+          // Auto-hide after 5 seconds
+          setTimeout(() => {
+            hideAutoSendStatus();
+          }, 5000);
+        } else {
+          if (result.cooldown) {
+            let message;
+            if (result.cooldown >= 60) {
+              const hours = Math.floor(result.cooldown / 60);
+              const minutes = result.cooldown % 60;
+              message = `⏳ Too many requests. Please try again in ${hours}h ${minutes}m.`;
+            } else {
+              message = `⏳ Too many requests. Please try again in ${result.cooldown} minutes.`;
+            }
+            showAutoSendStatus(message, 'error');
+          } else {
+            showAutoSendStatus('❌ ' + (result.message || 'Failed to send OTP.'), 'error');
+          }
+        }
+      } catch (error) {
+        showAutoSendStatus('❌ Network error. Please click "Resend OTP" to try again.', 'error');
+        console.error('Error auto-sending OTP:', error);
+      }
+    }
+
+    // ===== AUTO-SEND OTP ON PAGE LOAD =====
+    if (currentEmail) {
+      autoSendOTP();
+    } else {
+      showAutoSendStatus('❌ No email found. Please go back and try again.', 'error');
+    }
+
+    // ===== VERIFY OTP =====
+    async function verifyOTP() {
+      const code = otpInput.value.trim();
+
+      if (code.length !== 6) {
+        showError('Please enter a valid 6-digit code.');
+        return;
+      }
+
+      verifyBtn.disabled = true;
+      verifyBtn.textContent = 'Verifying...';
+      hideError();
+
+      try {
+        const response = await fetch('{{ url_for("verify_password_otp") }}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: currentEmail,
+            otp: code
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showSuccess('✅ OTP verified! Redirecting...');
+          setTimeout(() => {
+            window.location.href = result.redirect;
+          }, 1500);
+        } else {
+          showError(result.message || 'Invalid OTP. Please try again.');
+          otpInput.value = '';
+          otpInput.focus();
+        }
+      } catch (error) {
+        showError('Network error. Please try again.');
+        console.error('Error:', error);
+      } finally {
+        verifyBtn.disabled = false;
+        verifyBtn.textContent = 'Verify OTP';
+      }
+    }
+
+    // ===== EVENT LISTENERS =====
+    otpInput.addEventListener('input', function() {
+      this.value = this.value.replace(/\D/g, '');
+      hideError();
+      if (this.value.length === 6) {
+        verifyOTP();
+      }
+    });
+
+    otpInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && this.value.length === 6) {
+        verifyOTP();
+      }
+    });
+
+    verifyBtn.addEventListener('click', verifyOTP);
+
+    // ===== RESEND OTP =====
+    if (resendBtn) {
+      resendBtn.addEventListener('click', async function() {
+        if (!currentEmail) {
+          resendStatus.textContent = '❌ No email found. Please go back.';
+          resendStatus.style.color = '#dc2626';
+          return;
+        }
+
+        this.disabled = true;
+        this.textContent = 'Sending...';
+        resendStatus.textContent = '';
+
+        try {
+          const response = await fetch('{{ url_for("send_password_otp") }}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: currentEmail })
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            resendStatus.textContent = '✅ OTP resent successfully!';
+            resendStatus.style.color = '#13b355';
+            setTimeout(() => {
+              resendStatus.textContent = '';
+            }, 5000);
+          } else {
+            if (result.cooldown) {
+              let message;
+              if (result.cooldown >= 60) {
+                const hours = Math.floor(result.cooldown / 60);
+                const minutes = result.cooldown % 60;
+                message = `⏳ Too many requests. Please wait ${hours}h ${minutes}m.`;
+              } else {
+                message = `⏳ Too many requests. Please wait ${result.cooldown} minutes.`;
+              }
+              resendStatus.textContent = message;
+            } else {
+              resendStatus.textContent = '❌ ' + (result.message || 'Failed to resend.');
+            }
+            resendStatus.style.color = '#dc2626';
+          }
+        } catch (error) {
+          resendStatus.textContent = '❌ Network error. Please try again.';
+          resendStatus.style.color = '#dc2626';
+        } finally {
+          this.disabled = false;
+          this.textContent = 'Resend OTP';
+        }
+      });
+    }
+  });
+  </script>
+</body>
+</html>

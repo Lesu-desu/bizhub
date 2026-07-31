@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BizHub | Learn • Connect • Grow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* ============================================================
+                   ROOT VARIABLES — refined green/white palette
+                   ============================================================ */
+        :root {
+            --primary: #0a6b3a;
+            --primary-dark: #06522b;
+            --primary-light: #2a9d5e;
+            --primary-glow: rgba(10, 107, 58, 0.15);
+            --primary-subtle: #e8f5ed;
+
+            --bg-body: #f5f9f7;
+            --bg-card: #ffffff;
+            --bg-glass: rgba(255, 255, 255, 0.72);
+
+            --text-dark: #0f1a14;
+            --text-body: #1e2b24;
+            --text-muted: #5a6b62;
+            --text-light: #8a9b92;
+
+            --border-light: #e2e8e4;
+            --border-focus: #0a6b3a;
+
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.08);
+            --shadow-xl: 0 30px 80px rgba(0, 0, 0, 0.10);
+
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-xl: 32px;
+
+            --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* ============================================================
+                   RESET & BASE
+                   ============================================================ */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-body);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* ============================================================
+                   GLOW ORBS
+                   ============================================================ */
+        .bg-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.30;
+        }
+        .bg-glow.glow-1 {
+            width: 600px;
+            height: 600px;
+            top: -200px;
+            right: -150px;
+            background: radial-gradient(circle, rgba(10, 107, 58, 0.12), transparent 70%);
+        }
+        .bg-glow.glow-2 {
+            width: 500px;
+            height: 500px;
+            bottom: -100px;
+            left: -100px;
+            background: radial-gradient(circle, rgba(42, 157, 94, 0.08), transparent 70%);
+        }
+
+        /* ============================================================
+                   CONTAINER
+                   ============================================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================================
+                   NAVBAR — refined glassmorphism
+                   ============================================================ */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.80);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-bottom: 1px solid rgba(10, 107, 58, 0.06);
+            box-shadow: 0 2px 24px rgba(0, 0, 0, 0.03);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .logo-wrapper .logo-box {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 900;
+            font-size: 22px;
+            letter-spacing: -0.5px;
+            box-shadow: 0 4px 12px rgba(10, 107, 58, 0.25);
+            transition: transform 0.3s ease;
+        }
+
+        .logo-wrapper:hover .logo-box {
+            transform: scale(1.04) rotate(-2deg);
+        }
+
+        .logo-wrapper h2 {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+
+        .logo-wrapper h2 span {
+            color: var(--primary);
+        }
+
+        .logo-wrapper p {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: -2px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-body);
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .nav-links a .icon {
+            width: 17px;
+            height: 17px;
+            opacity: 0.6;
+            transition: opacity 0.25s ease;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary-subtle);
+            color: var(--primary);
+        }
+
+        .nav-links a:hover .icon {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 40%;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-login {
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-body);
+            border-radius: 40px;
+            transition: all 0.25s ease;
+        }
+
+        .nav-login:hover {
+            background: var(--primary-subtle);
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 40px;
+            box-shadow: 0 4px 16px rgba(10, 107, 58, 0.25);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 28px rgba(10, 107, 58, 0.35);
+            background: linear-gradient(145deg, var(--primary-light), var(--primary));
+        }
+
+        .nav-cta .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--text-dark);
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .mobile-menu-btn:hover {
+            background: var(--primary-subtle);
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            padding: 16px 24px 24px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(10, 107, 58, 0.06);
+            gap: 4px;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            color: var(--text-body);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu a:hover {
+            background: var(--primary-subtle);
+            color: var(--primary);
+        }
+
+        .mobile-menu a .icon {
+            width: 18px;
+            height: 18px;
+            opacity: 0.6;
+        }
+
+        .mobile-menu a:last-child {
+            background: var(--primary);
+            color: #fff;
+            justify-content: center;
+            margin-top: 8px;
+            font-weight: 700;
+            border-radius: 40px;
+        }
+
+        .mobile-menu a:last-child:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ============================================================
+                   HERO
+                   ============================================================ */
+        .hero {
+            padding: 60px 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(10, 107, 58, 0.07);
+            color: var(--primary);
+            padding: 8px 20px 8px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(10, 107, 58, 0.10);
+            backdrop-filter: blur(4px);
+            width: fit-content;
+            flex-wrap: wrap;
+        }
+
+        .hero-badge .brand-tag {
+            opacity: 0.5;
+            font-weight: 400;
+            font-size: 12px;
+        }
+
+        .hero-badge .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.6rem, 5vw, 3.8rem);
+            font-weight: 900;
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+            color: var(--text-dark);
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(145deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 480px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+
+        .hero-buttons .primary-btn,
+        .hero-buttons .secondary-btn {
+            padding: 14px 32px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hero-buttons .primary-btn {
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            box-shadow: 0 8px 28px rgba(10, 107, 58, 0.30);
+        }
+
+        .hero-buttons .primary-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 40px rgba(10, 107, 58, 0.40);
+        }
+
+        .hero-buttons .secondary-btn {
+            background: var(--bg-card);
+            color: var(--text-body);
+            border: 1.5px solid var(--border-light);
+        }
+
+        .hero-buttons .secondary-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-subtle);
+            transform: translateY(-4px);
+        }
+
+        .hero-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-links .link-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 40px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border-light);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: all 0.25s ease;
+        }
+
+        .hero-links .link-chip:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #fff;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hero-links .link-chip .icon {
+            width: 17px;
+            height: 17px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .hero-stats .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-stats .stat-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--primary-subtle);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .hero-stats .stat-icon .icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        .hero-stats .stat-text h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+
+        .hero-stats .stat-text p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* ---- Hero Visual (Dashboard Preview) ---- */
+        .hero-visual {
+            position: relative;
+        }
+
+        .dashboard-preview {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-lg);
+            padding: 28px 28px 24px;
+            transition: all 0.4s ease;
+        }
+
+        .dashboard-preview:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px);
+        }
+
+        .dashboard-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .dashboard-logo {
+            font-weight: 800;
+            font-size: 18px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dashboard-logo .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dashboard-nav-links {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .dashboard-nav-links span {
+            cursor: default;
+            transition: color 0.2s;
+            padding: 4px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .dashboard-nav-links span:hover {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .dashboard-content h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .dashboard-content p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .preview-card {
+            background: var(--bg-body);
+            padding: 14px 12px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+            transition: all 0.25s ease;
+            cursor: default;
+        }
+
+        .preview-card:hover {
+            background: var(--bg-card);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+        }
+
+        .preview-card .tag {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .preview-card h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 4px 0 2px;
+        }
+
+        .preview-card .price {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* ============================================================
+                   SECTION HEADINGS
+                   ============================================================ */
+        .section-padding {
+            padding: 80px 0;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-heading .section-tag {
+            display: inline-block;
+            background: var(--primary-subtle);
+            color: var(--primary);
+            padding: 6px 18px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .section-heading h2 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        /* ============================================================
+                   FEATURES
+                   ============================================================ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 28px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 32px 24px 28px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: all 0.35s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-card .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 16px;
+            background: var(--primary-subtle);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            background: var(--primary);
+        }
+
+        .feature-card:hover .feature-icon .icon {
+            color: #fff;
+        }
+
+        .feature-card .feature-icon .icon {
+            width: 28px;
+            height: 28px;
+            color: var(--primary);
+            transition: color 0.3s ease;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ============================================================
+                   PRODUCTS & COURSES
+                   ============================================================ */
+        .products-grid,
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 28px;
+        }
+
+        .product-card,
+        .course-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 0 0 20px 0;
+            border: 1px solid var(--border-light);
+            transition: all 0.35s ease;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .product-card:hover,
+        .course-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .product-card .product-top {
+            height: 130px;
+            background: linear-gradient(145deg, #e8f0ec, #d5e3dd);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card .product-top img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-card .product-top::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(10, 107, 58, 0.06), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .product-card .product-content,
+        .course-card .course-content {
+            padding: 16px 20px 8px;
+        }
+
+        .product-card .product-content .tag,
+        .course-card .course-content .tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-card .product-content h3,
+        .course-card .course-content h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 4px 0 4px;
+        }
+
+        .product-card .product-content p,
+        .course-card .course-content p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .product-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+        }
+
+        .product-bottom .price {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .product-bottom .view-btn {
+            background: var(--primary-subtle);
+            color: var(--primary);
+            border: none;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .product-bottom .view-btn:hover {
+            background: var(--primary);
+            color: #fff;
+            transform: scale(1.04);
+        }
+
+        .product-bottom .view-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            background: #e2e8e5;
+            color: #9ca3af;
+        }
+
+        .course-card .course-banner {
+            height: 110px;
+            background: linear-gradient(145deg, #dce8f0, #c8d8e4);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            overflow: hidden;
+        }
+
+        .course-card .course-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .course-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* ============================================================
+                   REVIEWS
+                   ============================================================ */
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+        }
+
+        .review-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 28px 24px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.35s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .review-stars {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 12px;
+        }
+
+        .review-stars .icon {
+            width: 18px;
+            height: 18px;
+            fill: #f59e0b;
+            color: #f59e0b;
+        }
+
+        .review-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-body);
+            margin-bottom: 16px;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .review-author .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .review-author .info strong {
+            display: block;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .review-author .info span {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+                   VENDOR CTA
+                   ============================================================ */
+        .vendor-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 48px 52px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-md);
+            align-items: center;
+        }
+
+        .vendor-content .section-tag {
+            display: inline-block;
+            background: var(--primary-subtle);
+            color: var(--primary);
+            padding: 6px 18px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .vendor-content h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .vendor-content p {
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .vendor-content ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .vendor-content ul li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-body);
+        }
+
+        .vendor-content ul li .icon {
+            width: 18px;
+            height: 18px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .vendor-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 34px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+            color: #fff;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 28px rgba(10, 107, 58, 0.25);
+        }
+
+        .vendor-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 40px rgba(10, 107, 58, 0.35);
+            background: linear-gradient(145deg, var(--primary-light), var(--primary));
+        }
+
+        .vendor-btn .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .vendor-visual {
+            background: var(--bg-body);
+            border-radius: var(--radius-md);
+            padding: 28px 24px;
+            border: 1px solid var(--border-light);
+        }
+
+        .vendor-dashboard h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .dashboard-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .dashboard-metrics .metric {
+            text-align: center;
+            padding: 12px 8px;
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-light);
+            transition: all 0.25s ease;
+        }
+
+        .dashboard-metrics .metric:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .dashboard-metrics .metric strong {
+            display: block;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .dashboard-metrics .metric span {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+                   FINAL CTA
+                   ============================================================ */
+        .cta-box {
+            max-width: 720px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+            border-radius: var(--radius-lg);
+            padding: 56px 48px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 20px 60px rgba(10, 107, 58, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.06), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .cta-box h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .cta-box p {
+            opacity: 0.85;
+            margin-bottom: 28px;
+            font-size: 1.05rem;
+            position: relative;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: #fff;
+            color: var(--primary);
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.25);
+        }
+
+        .cta-btn .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ============================================================
+                   FOOTER — polished & visible
+                   ============================================================ */
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid var(--border-light);
+            padding: 64px 0 20px;
+            margin-top: 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr 1fr 1fr;
+            gap: 48px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-brand .logo-box {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 900;
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(10, 107, 58, 0.20);
+            flex-shrink: 0;
+        }
+
+        .footer-brand .logo-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand .logo-row h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .footer-brand .logo-row h3 span {
+            color: var(--primary);
+        }
+
+        .footer-brand .logo-row p {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: -2px;
+        }
+
+        .footer-description {
+            color: var(--text-muted);
+            font-size: 14px;
+            max-width: 300px;
+            line-height: 1.7;
+            margin-top: 4px;
+        }
+
+        .footer h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer .footer-links a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            padding: 6px 0;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        .footer .footer-links a .icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.4;
+            transition: opacity 0.2s ease;
+        }
+
+        .footer .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer .footer-links a:hover .icon {
+            opacity: 1;
+            color: var(--primary);
+        }
+
+        .footer-contact p {
+            font-size: 14px;
+            color: var(--text-muted);
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-contact p .icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.5;
+            flex-shrink: 0;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding: 20px 24px 0;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-bottom .social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-bottom .social-links a {
+            color: var(--text-muted);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-body);
+            border: 1px solid var(--border-light);
+        }
+
+        .footer-bottom .social-links a:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom .social-links a .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ============================================================
+                   REVEAL ANIMATIONS (simple)
+                   ============================================================ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================================
+                   RESPONSIVE
+                   ============================================================ */
+        @media (max-width: 1024px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .hero-content {
+                align-items: center;
+            }
+
+            .hero p {
+                max-width: 100%;
+            }
+
+            .hero-badge {
+                align-self: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-links {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .vendor-card {
+                grid-template-columns: 1fr;
+                padding: 36px 28px;
+                text-align: center;
+            }
+
+            .vendor-content ul {
+                align-items: center;
+            }
+
+            .vendor-btn {
+                justify-content: center;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 32px;
+            }
+
+            .preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-buttons .nav-login {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-heading h2 {
+                font-size: 1.8rem;
+            }
+
+            .hero-stats {
+                gap: 24px;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-stats .stat-item {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .dashboard-topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .dashboard-nav-links {
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .vendor-card {
+                padding: 28px 20px;
+            }
+
+            .dashboard-metrics {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .cta-box {
+                padding: 40px 24px;
+            }
+
+            .cta-box h2 {
+                font-size: 1.6rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-brand .logo-row {
+                justify-content: center;
+            }
+
+            .footer-description {
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .footer h4 {
+                text-align: center;
+            }
+
+            .footer .footer-links a {
+                justify-content: center;
+            }
+
+            .footer-contact p {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .hero {
+                padding: 40px 0 20px;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero-buttons .primary-btn,
+            .hero-buttons .secondary-btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+
+            .hero-links .link-chip {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .products-grid,
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .section-padding {
+                padding: 48px 0;
+            }
+
+            .vendor-card {
+                padding: 20px 16px;
+            }
+
+            .cta-box {
+                padding: 32px 20px;
+            }
+
+            .cta-box h2 {
+                font-size: 1.4rem;
+            }
+
+            .footer {
+                padding: 40px 0 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== GLOW ORBS ===== -->
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+
+    <!-- ============================================================
+    NAVBAR
+    ============================================================ -->
+    <header class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo-wrapper">
+                <div class="logo-box">B</div>
+                <div>
+                    <h2>Biz<span>Hub</span></h2>
+                    <p>Learn • Connect • Grow</p>
+                </div>
+            </a>
+
+            <nav class="nav-links">
+                <a href="#features"><i data-lucide="layers" class="icon"></i> Features</a>
+                <a href="#products"><i data-lucide="box" class="icon"></i> Products</a>
+                <a href="#courses"><i data-lucide="graduation-cap" class="icon"></i> Courses</a>
+                <a href="{{ url_for('marketplace') }}"><i data-lucide="shopping-bag" class="icon"></i> Marketplace</a>
+                <a href="{{ url_for('admin_login') }}"><i data-lucide="shield-check" class="icon"></i> Admin</a>
+                <a href="#reviews"><i data-lucide="message-square" class="icon"></i> Reviews</a>
+            </nav>
+
+            <div class="nav-buttons">
+                <a href="/login" class="nav-login">Log in</a>
+                <a href="/signup" class="nav-cta">
+                    <i data-lucide="rocket" class="icon"></i> Get Started
+                </a>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">☰</button>
+        </div>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#features"><i data-lucide="layers" class="icon"></i> Features</a>
+            <a href="#products"><i data-lucide="box" class="icon"></i> Products</a>
+            <a href="#courses"><i data-lucide="graduation-cap" class="icon"></i> Courses</a>
+            <a href="{{ url_for('marketplace') }}"><i data-lucide="shopping-bag" class="icon"></i> Marketplace</a>
+            <a href="{{ url_for('admin_login') }}"><i data-lucide="shield-check" class="icon"></i> Admin</a>
+            <a href="#reviews"><i data-lucide="message-square" class="icon"></i> Reviews</a>
+            <a href="/login">Log in</a>
+            <a href="/signup">Get Started</a>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    HERO
+    ============================================================ -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i data-lucide="zap" class="icon"></i>
+                    Empowered by Michie Infotech Computer Institute Asaba
+                    <span class="brand-tag">• Supported by Entrix.II</span>
+                </div>
+
+                <h1>
+                    Learn, Buy, Sell & <span class="highlight">Grow</span> with BizHub
+                </h1>
+
+                <p>
+                    BizHub is your all-in-one digital marketplace and learning platform for courses,
+                    digital products, vendors and business growth.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="/signup" class="primary-btn">
+                        <i data-lucide="rocket" class="icon"></i> Get Started
+                    </a>
+                    <a href="{{ url_for('marketplace') }}" class="secondary-btn">
+                        <i data-lucide="shopping-bag" class="icon"></i> Explore Marketplace
+                    </a>
+                </div>
+
+                <div class="hero-links">
+                    <a href="/login" class="link-chip">
+                        <i data-lucide="box" class="icon"></i> View Products
+                    </a>
+                    <a href="/login" class="link-chip">
+                        <i data-lucide="graduation-cap" class="icon"></i> View Courses
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon"><i data-lucide="package" class="icon"></i></div>
+                        <div class="stat-text">
+                            <h3>{{ products|length }}+</h3>
+                            <p>Digital Products</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon"><i data-lucide="book-open" class="icon"></i></div>
+                        <div class="stat-text">
+                            <h3>{{ courses|length }}+</h3>
+                            <p>Courses</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon"><i data-lucide="headphones" class="icon"></i></div>
+                        <div class="stat-text">
+                            <h3>24/7</h3>
+                            <p>Support</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="dashboard-preview">
+                    <div class="dashboard-topbar">
+                        <div class="dashboard-logo">
+                            BizHub <span class="dot"></span>
+                        </div>
+                        <div class="dashboard-nav-links">
+                            <span>Products</span>
+                            <span>Courses</span>
+                            <span>Vendors</span>
+                        </div>
+                    </div>
+                    <div class="dashboard-content">
+                        <h2>Digital Marketplace</h2>
+                        <p>Everything you need to learn and grow.</p>
+                        <div class="preview-grid">
+                            <div class="preview-card">
+                                <div class="tag">Ebook</div>
+                                <h4>Excel Mastery</h4>
+                                <div class="price">$3.99</div>
+                            </div>
+                            <div class="preview-card">
+                                <div class="tag">Course</div>
+                                <h4>Python Basics</h4>
+                                <div class="price">$7.99</div>
+                            </div>
+                            <div class="preview-card">
+                                <div class="tag">Template</div>
+                                <h4>Business Kit</h4>
+                                <div class="price">$2.49</div>
+                            </div>
+                            <div class="preview-card">
+                                <div class="tag">Guide</div>
+                                <h4>Data Analysis</h4>
+                                <div class="price">$5.99</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FEATURES
+    ============================================================ -->
+    <section class="section-padding" id="features">
+        <div class="container">
+            <div class="section-heading reveal">
+                <span class="section-tag">Why BizHub</span>
+                <h2>Everything You Need In One Platform</h2>
+                <p>Buy digital products, learn valuable skills, sell online and grow your business seamlessly.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i data-lucide="shopping-cart" class="icon"></i></div>
+                    <h3>Digital Marketplace</h3>
+                    <p>Buy and sell ebooks, templates, guides, software and digital downloads.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i data-lucide="book-open" class="icon"></i></div>
+                    <h3>Learning Platform</h3>
+                    <p>Access premium IT, business and professional development courses.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i data-lucide="bot" class="icon"></i></div>
+                    <h3>AI IT Tutor</h3>
+                    <p>Get learning support, explanations and technical assistance anytime.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i data-lucide="message-circle" class="icon"></i></div>
+                    <h3>Buyer-Seller Chat</h3>
+                    <p>Communicate directly with vendors and customers in real-time.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i data-lucide="truck" class="icon"></i></div>
+                    <h3>Order Tracking</h3>
+                    <p>Track purchases and downloads easily from your dashboard.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i data-lucide="shield-check" class="icon"></i></div>
+                    <h3>Secure Payments</h3>
+                    <p>Fast and secure payment infrastructure powered by Paystack.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    PRODUCTS
+    ============================================================ -->
+    <section class="section-padding" id="products" style="padding-top:0;">
+        <div class="container">
+            <div class="section-heading reveal">
+                <span class="section-tag">Marketplace</span>
+                <h2>Featured Digital Products</h2>
+            </div>
+            <div class="products-grid">
+                {% if products %}
+                    {% for product in products %}
+                    <div class="product-card reveal">
+                        <div class="product-top">
+                            {% if product.cover_image %}
+                                <img src="{{ product.cover_image }}" alt="{{ product.title }}">
+                            {% else %}
+                                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#e8f0ec; font-size:48px; color:#8ba0a0;">📦</div>
+                            {% endif %}
+                        </div>
+                        <div class="product-content">
+                            <div class="tag">{{ product.category or 'Product' }}</div>
+                            <h3>{{ product.title }}</h3>
+                            <p>by {{ product.vendor_name or 'Vendor' }}</p>
+                            <div class="product-bottom">
+                                <span class="price">₦{{ product.price }}</span>
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="view-btn">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Fallback placeholder cards -->
+                    <div class="product-card reveal">
+                        <div class="product-top" style="background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:48px; color:#b0b0b0;">📦</div>
+                        <div class="product-content">
+                            <div class="tag">Sample Product</div>
+                            <h3>Your Product Here</h3>
+                            <p>Add your first product in the vendor dashboard.</p>
+                            <div class="product-bottom">
+                                <span class="price">₦0.00</span>
+                                <button class="view-btn" disabled>View</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-card reveal">
+                        <div class="product-top" style="background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:48px; color:#b0b0b0;">📚</div>
+                        <div class="product-content">
+                            <div class="tag">Sample Course</div>
+                            <h3>Your Course Here</h3>
+                            <p>Add your first course in the vendor dashboard.</p>
+                            <div class="product-bottom">
+                                <span class="price">₦0.00</span>
+                                <button class="view-btn" disabled>View</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    COURSES
+    ============================================================ -->
+    <section class="section-padding" id="courses" style="padding-top:0;">
+        <div class="container">
+            <div class="section-heading reveal">
+                <span class="section-tag">Learning</span>
+                <h2>Popular Courses</h2>
+            </div>
+            <div class="courses-grid">
+                {% if courses %}
+                    {% for course in courses %}
+                    <div class="course-card reveal">
+                        <div class="course-banner">
+                            {% if course.cover_image %}
+                                <img src="{{ course.cover_image }}" alt="{{ course.title }}">
+                            {% else %}
+                                <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#dce8f0; font-size:48px; color:#8099a8;">🎓</div>
+                            {% endif %}
+                        </div>
+                        <div class="course-content">
+                            <div class="tag">{{ course.category or 'Course' }}</div>
+                            <h3>{{ course.title }}</h3>
+                            <p>{{ course.description|truncate(60) if course.description else '' }}</p>
+                            <div class="course-meta">
+                                <span><i data-lucide="book-open" class="icon" style="width:14px;height:14px;"></i> {{ course.total_lessons or 0 }} Lessons</span>
+                                <span><i data-lucide="star" class="icon" style="width:14px;height:14px;"></i> {{ course.rating or 'N/A' }}</span>
+                            </div>
+                            <div class="product-bottom">
+                                <span class="price">₦{{ course.price }}</span>
+                                <a href="{{ url_for('course_detail', course_id=course.id) }}" class="view-btn">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Fallback placeholder cards -->
+                    <div class="course-card reveal">
+                        <div class="course-banner" style="background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:48px; color:#b0b0b0;">🎓</div>
+                        <div class="course-content">
+                            <div class="tag">Sample Course</div>
+                            <h3>Your Course Here</h3>
+                            <p>Start by adding your first course.</p>
+                            <div class="course-meta">
+                                <span><i data-lucide="book-open" class="icon" style="width:14px;height:14px;"></i> 0 Lessons</span>
+                                <span><i data-lucide="star" class="icon" style="width:14px;height:14px;"></i> N/A</span>
+                            </div>
+                            <div class="product-bottom">
+                                <span class="price">₦0.00</span>
+                                <button class="view-btn" disabled>View</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="course-card reveal">
+                        <div class="course-banner" style="background:#f0f0f0; display:flex; align-items:center; justify-content:center; font-size:48px; color:#b0b0b0;">📚</div>
+                        <div class="course-content">
+                            <div class="tag">Sample Product</div>
+                            <h3>Your Product Here</h3>
+                            <p>Add your first product to the marketplace.</p>
+                            <div class="course-meta">
+                                <span><i data-lucide="book-open" class="icon" style="width:14px;height:14px;"></i> 0 Lessons</span>
+                                <span><i data-lucide="star" class="icon" style="width:14px;height:14px;"></i> N/A</span>
+                            </div>
+                            <div class="product-bottom">
+                                <span class="price">₦0.00</span>
+                                <button class="view-btn" disabled>View</button>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    REVIEWS
+    ============================================================ -->
+    <section class="section-padding" id="reviews" style="padding-top:0;">
+        <div class="container">
+            <div class="section-heading reveal">
+                <span class="section-tag">Testimonials</span>
+                <h2>What Our Users Say</h2>
+                <p>Real reviews from real people who love BizHub.</p>
+            </div>
+            <div class="reviews-grid">
+                <div class="review-card reveal">
+                    <div class="review-stars">
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                    </div>
+                    <p class="review-text">"BizHub made it so easy to start selling my digital products. The platform is intuitive and the support is outstanding."</p>
+                    <div class="review-author">
+                        <div class="avatar">A</div>
+                        <div class="info">
+                            <strong>Amara O.</strong>
+                            <span>Vendor</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card reveal">
+                    <div class="review-stars">
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                    </div>
+                    <p class="review-text">"The courses are top-notch! I learned Python and landed my first tech job. BizHub changed my career."</p>
+                    <div class="review-author">
+                        <div class="avatar">C</div>
+                        <div class="info">
+                            <strong>Chidi E.</strong>
+                            <span>Learner</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card reveal">
+                    <div class="review-stars">
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                        <i data-lucide="star" class="icon"></i>
+                    </div>
+                    <p class="review-text">"As a small business owner, BizHub helped me reach customers across Africa. The analytics and chat features are invaluable."</p>
+                    <div class="review-author">
+                        <div class="avatar">F</div>
+                        <div class="info">
+                            <strong>Fatima B.</strong>
+                            <span>Business Owner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    VENDOR CTA
+    ============================================================ -->
+    <section class="section-padding" id="vendors" style="padding-top:0;">
+        <div class="container">
+            <div class="vendor-card reveal">
+                <div class="vendor-content">
+                    <span class="section-tag">For Vendors</span>
+                    <h2>Start Selling On BizHub</h2>
+                    <p>Upload your digital products, reach more customers and grow your business with powerful vendor tools.</p>
+                    <ul>
+                        <li><i data-lucide="check-circle" class="icon"></i> Secure vendor payouts</li>
+                        <li><i data-lucide="check-circle" class="icon"></i> Product analytics</li>
+                        <li><i data-lucide="check-circle" class="icon"></i> Customer communication tools</li>
+                        <li><i data-lucide="check-circle" class="icon"></i> Business growth support</li>
+                    </ul>
+                    <a href="/signup" class="vendor-btn">
+                        <i data-lucide="store" class="icon"></i> Become A Vendor
+                    </a>
+                </div>
+                <div class="vendor-visual">
+                    <div class="vendor-dashboard">
+                        <h3>Vendor Dashboard</h3>
+                        <div class="dashboard-metrics">
+                            <div class="metric">
+                                <strong>$2,430</strong>
+                                <span>Earnings</span>
+                            </div>
+                            <div class="metric">
+                                <strong>143</strong>
+                                <span>Sales</span>
+                            </div>
+                            <div class="metric">
+                                <strong>92%</strong>
+                                <span>Growth</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FINAL CTA
+    ============================================================ -->
+    <section class="section-padding" style="padding-top:0;">
+        <div class="container">
+            <div class="cta-box reveal">
+                <h2>Ready To Learn, Sell &amp; Grow?</h2>
+                <p>Join BizHub today and become part of a smarter digital ecosystem.</p>
+                <a href="/signup" class="cta-btn">
+                    <i data-lucide="rocket" class="icon"></i> Get Started
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    FOOTER — fully visible, polished
+    ============================================================ -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <!-- Brand -->
+            <div class="footer-brand">
+                <div class="logo-row">
+                    <div class="logo-box">B</div>
+                    <div>
+                        <h3>Biz<span>Hub</span></h3>
+                        <p>Learn • Connect • Grow</p>
+                    </div>
+                </div>
+                <p class="footer-description">
+                    BizHub is a modern digital marketplace and learning platform helping users buy,
+                    sell and grow online.
+                </p>
+            </div>
+
+            <!-- Platform -->
+            <div>
+                <h4>Platform</h4>
+                <div class="footer-links">
+                    <a href="#"><i data-lucide="shopping-bag" class="icon"></i> Marketplace</a>
+                    <a href="#products"><i data-lucide="box" class="icon"></i> Products</a>
+                    <a href="#courses"><i data-lucide="graduation-cap" class="icon"></i> Courses</a>
+                    <a href="#vendors"><i data-lucide="store" class="icon"></i> Vendors</a>
+                </div>
+            </div>
+
+            <!-- Company -->
+            <div>
+                <h4>Company</h4>
+                <div class="footer-links">
+                    <a href="#"><i data-lucide="info" class="icon"></i> About</a>
+                    <a href="#"><i data-lucide="help-circle" class="icon"></i> Support</a>
+                    <a href="#"><i data-lucide="shield" class="icon"></i> Privacy Policy</a>
+                    <a href="#"><i data-lucide="file-text" class="icon"></i> Terms</a>
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <h4>Contact</h4>
+                <div class="footer-contact">
+                    <p><i data-lucide="mail" class="icon"></i> support@bizhub.com.ng</p>
+                    <p><i data-lucide="map-pin" class="icon"></i> Michie Infotech Computer Institute Asaba</p>
+                    <p><i data-lucide="mail" class="icon"></i> For web development, send an email to <a href="mailto:entrix2026@gmail.com" style="color:var(--primary); text-decoration:underline;">entrix2026@gmail.com</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 BizHub. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" aria-label="Twitter"><i data-lucide="twitter" class="icon"></i></a>
+                <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin" class="icon"></i></a>
+                <a href="#" aria-label="YouTube"><i data-lucide="youtube" class="icon"></i></a>
+                <a href="#" aria-label="Instagram"><i data-lucide="instagram" class="icon"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    SCRIPTS
+    ============================================================ -->
+    <script>
+        // ---- Lucide icons ----
+        lucide.createIcons();
+
+        // ---- Mobile menu toggle ----
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+            menuBtn.textContent = mobileMenu.classList.contains('open') ? '✕' : '☰';
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                menuBtn.textContent = '☰';
+            });
+        });
+
+        // ---- Navbar scroll shadow ----
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        // ---- Reveal on scroll (Intersection Observer) ----
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.10,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // ---- Trigger reveal for elements already in view ----
+        setTimeout(() => {
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight) {
+                    el.classList.add('visible');
+                }
+            });
+        }, 200);
+    </script>
+
+</body>
+</html>

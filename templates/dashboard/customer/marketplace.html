@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f6f9f6;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1a1a2e;
+        }
+
+        .header h1 span {
+            color: #2d7d4f;
+        }
+
+        .header .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1.5px solid #d4dfd4;
+            border-radius: 40px;
+            background: white;
+            color: #4a5f4a;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.25s ease;
+        }
+
+        .header .btn-back:hover {
+            border-color: #2d7d4f;
+            color: #2d7d4f;
+            background: #f0f7f0;
+        }
+
+        /* ===== CART ICON IN HEADER ===== */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .cart-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border: 1.5px solid #d4dfd4;
+            border-radius: 40px;
+            background: white;
+            color: #4a5f4a;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.25s ease;
+            position: relative;
+        }
+
+        .cart-link:hover {
+            border-color: #2d7d4f;
+            color: #2d7d4f;
+            background: #f0f7f0;
+        }
+
+        .cart-link .cart-badge {
+            background: #2d7d4f;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            text-align: center;
+            padding: 48px 0 32px;
+        }
+
+        .hero h2 {
+            font-size: 34px;
+            font-weight: 800;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .hero h2 span {
+            color: #2d7d4f;
+        }
+
+        .hero p {
+            color: #5a6f5a;
+            font-size: 16px;
+            max-width: 500px;
+            margin: 0 auto 24px;
+            line-height: 1.7;
+        }
+
+        /* ===== SEARCH BAR ===== */
+        .search-bar {
+            max-width: 560px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 50px;
+            border: 1px solid #dce5dc;
+            padding: 4px 4px 4px 20px;
+            box-shadow: 0 4px 14px rgba(45, 125, 79, 0.06);
+            transition: 0.25s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: #2d7d4f;
+            box-shadow: 0 4px 20px rgba(45, 125, 79, 0.10);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+            color: #1a1a2e;
+        }
+
+        .search-bar input::placeholder {
+            color: #9aaf9a;
+        }
+
+        .search-bar button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 40px;
+            background: #2d7d4f;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .search-bar button:hover {
+            background: #246b42;
+            transform: translateY(-1px);
+        }
+
+        /* ===== RESULTS COUNT ===== */
+        .results-count {
+            text-align: center;
+            color: #5a6f5a;
+            font-size: 14px;
+            margin-top: 12px;
+            min-height: 24px;
+        }
+
+        /* ===== CATEGORY FILTERS ===== */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin: 32px 0 40px;
+        }
+
+        .category-btn {
+            padding: 8px 22px;
+            border: 1.5px solid #dce5dc;
+            border-radius: 40px;
+            background: white;
+            color: #4a5f4a;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .category-btn:hover {
+            border-color: #2d7d4f;
+            color: #2d7d4f;
+            background: #f0f7f0;
+        }
+
+        .category-btn.active {
+            background: #2d7d4f;
+            border-color: #2d7d4f;
+            color: white;
+        }
+
+        /* ===== SECTION HEADERS ===== */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 40px 0 16px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        .section-header .count {
+            color: #5a6f5a;
+            font-size: 14px;
+            background: #ecf3ec;
+            padding: 4px 14px;
+            border-radius: 40px;
+        }
+
+        /* ===== PRODUCT/COURSE GRID ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e5ece5;
+            overflow: hidden;
+            transition: 0.25s ease;
+            box-shadow: 0 2px 10px rgba(45, 125, 79, 0.04);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #2d7d4f;
+            box-shadow: 0 8px 28px rgba(45, 125, 79, 0.08);
+        }
+
+        /* ===== CARD IMAGE - CLICKABLE ===== */
+        .card .card-image {
+            height: 180px;
+            background: #edf5ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.3s ease;
+        }
+
+        .card:hover .card-image img {
+            transform: scale(1.03);
+        }
+
+        .card .card-image .placeholder {
+            width: 56px;
+            height: 56px;
+            color: #8ba88b;
+        }
+
+        .card .card-image .badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(45, 125, 79, 0.9);
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ===== CARD BODY ===== */
+        .card .card-body {
+            padding: 20px;
+        }
+
+        /* ===== CARD TITLE - CLICKABLE ===== */
+        .card .card-body h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .card .card-body h3:hover {
+            color: #2d7d4f;
+        }
+
+        .card .card-body .vendor {
+            font-size: 14px;
+            color: #5a6f5a;
+            margin-bottom: 6px;
+        }
+
+        .card .card-body .price {
+            font-weight: 700;
+            color: #2d7d4f;
+            font-size: 18px;
+        }
+
+        /* ===== CARD ACTIONS ===== */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        /* ===== PRODUCT: Add to Cart ===== */
+        .card-actions .btn-cart {
+            flex: 1;
+            padding: 10px;
+            border-radius: 40px;
+            background: #2d7d4f;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .card-actions .btn-cart:hover {
+            background: #246b42;
+            transform: translateY(-1px);
+        }
+
+        .card-actions .btn-cart .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ===== COURSE: View Details ===== */
+        .card-actions .btn-view {
+            flex: 1;
+            padding: 10px;
+            border: 1.5px solid #2d7d4f;
+            border-radius: 40px;
+            background: transparent;
+            color: #2d7d4f;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.25s ease;
+        }
+
+        .card-actions .btn-view:hover {
+            background: #2d7d4f;
+            color: white;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #5a6f5a;
+        }
+
+        .empty-state .icon {
+            width: 48px;
+            height: 48px;
+            color: #b5c8b5;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* ===== TOAST NOTIFICATION ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #2d7d4f;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(45, 125, 79, 0.3);
+            font-weight: 600;
+            font-size: 14px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: 0.3s ease;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 16px;
+            }
+            .hero h2 {
+                font-size: 28px;
+            }
+            .search-bar {
+                flex-direction: column;
+                padding: 12px;
+                border-radius: 24px;
+            }
+            .search-bar input {
+                width: 100%;
+                padding: 8px 0 12px;
+            }
+            .search-bar button {
+                width: 100%;
+                justify-content: center;
+            }
+            .categories {
+                gap: 6px;
+            }
+            .category-btn {
+                padding: 6px 16px;
+                font-size: 13px;
+            }
+            .card .card-image {
+                height: 140px;
+            }
+            .toast {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                text-align: center;
+                justify-content: center;
+            }
+            .card-actions {
+                flex-direction: column;
+            }
+            .card-actions .btn-view,
+            .card-actions .btn-cart {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            .card .card-body h3 {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container page-transition">
+        <!-- ===== HEADER ===== -->
+        <div class="header">
+            <h1>
+                <i data-lucide="shopping-bag" class="icon" style="width: 32px; height: 32px; color: #2d7d4f;"></i>
+                <span>Marketplace</span>
+            </h1>
+            <div class="header-right">
+                <a href="{{ url_for('view_cart') }}" class="cart-link">
+                    <i data-lucide="shopping-cart" class="icon" style="width: 18px; height: 18px;"></i>
+                    Cart
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+                <a href="{{ url_for('customer_dashboard') }}" class="btn-back">
+                    <i data-lucide="arrow-left" class="icon" style="width: 18px; height: 18px;"></i>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- ===== HERO ===== -->
+        <div class="hero">
+            <h2>Discover <span>Courses & Products</span></h2>
+            <p>Find the best digital products and courses created by top vendors.</p>
+
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for courses, products, vendors..." autocomplete="off">
+                <button onclick="performSearch()">
+                    <i data-lucide="search" class="icon" style="width: 18px; height: 18px;"></i>
+                    Search
+                </button>
+            </div>
+
+            <div class="results-count" id="resultsCount"></div>
+        </div>
+
+        <!-- ===== CATEGORY FILTERS ===== -->
+        <div class="categories" id="categoryFilters">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="Technology">Technology</button>
+            <button class="category-btn" data-category="Business">Business</button>
+            <button class="category-btn" data-category="Design">Design</button>
+            <button class="category-btn" data-category="Marketing">Marketing</button>
+            <button class="category-btn" data-category="Finance">Finance</button>
+            <button class="category-btn" data-category="Health">Health</button>
+            <button class="category-btn" data-category="Education">Education</button>
+        </div>
+
+        <!-- ===== TOAST NOTIFICATION ===== -->
+        <div class="toast" id="toast">
+            <i data-lucide="check-circle" class="icon"></i>
+            <span id="toastMessage">Added to cart!</span>
+        </div>
+
+        <!-- ===== PRODUCTS SECTION ===== -->
+        <div class="section-header">
+            <h2>Products</h2>
+            <span class="count" id="productCount">{{ products|length }} available</span>
+        </div>
+        <div class="grid" id="productGrid">
+            {% for product in products %}
+            <div class="card" data-category="{{ product.category }}">
+                <!-- Click image → go to product detail -->
+                <div class="card-image" onclick="window.location.href='{{ url_for('product_detail', product_id=product.id) }}'">
+                    {% if product.cover_image %}
+                        <img src="{{ product.cover_image }}" alt="{{ product.title }}">
+                    {% else %}
+                        <i data-lucide="package" class="placeholder"></i>
+                    {% endif %}
+                    <span class="badge">Product</span>
+                </div>
+                <div class="card-body">
+                    <!-- Click title → go to product detail -->
+                    <h3 onclick="window.location.href='{{ url_for('product_detail', product_id=product.id) }}'">{{ product.title }}</h3>
+                    <div class="vendor">{{ product.vendor_name }}</div>
+                    <div class="price">₦{{ product.price }}</div>
+                    <div class="card-actions">
+                        <a href="{{ url_for('product_detail', product_id=product.id) }}" class="btn-view">View Details</a>
+                        <button onclick="addToCart('product', {{ product.id }})" class="btn-cart">
+                            <i data-lucide="shopping-cart" class="icon"></i>
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ===== COURSES SECTION ===== -->
+        <div class="section-header">
+            <h2>Courses</h2>
+            <span class="count" id="courseCount">{{ courses|length }} available</span>
+        </div>
+        <div class="grid" id="courseGrid">
+            {% for course in courses %}
+            <div class="card" data-category="{{ course.category }}">
+                <!-- Click image → go to course detail -->
+                <div class="card-image" onclick="window.location.href='{{ url_for('course_detail', course_id=course.id) }}'">
+                    {% if course.cover_image %}
+                        <img src="{{ course.cover_image }}" alt="{{ course.title }}">
+                    {% else %}
+                        <i data-lucide="book-open" class="placeholder"></i>
+                    {% endif %}
+                    <span class="badge">Course</span>
+                </div>
+                <div class="card-body">
+                    <!-- Click title → go to course detail -->
+                    <h3 onclick="window.location.href='{{ url_for('course_detail', course_id=course.id) }}'">{{ course.title }}</h3>
+                    <div class="vendor">{{ course.vendor_name }}</div>
+                    <div class="price">₦{{ course.price }}</div>
+                    <div class="card-actions">
+                        <a href="{{ url_for('course_detail', course_id=course.id) }}" class="btn-view">View Details</a>
+                        <button onclick="addToCart('course', {{ course.id }})" class="btn-cart">
+                            <i data-lucide="shopping-cart" class="icon"></i>
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // ===== UPDATE CART COUNT ON PAGE LOAD =====
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+
+        // ===== ADD TO CART =====
+        function addToCart(itemType, itemId) {
+            fetch('/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    item_type: itemType,
+                    item_id: itemId,
+                    quantity: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('✅ Added to cart!');
+                    updateCartCount();
+                } else {
+                    showToast(data.message || 'Failed to add to cart.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Network error. Please try again.');
+            });
+        }
+
+        // ===== UPDATE CART COUNT =====
+        function updateCartCount() {
+            fetch('/api/cart/count')
+                .then(response => response.json())
+                .then(data => {
+                    const badge = document.getElementById('cartBadge');
+                    if (badge) {
+                        badge.textContent = data.count;
+                        badge.style.display = data.count > 0 ? 'inline' : 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating cart count:', error);
+                });
+        }
+
+        // ===== TOAST NOTIFICATION =====
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+
+            lucide.createIcons();
+
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ===== SEARCH =====
+        const searchInput = document.getElementById('searchInput');
+        const productGrid = document.getElementById('productGrid');
+        const courseGrid = document.getElementById('courseGrid');
+        const productCount = document.getElementById('productCount');
+        const courseCount = document.getElementById('courseCount');
+        const resultsCount = document.getElementById('resultsCount');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+
+        let currentCategory = 'all';
+        let searchTimeout = null;
+
+        function performSearch() {
+            const q = searchInput.value.trim();
+
+            if (q.length === 0) {
+                fetch('/api/marketplace/search?q=')
+                    .then(response => response.json())
+                    .then(data => {
+                        renderResults(data.products, data.courses);
+                    });
+                return;
+            }
+
+            if (q.length < 2) {
+                resultsCount.textContent = 'Please enter at least 2 characters.';
+                return;
+            }
+
+            fetch(`/api/marketplace/search?q=${encodeURIComponent(q)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const total = data.products.length + data.courses.length;
+                    resultsCount.textContent = `Found ${total} result${total !== 1 ? 's' : ''} for "${q}"`;
+                    renderResults(data.products, data.courses);
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    resultsCount.textContent = 'Search failed. Please try again.';
+                });
+        }
+
+        function renderResults(products, courses) {
+            if (products.length === 0) {
+                productGrid.innerHTML = `<div class="empty-state"><p>No products found.</p></div>`;
+                productCount.textContent = '0 available';
+            } else {
+                productGrid.innerHTML = products.map(p => `
+                    <div class="card" data-category="${p.category}">
+                        <div class="card-image" onclick="window.location.href='/product/${p.id}'">
+                            ${p.cover_image ? `<img src="${p.cover_image}" alt="${p.title}">` : `<i data-lucide="package" class="placeholder"></i>`}
+                            <span class="badge">Product</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 onclick="window.location.href='/product/${p.id}'">${p.title}</h3>
+                            <div class="vendor">${p.vendor_name}</div>
+                            <div class="price">₦${p.price}</div>
+                            <div class="card-actions">
+                                <a href="/product/${p.id}" class="btn-view">View Details</a>
+                                <button onclick="addToCart('product', ${p.id})" class="btn-cart">
+                                    <i data-lucide="shopping-cart" class="icon"></i>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                productCount.textContent = `${products.length} available`;
+            }
+
+            if (courses.length === 0) {
+                courseGrid.innerHTML = `<div class="empty-state"><p>No courses found.</p></div>`;
+                courseCount.textContent = '0 available';
+            } else {
+                courseGrid.innerHTML = courses.map(c => `
+                    <div class="card" data-category="${c.category}">
+                        <div class="card-image" onclick="window.location.href='/course/${c.id}'">
+                            ${c.cover_image ? `<img src="${c.cover_image}" alt="${c.title}">` : `<i data-lucide="book-open" class="placeholder"></i>`}
+                            <span class="badge">Course</span>
+                        </div>
+                        <div class="card-body">
+                            <h3 onclick="window.location.href='/course/${c.id}'">${c.title}</h3>
+                            <div class="vendor">${c.vendor_name}</div>
+                            <div class="price">₦${c.price}</div>
+                            <div class="card-actions">
+                                <a href="/course/${c.id}" class="btn-view">View Details</a>
+                                <button onclick="addToCart('course', ${c.id})" class="btn-cart">
+                                    <i data-lucide="shopping-cart" class="icon"></i>
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                courseCount.textContent = `${courses.length} available`;
+            }
+
+            lucide.createIcons();
+        }
+
+        // ===== DEBOUNCED SEARCH =====
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(performSearch, 300);
+        });
+
+        // ===== CATEGORY FILTER =====
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.dataset.category;
+
+                filterByCategory();
+            });
+        });
+
+        function filterByCategory() {
+            const productCards = productGrid.querySelectorAll('.card');
+            const courseCards = courseGrid.querySelectorAll('.card');
+
+            let productVisible = 0;
+            let courseVisible = 0;
+
+            productCards.forEach(card => {
+                const cat = card.dataset.category;
+                if (currentCategory === 'all' || cat === currentCategory) {
+                    card.style.display = '';
+                    productVisible++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            courseCards.forEach(card => {
+                const cat = card.dataset.category;
+                if (currentCategory === 'all' || cat === currentCategory) {
+                    card.style.display = '';
+                    courseVisible++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            productCount.textContent = `${productVisible} available`;
+            courseCount.textContent = `${courseVisible} available`;
+        }
+
+        // ===== ENTER KEY =====
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
+</body>
+</html>

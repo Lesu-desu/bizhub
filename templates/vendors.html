@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendors | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}" />
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header h1 span { color: #0b8f47; }
+
+        .header .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+        .header .btn-back:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .search-section {
+            margin-bottom: 32px;
+        }
+
+        .search-bar {
+            display: flex;
+            max-width: 560px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 50px;
+            padding: 4px 4px 4px 20px;
+            transition: 0.2s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: #0b8f47;
+            box-shadow: 0 0 0 4px rgba(11,143,71,0.1);
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            background: transparent;
+        }
+
+        .search-bar input::placeholder { color: #9ca3af; }
+
+        .search-bar button {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 40px;
+            background: #0b8f47;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .search-bar button:hover { background: #0a7a3d; }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .category-btn {
+            padding: 8px 20px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 40px;
+            background: white;
+            color: #4b5563;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .category-btn:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .category-btn.active {
+            background: #0b8f47;
+            border-color: #0b8f47;
+            color: white;
+        }
+
+        .vendors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .vendor-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            padding: 24px;
+            transition: 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .vendor-card:hover {
+            transform: translateY(-4px);
+            border-color: #0b8f47;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .vendor-card .logo {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #dcfce7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 24px;
+            color: #0b8f47;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .vendor-card .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .vendor-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .vendor-card .category {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .vendor-card .rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            color: #f59e0b;
+            margin-bottom: 12px;
+        }
+
+        .vendor-card .products-count {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .vendor-card .btn-view {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 20px;
+            background: #0b8f47;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .vendor-card .btn-view:hover {
+            background: #0a7a3d;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state .icon {
+            width: 64px;
+            height: 64px;
+            color: #d1d5db;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .vendors-grid { grid-template-columns: 1fr; }
+            .search-bar { flex-direction: column; padding: 12px; border-radius: 24px; }
+            .search-bar input { width: 100%; padding: 8px 0 12px; }
+            .search-bar button { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container page-transition">
+        <div class="header">
+            <h1>
+                <i data-lucide="store" class="icon" style="width: 32px; height: 32px; color: #0b8f47;"></i>
+                <span>Vendors</span>
+            </h1>
+            <a href="{{ url_for('customer_dashboard') }}" class="btn-back">
+                <i data-lucide="arrow-left" class="icon"></i>
+                Back to Dashboard
+            </a>
+        </div>
+
+        <div class="search-section">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search vendors...">
+                <button onclick="performSearch()">
+                    <i data-lucide="search" class="icon"></i>
+                    Search
+                </button>
+            </div>
+        </div>
+
+        <div class="categories" id="categoryFilters">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="Technology">Technology</button>
+            <button class="category-btn" data-category="Fashion">Fashion</button>
+            <button class="category-btn" data-category="Health & Beauty">Health & Beauty</button>
+            <button class="category-btn" data-category="Education">Education</button>
+            <button class="category-btn" data-category="Food & Drinks">Food & Drinks</button>
+            <button class="category-btn" data-category="Business Consulting">Business Consulting</button>
+        </div>
+
+        <div class="vendors-grid" id="vendorsGrid">
+            {% if vendors %}
+                {% for vendor in vendors %}
+                <div class="vendor-card" data-category="{{ vendor.category }}" data-name="{{ vendor.business_name|lower }}">
+                    <div class="logo">
+                        {% if vendor.logo_url %}
+                            <img src="{{ vendor.logo_url }}" alt="{{ vendor.business_name }}">
+                        {% else %}
+                            {{ vendor.business_name[0]|upper }}
+                        {% endif %}
+                    </div>
+                    <h3>{{ vendor.business_name }}</h3>
+                    <div class="category">{{ vendor.category or 'General' }}</div>
+                    <div class="rating">
+                        <i data-lucide="star" class="icon" style="width: 16px; height: 16px; fill: #f59e0b;"></i>
+                        {{ vendor.rating|round(1) if vendor.rating else 'N/A' }}
+                    </div>
+                    <div class="products-count">{{ vendor.product_count }} products</div>
+                    <a href="{{ url_for('vendor_profile', vendor_id=vendor.id) }}" class="btn-view">
+                        <i data-lucide="eye" class="icon" style="width: 16px; height: 16px;"></i>
+                        View Store
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i data-lucide="store" class="icon"></i>
+                    <h3>No vendors found</h3>
+                    <p>Check back later for new vendors.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/transitions.js') }}"></script>
+    <script>
+        lucide.createIcons();
+
+        // Search
+        function performSearch() {
+            const q = document.getElementById('searchInput').value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.vendor-card');
+            cards.forEach(card => {
+                const name = card.dataset.name || '';
+                const match = name.includes(q);
+                card.style.display = match ? '' : 'none';
+            });
+        }
+
+        // Category filter
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const category = this.dataset.category;
+                const cards = document.querySelectorAll('.vendor-card');
+                cards.forEach(card => {
+                    const cat = card.dataset.category || 'General';
+                    card.style.display = (category === 'all' || cat === category) ? '' : 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

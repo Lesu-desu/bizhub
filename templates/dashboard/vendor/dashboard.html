@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Dashboard | BizHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/lucide@latest">
+    </script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/transitions.css') }}">
+
+    <style>
+        /* ===== GLOBAL RESET ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f7faf8;
+            color: #111827;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            padding: 24px 16px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 24px;
+        }
+
+        .sidebar-brand .logo-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .sidebar-brand h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0b8f47;
+        }
+
+        .sidebar-brand p {
+            font-size: 10px;
+            color: #6b7280;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+        }
+
+        .sidebar-nav .nav-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 8px 8px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.2s ease;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-nav a:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .sidebar-nav a.active {
+            background: #dcfce7;
+            color: #0b8f47;
+        }
+
+        .sidebar-nav a .icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-nav a .badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 16px;
+            margin-top: auto;
+        }
+
+        .sidebar-footer a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .sidebar-footer a:hover {
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .sidebar-footer a .icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 200;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .mobile-toggle .icon {
+            width: 24px;
+            height: 24px;
+            color: #111827;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 99;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            padding: 32px 40px 60px;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .header-left h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .header-left h2 span {
+            color: #0b8f47;
+        }
+
+        .header-left .store-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .header-left .store-status.live {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .header-left .store-status.draft {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-right .btn-outline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            background: white;
+            color: #111827;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            text-decoration: none;
+        }
+
+        .header-right .btn-outline:hover {
+            border-color: #0b8f47;
+            color: #0b8f47;
+            background: #f0fdf4;
+        }
+
+        .header-right .btn-primary {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s ease;
+            text-decoration: none;
+        }
+
+        .header-right .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(11, 143, 71, 0.25);
+        }
+
+        /* ===== STATS CARDS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-card .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .stat-card .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #dcfce7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0b8f47;
+        }
+
+        .stat-card .stat-icon .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .stat-card .stat-change {
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .stat-card .stat-change.positive {
+            color: #0b8f47;
+        }
+
+        .stat-card .stat-change.negative {
+            color: #ef4444;
+        }
+
+        /* ===== DASHBOARD GRID ===== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+        }
+
+        .dashboard-card .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-card .card-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .dashboard-card .card-header a {
+            color: #0b8f47;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .dashboard-card .card-body {
+            padding: 20px 24px;
+        }
+
+        /* ===== RECENT ORDERS TABLE ===== */
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table th {
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #6b7280;
+            padding: 8px 0 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .orders-table td {
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+
+        .orders-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .order-status.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .order-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .order-status.shipped {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .order-status.cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* ===== TOP PRODUCTS ===== */
+        .top-products-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .top-product-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .top-product-item:last-child {
+            border-bottom: none;
+        }
+
+        .top-product-item .product-rank {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #6b7280;
+        }
+
+        .top-product-item .product-rank.top-1 {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .top-product-item .product-rank.top-2 {
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+
+        .top-product-item .product-rank.top-3 {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .top-product-item .product-info {
+            flex: 1;
+        }
+
+        .top-product-item .product-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .top-product-item .product-info p {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .top-product-item .product-sales {
+            font-weight: 700;
+            color: #0b8f47;
+            font-size: 14px;
+        }
+
+        /* ===== QUICK ACTIONS ===== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .quick-action-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: #111827;
+            transition: 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .quick-action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            border-color: #0b8f47;
+        }
+
+        .quick-action-card .icon-wrapper {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: #dcfce7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .quick-action-card .icon-wrapper .icon {
+            width: 20px;
+            height: 20px;
+            color: #0b8f47;
+        }
+
+        .quick-action-card .action-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .quick-action-card .action-content p {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* ===== ONBOARDING CHECKLIST ===== */
+        .onboarding-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 36px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            margin-bottom: 32px;
+        }
+
+        .onboarding-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .onboarding-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .onboarding-header .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0b8f47;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 999px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-bar .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            border-radius: 999px;
+            transition: width 0.6s ease;
+            width: {{ progress_percentage }}%;
+        }
+
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            transition: 0.2s ease;
+        }
+
+        .checklist-item:hover {
+            background: #f9fafb;
+        }
+
+        .checklist-item .check-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .checklist-item .check-icon.completed {
+            background: #dcfce7;
+            color: #0b8f47;
+        }
+
+        .checklist-item .check-icon.pending {
+            background: #f3f4f6;
+            color: #9ca3af;
+        }
+
+        .checklist-item .check-icon.active {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .checklist-item .check-icon .icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .checklist-item .check-content {
+            flex: 1;
+        }
+
+        .checklist-item .check-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .checklist-item .check-content p {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .checklist-item .check-content .sub-text {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+
+        .checklist-item .check-action {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0b8f47;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .checklist-item .check-action:hover {
+            background: #dcfce7;
+        }
+
+        .checklist-item .check-action.completed-action {
+            color: #6b7280;
+            pointer-events: none;
+        }
+
+        /* ===== WELCOME BANNER ===== */
+        .welcome-banner {
+            background: linear-gradient(135deg, #0b8f47, #16c96b);
+            border-radius: 16px;
+            padding: 40px 48px;
+            margin-bottom: 32px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .welcome-banner .welcome-content h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .welcome-banner .welcome-content p {
+            opacity: 0.9;
+            font-size: 16px;
+            max-width: 500px;
+        }
+
+        .welcome-banner .welcome-btn {
+            background: white;
+            color: #0b8f47;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s ease;
+        }
+
+        .welcome-banner .welcome-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar-overlay.active {
+                display: block;
+            }
+            .mobile-toggle {
+                display: block;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 80px 20px 40px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-right {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            .header-right .btn-outline,
+            .header-right .btn-primary {
+                flex: 1;
+                justify-content: center;
+            }
+            .welcome-banner {
+                padding: 30px 24px;
+                flex-direction: column;
+                text-align: center;
+            }
+            .welcome-banner .welcome-content p {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-left h2 {
+                font-size: 22px;
+            }
+            .stat-card .stat-value {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== MOBILE TOGGLE ===== -->
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+        <i data-lucide="menu" class="icon"></i>
+    </button>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="logo-box">B</div>
+            <div>
+                <h1>BizHub</h1>
+                <p>VENDOR</p>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-label">Main</div>
+            <a href="{{ url_for('vendor_dashboard') }}" class="active">
+                <i data-lucide="layout-dashboard" class="icon"></i>
+                Dashboard
+            </a>
+            <a href="{{ url_for('vendor_products') }}">
+                <i data-lucide="package" class="icon"></i>
+                Products
+            </a>
+            <a href="{{ url_for('vendor_courses') }}">
+                <i data-lucide="book-open" class="icon"></i>
+                Courses
+            </a>
+            <a href="{{ url_for('vendor_orders') }}">
+                <i data-lucide="shopping-bag" class="icon"></i>
+                Orders
+                <span class="badge">{{ pending_orders_count }}</span>
+            </a>
+            <a href="{{ url_for('vendor_messages') }}">
+                <i data-lucide="message-circle" class="icon"></i>
+                Messages
+                <span class="badge">{{ unread_messages_count }}</span>
+            </a>
+
+            <div class="nav-label">Analytics</div>
+            <a href="{{ url_for('vendor_customers') }}">
+                <i data-lucide="users" class="icon"></i>
+                Customers
+            </a>
+            <a href="{{ url_for('vendor_analytics') }}">
+                <i data-lucide="trending-up" class="icon"></i>
+                Analytics
+            </a>
+            <a href="{{ url_for('vendor_wallet') }}">
+                <i data-lucide="wallet" class="icon"></i>
+                Wallet
+                <span class="badge" style="background: #0b8f47;">₦{{ wallet_balance }}</span>
+            </a>
+
+            <div class="nav-label">Management</div>
+            <a href="{{ url_for('vendor_reviews') }}">
+                <i data-lucide="star" class="icon"></i>
+                Reviews
+            </a>
+            <a href="{{ url_for('vendor_verification') }}">
+                <i data-lucide="shield-check" class="icon"></i>
+                Verification
+            </a>
+            <a href="{{ url_for('vendor_settings') }}">
+                <i data-lucide="settings" class="icon"></i>
+                Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="{{ url_for('vendor_help') }}">
+                <i data-lucide="help-circle" class="icon"></i>
+                Help Center
+            </a>
+            <a href="{{ url_for('logout') }}">
+                <i data-lucide="log-out" class="icon"></i>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content page-transition">
+
+        <!-- ===== HEADER ===== -->
+        <header class="header">
+            <div class="header-left">
+                <h2>Welcome back, <span>{{ user.full_name if user else 'Vendor' }}</span> 👋</h2>
+                {% if onboarding_complete %}
+                    <span class="store-status live">
+                        <i data-lucide="check-circle" class="icon" style="width: 14px; height: 14px;"></i>
+                        Store is Live
+                    </span>
+                {% else %}
+                    <span class="store-status draft">
+                        <i data-lucide="clock" class="icon" style="width: 14px; height: 14px;"></i>
+                        Store in Setup
+                    </span>
+                {% endif %}
+            </div>
+            <div class="header-right">
+                <a href="#" class="btn-outline">
+                    <i data-lucide="eye" class="icon"></i>
+                    View Store
+                </a>
+                <a href="{{ url_for('vendor_upload_product') }}" class="btn-primary">
+                    <i data-lucide="plus" class="icon"></i>
+                    Add Product
+                </a>
+            </div>
+        </header>
+
+        <!-- ===== SHOW ONBOARDING OR FULL DASHBOARD ===== -->
+        {% if not onboarding_complete %}
+            <!-- ===== ONBOARDING MODE ===== -->
+            <section class="onboarding-card">
+                <div class="onboarding-header">
+                    <h3>Store Setup Progress</h3>
+                    <span class="progress-text">{{ completed_steps }}/{{ total_steps }} Complete</span>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ progress_percentage }}%;"></div>
+                </div>
+
+                <div class="checklist">
+                    <!-- Item 1: Verify Email -->
+                    <div class="checklist-item">
+                        <div class="check-icon completed">
+                            <i data-lucide="check" class="icon"></i>
+                        </div>
+                        <div class="check-content">
+                            <h4>Verify Email</h4>
+                            <p>Your email has been verified</p>
+                        </div>
+                        <span class="check-action completed-action">Completed ✓</span>
+                    </div>
+
+                    <!-- Item 2: Business Information -->
+                    <div class="checklist-item">
+                        <div class="check-icon {% if business_info_complete %}completed{% else %}active{% endif %}">
+                            {% if business_info_complete %}
+                                <i data-lucide="check" class="icon"></i>
+                            {% else %}
+                                <i data-lucide="loader-2" class="icon" style="animation: spin 1s linear infinite;"></i>
+                            {% endif %}
+                        </div>
+                        <div class="check-content">
+                            <h4>Complete Business Information</h4>
+                            <p>{% if business_info_complete %}Business information completed{% else %}Add your business details{% endif %}</p>
+                        </div>
+                        {% if business_info_complete %}
+                            <span class="check-action completed-action">Completed ✓</span>
+                        {% else %}
+                            <a href="{{ url_for('vendor_step1') }}" class="check-action">Continue →</a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Item 3: Accept Vendor Agreement -->
+                    <div class="checklist-item">
+                        <div class="check-icon {% if agreement_accepted %}completed{% else %}pending{% endif %}">
+                            {% if agreement_accepted %}
+                                <i data-lucide="check" class="icon"></i>
+                            {% else %}
+                                <i data-lucide="circle" class="icon"></i>
+                            {% endif %}
+                        </div>
+                        <div class="check-content">
+                            <h4>Accept Vendor Agreement</h4>
+                            <p>Review and accept the terms of service</p>
+                            <div class="sub-text">💰 You receive 70% of each sale • BizHub retains 30%</div>
+                        </div>
+                        {% if agreement_accepted %}
+                            <span class="check-action completed-action">Completed ✓</span>
+                        {% else %}
+                            <a href="#" class="check-action" onclick="openTermsModal()">Review →</a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Item 4: Add Tax ID (TIN) -->
+                    <div class="checklist-item">
+                        <div class="check-icon {% if tin_added %}completed{% else %}pending{% endif %}">
+                            {% if tin_added %}
+                                <i data-lucide="check" class="icon"></i>
+                            {% else %}
+                                <i data-lucide="circle" class="icon"></i>
+                            {% endif %}
+                        </div>
+                        <div class="check-content">
+                            <h4>Add Tax ID (TIN)</h4>
+                            <p>{% if tin_added %}Tax ID added{% else %}Add your Tax Identification Number{% endif %}</p>
+                            <div class="sub-text">Required for legal compliance</div>
+                        </div>
+                        {% if tin_added %}
+                            <span class="check-action completed-action">Completed ✓</span>
+                        {% else %}
+                            <a href="#" class="check-action" onclick="openTinModal()">Add TIN →</a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Item 5: Upload First Product -->
+                    <div class="checklist-item">
+                        <div class="check-icon {% if has_products %}completed{% else %}pending{% endif %}">
+                            {% if has_products %}
+                                <i data-lucide="check" class="icon"></i>
+                            {% else %}
+                                <i data-lucide="circle" class="icon"></i>
+                            {% endif %}
+                        </div>
+                        <div class="check-content">
+                            <h4>Upload Your First Product</h4>
+                            <p>{% if has_products %}You have products in your store{% else %}Create and publish your first digital product{% endif %}</p>
+                        </div>
+                        {% if has_products %}
+                            <span class="check-action completed-action">Completed ✓</span>
+                        {% else %}
+                            <a href="{{ url_for('vendor_upload_product') }}" class="check-action">Upload →</a>
+                        {% endif %}
+                    </div>
+
+                    <!-- Item 6: Publish Store -->
+                    <div class="checklist-item">
+                        <div class="check-icon {% if store_published %}completed{% else %}pending{% endif %}">
+                            {% if store_published %}
+                                <i data-lucide="check" class="icon"></i>
+                            {% else %}
+                                <i data-lucide="circle" class="icon"></i>
+                            {% endif %}
+                        </div>
+                        <div class="check-content">
+                            <h4>Publish Your Store</h4>
+                            <p>{% if store_published %}Your store is live!{% else %}Make your store visible to customers{% endif %}</p>
+                        </div>
+                        {% if store_published %}
+                            <span class="check-action completed-action">Completed ✓</span>
+                        {% else %}
+                            <span class="check-action" style="color: #6b7280; pointer-events: none;">
+                                Auto-publishes when all steps are complete
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== QUICK ACTIONS (Onboarding) ===== -->
+            <section class="quick-actions">
+                <a href="{{ url_for('vendor_upload_product') }}" class="quick-action-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="plus-circle" class="icon"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>Upload First Product</h4>
+                        <p>Start selling digital products</p>
+                    </div>
+                </a>
+
+                <a href="{{ url_for('vendor_courses') }}" class="quick-action-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="book-open" class="icon"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>Create a Course</h4>
+                        <p>Share your knowledge</p>
+                    </div>
+                </a>
+
+                <a href="#" class="quick-action-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="help-circle" class="icon"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>Need Help?</h4>
+                        <p>Visit the seller FAQ</p>
+                    </div>
+                </a>
+            </section>
+
+        {% else %}
+            <!-- ===== FULL DASHBOARD MODE ===== -->
+
+            <!-- ===== WELCOME BANNER ===== -->
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <h2>🎉 Your store is live!</h2>
+                    <p>Congratulations! Your BizHub store is now visible to customers. Start making sales!</p>
+                </div>
+                <a href="#" class="welcome-btn">
+                    View Your Store →
+                </a>
+            </div>
+
+            <!-- ===== STATS CARDS ===== -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Revenue</span>
+                        <div class="stat-icon">
+                            <i data-lucide="dollar-sign" class="icon"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">₦{{ stats.total_revenue|round(2) }}</div>
+                    <div class="stat-change positive">↑ 12% from last month</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Orders</span>
+                        <div class="stat-icon">
+                            <i data-lucide="shopping-bag" class="icon"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ stats.total_orders }}</div>
+                    <div class="stat-change positive">↑ 8% from last month</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Active Products</span>
+                        <div class="stat-icon">
+                            <i data-lucide="package" class="icon"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ stats.total_products }}</div>
+                    <div class="stat-change positive">↑ 3 new this month</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Customers</span>
+                        <div class="stat-icon">
+                            <i data-lucide="users" class="icon"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">{{ stats.total_customers|default(0) }}</div>
+                    <div class="stat-change positive">↑ 5 new customers</div>
+                </div>
+            </div>
+
+            <!-- ===== DASHBOARD GRID ===== -->
+            <div class="dashboard-grid">
+                <!-- ===== RECENT ORDERS ===== -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Recent Orders</h3>
+                        <a href="{{ url_for('vendor_orders') }}">View All →</a>
+                    </div>
+                    <div class="card-body">
+                        {% if orders and orders|length > 0 %}
+                            <table class="orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Customer</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in orders[:5] %}
+                                    <tr>
+                                        <td>#{{ order.id }}</td>
+                                        <td>{{ order.customer_name }}</td>
+                                        <td>₦{{ order.amount }}</td>
+                                        <td>
+                                            <span class="order-status {{ order.status|lower }}">
+                                                {{ order.status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p style="color: #6b7280; text-align: center; padding: 20px 0;">
+                                No orders yet. Share your store to start selling!
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- ===== TOP PRODUCTS ===== -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>Top Products</h3>
+                        <a href="{{ url_for('vendor_products') }}">View All →</a>
+                    </div>
+                    <div class="card-body">
+                        {% if products and products|length > 0 %}
+                            <div class="top-products-list">
+                                {% for product in products[:3] %}
+                                <div class="top-product-item">
+                                    <div class="product-rank {% if loop.index == 1 %}top-1{% elif loop.index == 2 %}top-2{% elif loop.index == 3 %}top-3{% endif %}">
+                                        {{ loop.index }}
+                                    </div>
+                                    <div class="product-info">
+                                        <h4>{{ product.title }}</h4>
+                                        <p>₦{{ product.price }} • {{ product.downloads }} downloads</p>
+                                    </div>
+                                    <div class="product-sales">₦{{ (product.price|float * 0.7)|round(2) }}</div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p style="color: #6b7280; text-align: center; padding: 20px 0;">
+                                Upload your first product to get started!
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== QUICK ACTIONS (Full Dashboard) ===== -->
+            <section class="quick-actions">
+                <a href="{{ url_for('vendor_upload_product') }}" class="quick-action-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="plus-circle" class="icon"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>Add New Product</h4>
+                        <p>Expand your catalog</p>
+                    </div>
+                </a>
+
+                <a href="{{ url_for('vendor_orders') }}" class="quick-action-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="truck" class="icon"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>Manage Orders</h4>
+                        <p>Process new orders</p>
+                    </div>
+                </a>
+
+                <a href="{{ url_for('vendor_wallet') }}" class="quick-action-card">
+                    <div class="icon-wrapper">
+                        <i data-lucide="wallet" class="icon"></i>
+                    </div>
+                    <div class="action-content">
+                        <h4>View Wallet</h4>
+                        <p>Track your earnings</p>
+                    </div>
+                </a>
+            </section>
+
+        {% endif %}
+
+    </main>
+
+    <!-- ===== TERMS MODAL ===== -->
+    <div id="termsModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div style="background: white; max-width: 600px; width: 90%; border-radius: 24px; padding: 40px; max-height: 80vh; overflow-y: auto; position: relative;">
+            <button onclick="closeTermsModal()" style="position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">✕</button>
+            <h2 style="font-size: 24px; margin-bottom: 20px;">Vendor Agreement</h2>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="font-size: 16px; color: #0b8f47; margin-bottom: 8px;">💰 Revenue Share</h3>
+                <p style="color: #4b5563; font-size: 14px; line-height: 1.7;">You receive <strong>70%</strong> of each sale. BizHub retains <strong>30%</strong> for platform services, payment processing, and customer support.</p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="font-size: 16px; color: #0b8f47; margin-bottom: 8px;">📅 Payout Schedule</h3>
+                <p style="color: #4b5563; font-size: 14px; line-height: 1.7;">Payouts are processed every <strong>7 days</strong>. Minimum payout: <strong>₦5,000</strong>. Payments are sent to your registered bank account.</p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="font-size: 16px; color: #0b8f47; margin-bottom: 8px;">📦 Product Guidelines</h3>
+                <p style="color: #4b5563; font-size: 14px; line-height: 1.7;">All products must be original or properly licensed. No illegal, harmful, or prohibited content. Accurate product descriptions are required.</p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="font-size: 16px; color: #0b8f47; margin-bottom: 8px;">⭐ Customer Satisfaction</h3>
+                <p style="color: #4b5563; font-size: 14px; line-height: 1.7;">24-hour response time to customer inquiries. 7-day refund policy for digital products. Maintain minimum <strong>4.0 star</strong> rating.</p>
+            </div>
+
+            <div style="margin-bottom: 24px; background: #fef3c7; padding: 16px; border-radius: 12px; border-left: 4px solid #f59e0b;">
+                <p style="color: #92400e; font-size: 14px; line-height: 1.6;">⚠️ By accepting these terms, you agree to the revenue share model and platform guidelines.</p>
+            </div>
+
+            <button onclick="acceptTerms()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0b8f47, #16c96b); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s;">
+                Accept Agreement
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== TIN MODAL ===== -->
+    <div id="tinModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div style="background: white; max-width: 480px; width: 90%; border-radius: 24px; padding: 40px; position: relative;">
+            <button onclick="closeTinModal()" style="position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">✕</button>
+            <h2 style="font-size: 24px; margin-bottom: 8px;">Add Tax ID (TIN)</h2>
+            <p style="color: #6b7280; font-size: 14px; margin-bottom: 20px;">Required for legal compliance and vendor payouts.</p>
+
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; font-size: 14px; margin-bottom: 8px;">Tax Identification Number (TIN)</label>
+                <input type="text" id="tinInput" placeholder="e.g. TIN-123456789" style="width: 100%; padding: 14px 16px; border: 1.5px solid #e5e7eb; border-radius: 12px; font-size: 15px; transition: 0.2s;">
+            </div>
+
+            <div style="margin-bottom: 24px; background: #dcfce7; padding: 12px 16px; border-radius: 10px; border-left: 4px solid #22c55e;">
+                <p style="color: #166534; font-size: 13px; line-height: 1.6;">ℹ️ Your TIN will be verified before payouts are processed.</p>
+            </div>
+
+            <button onclick="saveTin()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #0b8f47, #16c96b); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.3s;">
+                Save TIN
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="{{ url_for('static', filename='js/transitions.js') }}"></script>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Mobile menu toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            const icon = mobileToggle.querySelector('.icon');
+            if (sidebar.classList.contains('open')) {
+                icon.setAttribute('data-lucide', 'x');
+            } else {
+                icon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
+
+        mobileToggle.addEventListener('click', toggleSidebar);
+        overlay.addEventListener('click', toggleSidebar);
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+                const icon = mobileToggle.querySelector('.icon');
+                icon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+            }
+        });
+
+        // Spinner animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Terms Modal
+        function openTermsModal() {
+            document.getElementById('termsModal').style.display = 'flex';
+        }
+
+        function closeTermsModal() {
+            document.getElementById('termsModal').style.display = 'none';
+        }
+
+        function acceptTerms() {
+            fetch('/accept-vendor-terms', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Vendor Agreement accepted!');
+                    closeTermsModal();
+                    location.reload();
+                } else {
+                    alert('❌ ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Network error. Please try again.');
+            });
+        }
+
+        document.getElementById('termsModal').addEventListener('click', function(e) {
+            if (e.target === this) closeTermsModal();
+        });
+
+        // TIN Modal
+        function openTinModal() {
+            document.getElementById('tinModal').style.display = 'flex';
+            document.getElementById('tinInput').focus();
+        }
+
+        function closeTinModal() {
+            document.getElementById('tinModal').style.display = 'none';
+        }
+
+        function saveTin() {
+            const tin = document.getElementById('tinInput').value.trim();
+
+            if (!tin) {
+                alert('Please enter your Tax Identification Number (TIN).');
+                return;
+            }
+
+            fetch('/save-vendor-tin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tin: tin })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ TIN saved successfully!');
+                    closeTinModal();
+                    location.reload();
+                } else {
+                    alert('❌ ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('Network error. Please try again.');
+            });
+        }
+
+        document.getElementById('tinModal').addEventListener('click', function(e) {
+            if (e.target === this) closeTinModal();
+        });
+
+        document.getElementById('tinInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                saveTin();
+            }
+        });
+    </script>
+</body>
+</html>
